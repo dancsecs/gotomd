@@ -146,10 +146,10 @@ issues:
         - gochecknoglobals
     - text: cat
       linters:
-        - goconst    
+        - goconst
     - text: package
       linters:
-        - goconst    
+        - goconst
     # Exclude known linters from partially hard-vendored code,
   include:
     - EXC0001
@@ -173,4 +173,4 @@ issues:
 run:
   timeout: 5m
   issues-exit-code: 2
-  go: '1.18'
+  go: '1.21'
