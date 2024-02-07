@@ -1,0 +1,5 @@
+module github.com/dancsecs/gotomd/sample_go_project_one
+
+go 1.21
+
+require github.com/dancsecs/sztest v0.0.0-20240206131544-8287b34a6307
