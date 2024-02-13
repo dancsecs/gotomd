@@ -19,8 +19,6 @@
 package main
 
 import (
-	"fmt"
-	"math"
 	"strings"
 
 	"github.com/dancsecs/sztest"
@@ -60,74 +58,21 @@ const (
 	internalTestMarkMsgOff = `}`
 )
 
-// findNextMark searches the string for all known marks.
-//
-//nolint:funlen // Ok.
-func findNextMark(s, expectedClose string) (int, string, string, string) {
-	if s == "" {
-		return -1, "", "", ""
-	}
-
-	markOpenIndex := math.MaxInt
-	markOpen := ""
-	markOpenInternal := ""
-	markOpenExpectedInternal := ""
-
-	findOnMark := func(eOpenMark, iOpenMark, iCloseMark string) {
-		tmpIndex := strings.Index(s, eOpenMark)
-		if tmpIndex >= 0 && tmpIndex < markOpenIndex {
-			markOpenIndex = tmpIndex
-			markOpen = eOpenMark
-			markOpenInternal = iOpenMark
-			markOpenExpectedInternal = iCloseMark
-		}
-	}
-
-	findOnMark(sztest.SettingMarkInsOn(), markInsOn, markInsOff)
-	findOnMark(sztest.SettingMarkDelOn(), markDelOn, markDelOff)
-	findOnMark(sztest.SettingMarkChgOn(), markChgOn, markChgOff)
-	findOnMark(sztest.SettingMarkWntOn(), markWntOn, markWntOff)
-	findOnMark(sztest.SettingMarkGotOn(), markGotOn, markGotOff)
-	findOnMark(sztest.SettingMarkSepOn(), markSepOn, markSepOff)
-	findOnMark(sztest.SettingMarkMsgOn(), markMsgOn, markMsgOff)
-
-	markCloseIndex := math.MaxInt
-	markClose := ""
-	markCloseInternal := ""
-
-	findOffMark := func(mark, internalMark string) {
-		tmpIndex := strings.Index(s, mark)
-		if tmpIndex >= 0 &&
-			tmpIndex < markOpenIndex &&
-			tmpIndex <= markCloseIndex {
-			if tmpIndex == markCloseIndex && markCloseInternal == expectedClose {
-				return
-			}
-			markCloseIndex = tmpIndex
-			markClose = mark
-			markCloseInternal = internalMark
-		}
-	}
-
-	findOffMark(sztest.SettingMarkInsOff(), markInsOff)
-	findOffMark(sztest.SettingMarkDelOff(), markDelOff)
-	findOffMark(sztest.SettingMarkChgOff(), markChgOff)
-	findOffMark(sztest.SettingMarkWntOff(), markWntOff)
-	findOffMark(sztest.SettingMarkGotOff(), markGotOff)
-	findOffMark(sztest.SettingMarkSepOff(), markSepOff)
-	findOffMark(sztest.SettingMarkMsgOff(), markMsgOff)
-
-	if markOpenIndex < math.MaxInt || markCloseIndex < math.MaxInt {
-		if markOpenIndex < markCloseIndex {
-			return markOpenIndex,
-				markOpen,
-				markOpenInternal,
-				markOpenExpectedInternal
-		} else {
-			return markCloseIndex, markClose, markCloseInternal, ""
-		}
-	}
-	return -1, "", "", ""
+var szEnvSetup = []string{
+	sztest.EnvMarkWntOn + "=" + markWntOn,
+	sztest.EnvMarkWntOff + "=" + markWntOff,
+	sztest.EnvMarkGotOn + "=" + markGotOn,
+	sztest.EnvMarkGotOff + "=" + markGotOff,
+	sztest.EnvMarkMsgOn + "=" + markMsgOn,
+	sztest.EnvMarkMsgOff + "=" + markMsgOff,
+	sztest.EnvMarkInsOn + "=" + markInsOn,
+	sztest.EnvMarkInsOff + "=" + markInsOff,
+	sztest.EnvMarkDelOn + "=" + markDelOn,
+	sztest.EnvMarkDelOff + "=" + markDelOff,
+	sztest.EnvMarkChgOn + "=" + markChgOn,
+	sztest.EnvMarkChgOff + "=" + markChgOff,
+	sztest.EnvMarkSepOn + "=" + markSepOn,
+	sztest.EnvMarkSepOff + "=" + markSepOff,
 }
 
 func translateToTestSymbols(s string) string {
@@ -164,58 +109,4 @@ func translateToBlankSymbols(s string) string {
 	s = strings.ReplaceAll(s, markMsgOn, "")
 	s = strings.ReplaceAll(s, markMsgOff, "")
 	return s
-}
-
-func marksToMarkdownHTML(source string) (string, error) {
-	iCloseMarkExpected := ""
-	newS := ""
-	for {
-		i, eNextMark, iNextMark, iNextCloseMark :=
-			findNextMark(source, iCloseMarkExpected)
-
-		// If no more marks are present then we are done.  Either return the
-		// translated string with the all marks reversed or an error if we are
-		// expecting a close mark.
-		if i < 0 {
-			if iCloseMarkExpected != "" {
-				return "", fmt.Errorf(
-					"no closing mark found for %q in %q",
-					iCloseMarkExpected,
-					source,
-				)
-			}
-
-			if szColorize {
-				return translateToTestSymbols(newS + source), nil
-			}
-			return translateToBlankSymbols(newS + source), nil
-		}
-
-		// Otherwise we found a Mark.  Move all text up to the next mark from
-		// the string to the translated string.
-		if i > 0 {
-			newS += source[:i]
-			source = source[i:]
-		}
-
-		// Add the internal representation, replacing the resolved marks.
-		newS += iNextMark
-
-		// Remove the resolved Mark from the source string
-		source = source[len(eNextMark):]
-
-		if iCloseMarkExpected != "" {
-			// There is an open mark that needs to be closed.
-			if iNextMark != iCloseMarkExpected {
-				return "", fmt.Errorf(
-					"unexpected closing mark: Got: %q  Want: %q",
-					iNextMark,
-					iCloseMarkExpected,
-				)
-			}
-			iCloseMarkExpected = ""
-		} else {
-			iCloseMarkExpected = iNextCloseMark
-		}
-	}
 }

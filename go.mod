@@ -2,4 +2,4 @@ module github.com/dancsecs/gotomd
 
 go 1.21
 
-require github.com/dancsecs/sztest v0.0.0-20240207154049-50d81b3e00d0
+require github.com/dancsecs/sztest v0.0.0-20240212170232-3d3eec716276
