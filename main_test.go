@@ -402,39 +402,3 @@ func Test_SampleGoProjectOneCleanNoTargetAlternateOut(t *testing.T) {
 	wFile := filepath.Join(altDir, "README.md.gtm")
 	chk.Log("Cleaning " + rFile + " to: " + wFile)
 }
-
-func Test_SampleGoProjectOne_CpuProfile(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
-	defer chk.Release()
-
-	dir := chk.CreateTmpDir()
-	altDir := chk.CreateTmpSubDir("altDir")
-
-	pprofFilePath := filepath.Join(dir, "gotomd.pprof")
-
-	chk.NoErr(setup(dir, "README.md.gtm", "sample_test.go", "sample.go"))
-
-	chk.SetupArgsAndFlags([]string{
-		"programName",
-		"-f",
-		"-o", altDir,
-		"-U", pprofFilePath,
-		"-u", "1",
-		"-z",
-		filepath.Join(dir, "README.md.gtm"),
-	})
-
-	// Nor Run the main function with no -f arg requiring confirmation
-	main()
-
-	got, wnt, err := getTestFiles(altDir, "README.md")
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	ppStat, err := os.Stat(pprofFilePath)
-	chk.NoErr(err)
-	chk.False(ppStat.IsDir())
-
-	chk.Stdout()
-	chk.Log()
-}

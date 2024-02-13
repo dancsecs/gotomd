@@ -117,7 +117,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"runtime/pprof"
 )
 
 const license = `
@@ -142,7 +141,6 @@ func main() {
 	var err error
 	var origWd string
 	var filesToProcess []string
-	var profileIterations uint
 
 	// Restore original working directory on exit.
 	origWd, err = os.Getwd()
@@ -158,32 +156,17 @@ func main() {
 		fmt.Print(license)
 	}
 
-	if cpuProfile != "" {
-		f, err := os.Create(cpuProfile)
-		if err == nil {
-			err = pprof.StartCPUProfile(f)
-			if err == nil {
-				defer pprof.StopCPUProfile()
-				profileIterations = cpuProfileIterations
-			}
-		}
-	} else {
-		profileIterations = 1
-	}
-
 	filesToProcess, err = getFilesToProcess()
 
-	for ; profileIterations > 0; profileIterations-- {
-		for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
-			switch {
-			case cleanOnly:
-				//   err = cleanMD(filesToProcess[i])
-				err = cleanMD(filesToProcess[i])
-			case replace:
-				err = replaceMDInPlace(filesToProcess[i])
-			default:
-				err = expandMD(filesToProcess[i])
-			}
+	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
+		switch {
+		case cleanOnly:
+			//   err = cleanMD(filesToProcess[i])
+			err = cleanMD(filesToProcess[i])
+		case replace:
+			err = replaceMDInPlace(filesToProcess[i])
+		default:
+			err = expandMD(filesToProcess[i])
 		}
 	}
 	if err != nil {

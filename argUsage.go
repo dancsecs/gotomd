@@ -25,21 +25,18 @@ import (
 	"strings"
 )
 
-const defaultCpuProfileIterations = uint(5)
 const defaultPermissions = 0644
 
 //nolint:goCheckNoGlobals // Ok.
 var (
-	cleanOnly            = false
-	forceOverwrite       = false
-	replace              = false
-	verbose              = false
-	szColorize           = false
-	outputDir            = "."
-	defaultPerm          = defaultPermissions
-	showLicense          = false
-	cpuProfile           = ""
-	cpuProfileIterations = defaultCpuProfileIterations
+	cleanOnly      = false
+	forceOverwrite = false
+	replace        = false
+	verbose        = false
+	szColorize     = false
+	outputDir      = "."
+	defaultPerm    = defaultPermissions
+	showLicense    = false
 )
 
 func usage() {
@@ -52,8 +49,6 @@ func usage() {
 			" [-z]"+
 			" [-p perm]"+
 			" [-o outDir]"+
-			" [-U file]"+
-			" [-u int]"+
 			" file|dir"+
 			" [file|dir...]"+
 			"\n",
@@ -99,13 +94,6 @@ func processArgs() {
 	)
 	flag.IntVar(&defaultPerm, "p", defaultPermissions,
 		"Permissions to use when creating new file (can only set RW bits).",
-	)
-	flag.StringVar(&cpuProfile, "U", "",
-		"Collect cpu profile data into named file.",
-	)
-
-	flag.UintVar(&cpuProfileIterations, "u", defaultCpuProfileIterations,
-		"Number of iterations to run when collecting cpu profile information.",
 	)
 
 	flag.CommandLine.Usage = usage
