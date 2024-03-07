@@ -26,7 +26,7 @@ and the defined structure:
 
 and run a specific test
 
-<!--- gotomd::tst::./Test_PASS_SampleGoProjectOne -->
+<!--- gotomd::tst::./Test_PASS_Example1 -->
 
 or run all tests in a package:
 

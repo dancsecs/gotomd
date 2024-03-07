@@ -63,8 +63,8 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 		szColorize = false
 	}()
 
-	file1 := sampleGoProjectOnePath + pkgLabel
-	file2 := sampleGoProjectTwoPath + pkgLabel
+	file1 := example1Path + pkgLabel
+	file2 := example2Path + pkgLabel
 	s, err := getGoTst(file1 + " " + file2)
 
 	chk.NoErr(err)
@@ -94,13 +94,13 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 	chk.Stdout("" +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+sampleGoProjectOne) + "\n" +
+				string(os.PathSeparator)+example1) + "\n" +
 		`
-    {{latexOn}}=== RUN   Test_PASS_SampleGoProjectOne{{latexOff}}
+    {{latexOn}}=== RUN   Test_PASS_Example1{{latexOff}}
     <br>
-    {{latexOn}}--- PASS: Test_PASS_SampleGoProjectOne (0.0s){{latexOff}}
+    {{latexOn}}--- PASS: Test_PASS_Example1 (0.0s){{latexOff}}
     <br>
-    {{latexOn}}=== RUN   Test_FAIL_SampleGoProjectOne{{latexOff}}
+    {{latexOn}}=== RUN   Test_FAIL_Example1{{latexOff}}
     <br>
     {{latexOn}}    sample_test.go:28: unexpected int:{{latexOff}}
     <br>
@@ -126,7 +126,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}        {{wntOn}}WNT: {{wntOff}}{{chgOn}}Sum{{chgOff}}: 6{{latexOff}}
     <br>
-    {{latexOn}}--- FAIL: Test_FAIL_SampleGoProjectOne (0.0s){{latexOff}}
+    {{latexOn}}--- FAIL: Test_FAIL_Example1 (0.0s){{latexOff}}
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
@@ -140,13 +140,13 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     ` +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+sampleGoProjectTwo) + "\n" +
+				string(os.PathSeparator)+example2) + "\n" +
 		`
-    {{latexOn}}=== RUN   Test_PASS_SampleGoProjectTwo{{latexOff}}
+    {{latexOn}}=== RUN   Test_PASS_Example2{{latexOff}}
     <br>
-    {{latexOn}}--- PASS: Test_PASS_SampleGoProjectTwo (0.0s){{latexOff}}
+    {{latexOn}}--- PASS: Test_PASS_Example2 (0.0s){{latexOff}}
     <br>
-    {{latexOn}}=== RUN   Test_FAIL_SampleGoProjectTwo{{latexOff}}
+    {{latexOn}}=== RUN   Test_FAIL_Example2{{latexOff}}
     <br>
     {{latexOn}}    sample_test.go:28: unexpected int:{{latexOff}}
     <br>
@@ -172,7 +172,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}        {{wntOn}}WNT: {{wntOff}}{{chgOn}}Sum{{chgOff}}: 6{{latexOff}}
     <br>
-    {{latexOn}}--- FAIL: Test_FAIL_SampleGoProjectTwo (0.0s){{latexOff}}
+    {{latexOn}}--- FAIL: Test_FAIL_Example2 (0.0s){{latexOff}}
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
@@ -190,8 +190,8 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
 	chk := sztest.CaptureStdout(t)
 	defer chk.Release()
 
-	file1 := sampleGoProjectOnePath + pkgLabel
-	file2 := sampleGoProjectTwoPath + pkgLabel
+	file1 := example1Path + pkgLabel
+	file2 := example2Path + pkgLabel
 	s, err := getGoTst(file1 + " " + file2)
 
 	chk.NoErr(err)
@@ -200,12 +200,12 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
 	chk.Stdout("" +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+sampleGoProjectOne) + "\n" +
+				string(os.PathSeparator)+example1) + "\n" +
 		`
     <pre>
-    === RUN   Test_PASS_SampleGoProjectOne
-    --- PASS: Test_PASS_SampleGoProjectOne (0.0s)
-    === RUN   Test_FAIL_SampleGoProjectOne
+    === RUN   Test_PASS_Example1
+    --- PASS: Test_PASS_Example1 (0.0s)
+    === RUN   Test_FAIL_Example1
     \s   sample_test.go:28: unexpected int:
     \s       2+2=5 (is true for big values of two):
     \s       GOT: 4
@@ -218,7 +218,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     \s   sample_test.go:39: unexpected string:
     \s       GOT: Total: 6
     \s       WNT: Sum: 6
-    --- FAIL: Test_FAIL_SampleGoProjectOne (0.0s)
+    --- FAIL: Test_FAIL_Example1 (0.0s)
     FAIL
     coverage: 100.0&#xFE6A; of statements
     FAIL github.com/dancsecs/gotomd/example1 0.0s
@@ -228,12 +228,12 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     ` +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+sampleGoProjectTwo) + "\n" +
+				string(os.PathSeparator)+example2) + "\n" +
 		`
     <pre>
-    === RUN   Test_PASS_SampleGoProjectTwo
-    --- PASS: Test_PASS_SampleGoProjectTwo (0.0s)
-    === RUN   Test_FAIL_SampleGoProjectTwo
+    === RUN   Test_PASS_Example2
+    --- PASS: Test_PASS_Example2 (0.0s)
+    === RUN   Test_FAIL_Example2
     \s   sample_test.go:28: unexpected int:
     \s       2+2=5 (is true for big values of two):
     \s       GOT: 4
@@ -246,7 +246,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     \s   sample_test.go:39: unexpected string:
     \s       GOT: Total: 6
     \s       WNT: Sum: 6
-    --- FAIL: Test_FAIL_SampleGoProjectTwo (0.0s)
+    --- FAIL: Test_FAIL_Example2 (0.0s)
     FAIL
     coverage: 100.0&#xFE6A; of statements
     FAIL github.com/dancsecs/gotomd/example2 0.0s

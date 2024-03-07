@@ -34,8 +34,8 @@ const hardSpace = "\\unicode{160}"
 const hardUnderscore = "&#x332;"
 const hardPercent = "&#xFE6A;"
 
-// "--- PASS: Test_PASS_SampleGoProjectOne (0.0s)".
-// "--- FAIL: Test_FAIL_SampleGoProjectOne (0.0s)".
+// "--- PASS: Test_PASS_Example1 (0.0s)".
+// "--- FAIL: Test_FAIL_Example1 (0.0s)".
 var squashTestTime = regexp.MustCompile(
 	`(?m)^(--- (?:PASS|FAIL): .+?) \(\d+\.\d+s\)$`,
 )

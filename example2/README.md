@@ -75,14 +75,14 @@ StructureType tests the documentation of structures.
 
 and run a specific test
 
-<!--- gotomd::Bgn::tst::./Test_PASS_SampleGoProjectTwo -->
+<!--- gotomd::Bgn::tst::./Test_PASS_Example2 -->
 ```bash
-go test -v -cover -run Test_PASS_SampleGoProjectTwo .
+go test -v -cover -run Test_PASS_Example2 .
 ```
 
-$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectTwo}}$
+$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;PASS&#x332;Example2}}$
 <br>
-$\small{\texttt{---\unicode{160}PASS:\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectTwo\unicode{160}(0.0s)}}$
+$\small{\texttt{---\unicode{160}PASS:\unicode{160}Test&#x332;PASS&#x332;Example2\unicode{160}(0.0s)}}$
 <br>
 $\small{\texttt{PASS}}$
 <br>
@@ -90,7 +90,7 @@ $\small{\texttt{coverage:\unicode{160}100.0&#xFE6A;\unicode{160}of\unicode{160}s
 <br>
 $\small{\texttt{ok\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}github.com/dancsecs/gotomd/example2\unicode{160}\unicode{160}\unicode{160}\unicode{160}coverage:\unicode{160}100.0&#xFE6A;\unicode{160}of\unicode{160}statements}}$
 <br>
-<!--- gotomd::End::tst::./Test_PASS_SampleGoProjectTwo -->
+<!--- gotomd::End::tst::./Test_PASS_Example2 -->
 
 or run all tests in a package:
 
@@ -99,11 +99,11 @@ or run all tests in a package:
 go test -v -cover .
 ```
 
-$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectTwo}}$
+$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;PASS&#x332;Example2}}$
 <br>
-$\small{\texttt{---\unicode{160}PASS:\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectTwo\unicode{160}(0.0s)}}$
+$\small{\texttt{---\unicode{160}PASS:\unicode{160}Test&#x332;PASS&#x332;Example2\unicode{160}(0.0s)}}$
 <br>
-$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;FAIL&#x332;SampleGoProjectTwo}}$
+$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;FAIL&#x332;Example2}}$
 <br>
 $\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}sample&#x332;test.go:28:\unicode{160}unexpected\unicode{160}int:}}$
 <br>
@@ -129,7 +129,7 @@ $\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160
 <br>
 $\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\color{cyan}WNT:\unicode{160}\color{default}\color{darkturquoise}Sum\color{default}:\unicode{160}6}}$
 <br>
-$\small{\texttt{---\unicode{160}FAIL:\unicode{160}Test&#x332;FAIL&#x332;SampleGoProjectTwo\unicode{160}(0.0s)}}$
+$\small{\texttt{---\unicode{160}FAIL:\unicode{160}Test&#x332;FAIL&#x332;Example2\unicode{160}(0.0s)}}$
 <br>
 $\small{\texttt{FAIL}}$
 <br>

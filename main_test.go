@@ -27,15 +27,15 @@ import (
 	"github.com/dancsecs/sztest"
 )
 
-const sampleGoProjectOne = "example1"
-const sampleGoProjectOnePath = "." + string(os.PathSeparator) +
-	sampleGoProjectOne + string(os.PathSeparator)
+const example1 = "example1"
+const example1Path = "." + string(os.PathSeparator) +
+	example1 + string(os.PathSeparator)
 
-const sampleGoProjectTwo = "example2"
-const sampleGoProjectTwoPath = "." + string(os.PathSeparator) +
-	sampleGoProjectTwo + string(os.PathSeparator)
+const example2 = "example2"
+const example2Path = "." + string(os.PathSeparator) +
+	example2 + string(os.PathSeparator)
 
-func Test_SampleGoProjectOneExpandTargetOverwriteDirVerbose(t *testing.T) {
+func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	chk := sztest.CaptureLogAndStdout(t)
 	defer chk.Release()
 
@@ -92,7 +92,7 @@ func Test_SampleGoProjectOneExpandTargetOverwriteDirVerbose(t *testing.T) {
 
 ////////////
 
-func Test_SampleGoProjectOneReplaceNoTarget(t *testing.T) {
+func Test_Example1ReplaceNoTarget(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
@@ -119,7 +119,7 @@ func Test_SampleGoProjectOneReplaceNoTarget(t *testing.T) {
 	)
 }
 
-func Test_SampleGoProjectOneReplaceTargetCancel(t *testing.T) {
+func Test_Example1ReplaceTargetCancel(t *testing.T) {
 	chk := sztest.CaptureLogAndStdout(t)
 	defer chk.Release()
 
@@ -167,7 +167,7 @@ func Test_SampleGoProjectOneReplaceTargetCancel(t *testing.T) {
 	)
 }
 
-func Test_SampleGoProjectOneReplaceTargetOverwrite(t *testing.T) {
+func Test_Example1ReplaceTargetOverwrite(t *testing.T) {
 	chk := sztest.CaptureStdout(t)
 	defer chk.Release()
 
@@ -204,7 +204,7 @@ func Test_SampleGoProjectOneReplaceTargetOverwrite(t *testing.T) {
 	chk.Stdout("Confirm overwrite of " + fName + " (Y to overwrite)?\\s")
 }
 
-func Test_SampleGoProjectOneReplaceTargetOverwriteDir(t *testing.T) {
+func Test_Example1ReplaceTargetOverwriteDir(t *testing.T) {
 	chk := sztest.CaptureStdout(t)
 	defer chk.Release()
 
@@ -240,7 +240,7 @@ func Test_SampleGoProjectOneReplaceTargetOverwriteDir(t *testing.T) {
 	chk.Stdout("Confirm overwrite of " + dir + "/README.md (Y to overwrite)?\\s")
 }
 
-func Test_SampleGoProjectOneReplaceTargetOverwriteDirFromClean(t *testing.T) {
+func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
 	chk := sztest.CaptureStdout(t)
 	defer chk.Release()
 
@@ -283,7 +283,7 @@ func Test_SampleGoProjectOneReplaceTargetOverwriteDirFromClean(t *testing.T) {
 	chk.Stdout("Confirm overwrite of " + dir + "/README.md (Y to overwrite)?\\s")
 }
 
-func Test_SampleGoProjectOneReplaceTargetOverwriteDirVerbose(t *testing.T) {
+func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
 	chk := sztest.CaptureLogAndStdout(t)
 	defer chk.Release()
 
@@ -376,7 +376,7 @@ func getTestFiles(dir, fName string) ([]string, []string, error) {
 		nil
 }
 
-func Test_SampleGoProjectOneCleanNoTargetAlternateOut(t *testing.T) {
+func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 	chk := sztest.CaptureLogAndStdout(t)
 	defer chk.Release()
 

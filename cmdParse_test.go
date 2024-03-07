@@ -53,7 +53,7 @@ func Test_CmdParse_ParseCmd(t *testing.T) {
 	chk.Str(dir, "")
 	chk.Str(action, "")
 
-	cmd = sampleGoProjectOne + string(os.PathSeparator) + "action"
+	cmd = example1 + string(os.PathSeparator) + "action"
 
 	dir, action, err = parseCmd(cmd)
 	chk.Err(
@@ -63,10 +63,10 @@ func Test_CmdParse_ParseCmd(t *testing.T) {
 	chk.Str(dir, "")
 	chk.Str(action, "")
 
-	cmd = sampleGoProjectOnePath + "action"
+	cmd = example1Path + "action"
 	dir, action, err = parseCmd(cmd)
 	chk.NoErr(err)
-	chk.Str(dir, "."+string(os.PathSeparator)+sampleGoProjectOne)
+	chk.Str(dir, "."+string(os.PathSeparator)+example1)
 	chk.Str(action, "action")
 }
 
@@ -95,7 +95,7 @@ func Test_CmdParse_ParseCmds1(t *testing.T) {
 	chk.Nil(actions)
 	chk.Err(err, "invalid action: a non-blank action is required")
 
-	cmd = sampleGoProjectOne + string(os.PathSeparator) + "action"
+	cmd = example1 + string(os.PathSeparator) + "action"
 
 	dirs, actions, err = parseCmds(cmd)
 	chk.Nil(dirs)
@@ -105,8 +105,8 @@ func Test_CmdParse_ParseCmds1(t *testing.T) {
 		"relative directory must be specified in cmd: \""+cmd+"\"",
 	)
 
-	cmd = sampleGoProjectOnePath + "action"
-	expDir := "." + string(os.PathSeparator) + sampleGoProjectOne
+	cmd = example1Path + "action"
+	expDir := "." + string(os.PathSeparator) + example1
 
 	dirs, actions, err = parseCmds(cmd)
 	chk.NoErr(err)
@@ -118,7 +118,7 @@ func Test_CmdParse_ParseCmds2(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	file1 := sampleGoProjectOnePath + "action"
+	file1 := example1Path + "action"
 	file2 := string(os.PathSeparator) + "action2"
 
 	dirs, actions, err := parseCmds(file1 + " " + file2)
@@ -126,21 +126,21 @@ func Test_CmdParse_ParseCmds2(t *testing.T) {
 	chk.Nil(actions)
 	chk.Err(err, "relative directory must be specified in cmd: \""+file2+"\"")
 
-	file2 = sampleGoProjectOne + string(os.PathSeparator) + "action"
+	file2 = example1 + string(os.PathSeparator) + "action"
 	dirs, actions, err = parseCmds(file1 + " " + file2)
 	chk.Nil(dirs)
 	chk.Nil(actions)
 	chk.Err(err, "relative directory must be specified in cmd: \""+file2+"\"")
 
 	file2 = "action2"
-	expDir := "." + string(os.PathSeparator) + sampleGoProjectOne
+	expDir := "." + string(os.PathSeparator) + example1
 
 	dirs, actions, err = parseCmds(file1 + " " + file2)
 	chk.NoErr(err)
 	chk.StrSlice(dirs, []string{expDir, expDir})
 	chk.StrSlice(actions, []string{"action", "action2"})
 
-	file2 = sampleGoProjectOnePath + "action2"
+	file2 = example1Path + "action2"
 	dirs, actions, err = parseCmds(file1 + " " + file2)
 	chk.NoErr(err)
 	chk.StrSlice(dirs, []string{expDir, expDir})

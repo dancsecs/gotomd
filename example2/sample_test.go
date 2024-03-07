@@ -7,7 +7,7 @@ import (
 	"github.com/dancsecs/sztest"
 )
 
-func Test_PASS_SampleGoProjectTwo(t *testing.T) {
+func Test_PASS_Example2(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
@@ -19,7 +19,7 @@ func Test_PASS_SampleGoProjectTwo(t *testing.T) {
 	chk.Str(structure.GetF1(1, 2, 3), "Total: 6")
 }
 
-func Test_FAIL_SampleGoProjectTwo(t *testing.T) {
+func Test_FAIL_Example2(t *testing.T) {
 	chk := sztest.CaptureStdout(t)
 	defer chk.Release()
 

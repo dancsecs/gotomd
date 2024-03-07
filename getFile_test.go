@@ -36,7 +36,7 @@ func Test_GetFile_GetGoFileInvalid(t *testing.T) {
 		"relative directory must be specified in cmd: \""+tstDir+"\"",
 	)
 
-	_, err = getGoTst(sampleGoProjectOnePath + "TEST_DOES_NOT_EXIST")
+	_, err = getGoTst(example1Path + "TEST_DOES_NOT_EXIST")
 	chk.Err(err, "no tests to run")
 }
 
@@ -44,14 +44,14 @@ func Test_GetFile_GetGoFile(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	d, err := getGoFile(sampleGoProjectOnePath + "crumb.go")
+	d, err := getGoFile(example1Path + "crumb.go")
 	chk.NoErr(err)
 	chk.Str(
 		d,
 		""+
-			markBashCode(catCmd+sampleGoProjectOnePath+"crumb.go")+
+			markBashCode(catCmd+example1Path+"crumb.go")+
 			"\n\n"+
-			markGoCode(pkgLabel+" "+sampleGoProjectOne),
+			markGoCode(pkgLabel+" "+example1),
 	)
 }
 
@@ -59,8 +59,8 @@ func Test_GetFile_GetGoFile2(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	file1 := sampleGoProjectOnePath + "crumb.go"
-	file2 := sampleGoProjectTwoPath + "crumb.go"
+	file1 := example1Path + "crumb.go"
+	file2 := example2Path + "crumb.go"
 
 	d, err := getGoFile(file1 + " " + file2)
 	chk.NoErr(err)
@@ -69,11 +69,11 @@ func Test_GetFile_GetGoFile2(t *testing.T) {
 		""+
 			markBashCode(catCmd+file1)+
 			"\n\n"+
-			markGoCode(pkgLabel+" "+sampleGoProjectOne)+
+			markGoCode(pkgLabel+" "+example1)+
 			"\n\n"+
 			markBashCode(catCmd+file2)+
 			"\n\n"+
-			markGoCode(pkgLabel+" "+sampleGoProjectTwo)+
+			markGoCode(pkgLabel+" "+example2)+
 			"",
 	)
 }
