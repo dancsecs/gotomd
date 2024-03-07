@@ -1,6 +1,6 @@
 <!--- gotomd::Auto:: See github.com/dancsecs/gotomd **DO NOT MODIFY** -->
 
-# Package sample_go_project_one
+# Package example2
 
 This project is used by the Szerszam utility function to test its markdown
 update methods against an independent standalone project. All features
@@ -10,10 +10,10 @@ The following will be replaced by the go package documentation
 
 <!--- gotomd::Bgn::doc::./package -->
 ```go
-package sample_go_project_one
+package example2
 ```
 
-Package sample_go_project_one exists in order to test various go to git
+Package example2 exists in order to test various go to git
 markdown (gToMD) extraction utilities.  Various object will be defined that
 exhibit the various comment and declaration options permitted by gofmt.
 
@@ -75,22 +75,22 @@ StructureType tests the documentation of structures.
 
 and run a specific test
 
-<!--- gotomd::Bgn::tst::./Test_PASS_SampleGoProjectOne -->
+<!--- gotomd::Bgn::tst::./Test_PASS_SampleGoProjectTwo -->
 ```bash
-go test -v -cover -run Test_PASS_SampleGoProjectOne .
+go test -v -cover -run Test_PASS_SampleGoProjectTwo .
 ```
 
-$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectOne}}$
+$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectTwo}}$
 <br>
-$\small{\texttt{---\unicode{160}PASS:\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectOne\unicode{160}(0.0s)}}$
+$\small{\texttt{---\unicode{160}PASS:\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectTwo\unicode{160}(0.0s)}}$
 <br>
 $\small{\texttt{PASS}}$
 <br>
 $\small{\texttt{coverage:\unicode{160}100.0&#xFE6A;\unicode{160}of\unicode{160}statements}}$
 <br>
-$\small{\texttt{ok\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}github.com/dancsecs/gotomd/sample&#x332;go&#x332;project&#x332;one\unicode{160}\unicode{160}\unicode{160}\unicode{160}coverage:\unicode{160}100.0&#xFE6A;\unicode{160}of\unicode{160}statements}}$
+$\small{\texttt{ok\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}github.com/dancsecs/gotomd/example2\unicode{160}\unicode{160}\unicode{160}\unicode{160}coverage:\unicode{160}100.0&#xFE6A;\unicode{160}of\unicode{160}statements}}$
 <br>
-<!--- gotomd::End::tst::./Test_PASS_SampleGoProjectOne -->
+<!--- gotomd::End::tst::./Test_PASS_SampleGoProjectTwo -->
 
 or run all tests in a package:
 
@@ -99,11 +99,11 @@ or run all tests in a package:
 go test -v -cover .
 ```
 
-$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectOne}}$
+$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectTwo}}$
 <br>
-$\small{\texttt{---\unicode{160}PASS:\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectOne\unicode{160}(0.0s)}}$
+$\small{\texttt{---\unicode{160}PASS:\unicode{160}Test&#x332;PASS&#x332;SampleGoProjectTwo\unicode{160}(0.0s)}}$
 <br>
-$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;FAIL&#x332;SampleGoProjectOne}}$
+$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;FAIL&#x332;SampleGoProjectTwo}}$
 <br>
 $\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}sample&#x332;test.go:28:\unicode{160}unexpected\unicode{160}int:}}$
 <br>
@@ -129,13 +129,13 @@ $\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160
 <br>
 $\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\color{cyan}WNT:\unicode{160}\color{default}\color{darkturquoise}Sum\color{default}:\unicode{160}6}}$
 <br>
-$\small{\texttt{---\unicode{160}FAIL:\unicode{160}Test&#x332;FAIL&#x332;SampleGoProjectOne\unicode{160}(0.0s)}}$
+$\small{\texttt{---\unicode{160}FAIL:\unicode{160}Test&#x332;FAIL&#x332;SampleGoProjectTwo\unicode{160}(0.0s)}}$
 <br>
 $\small{\texttt{FAIL}}$
 <br>
 $\small{\texttt{coverage:\unicode{160}100.0&#xFE6A;\unicode{160}of\unicode{160}statements}}$
 <br>
-$\small{\texttt{FAIL\unicode{160}github.com/dancsecs/gotomd/sample&#x332;go&#x332;project&#x332;one\unicode{160}0.0s}}$
+$\small{\texttt{FAIL\unicode{160}github.com/dancsecs/gotomd/example2\unicode{160}0.0s}}$
 <br>
 $\small{\texttt{FAIL}}$
 <br>
@@ -149,7 +149,7 @@ cat ./sample.go
 ```
 
 ```go
-// Package sample_go_project_one exists in order to test various go to git
+// Package example2 exists in order to test various go to git
 // markdown (gToMD) extraction utilities.  Various object will be defined that
 // exhibit the various comment and declaration options permitted by gofmt.
 //
@@ -160,7 +160,7 @@ cat ./sample.go
 //
 // Declarations can be single-line or multi-line blocks or constructions.  Each
 // type will be included here for complete testing.
-package sample_go_project_one
+package example2
 
 import "strconv"
 

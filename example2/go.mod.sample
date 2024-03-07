@@ -1,4 +1,4 @@
-module github.com/dancsecs/gotomd/sample_go_project_two
+module github.com/dancsecs/gotomd/example2
 
 go 1.21
 

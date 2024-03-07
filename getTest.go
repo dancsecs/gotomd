@@ -41,7 +41,7 @@ var squashTestTime = regexp.MustCompile(
 )
 
 // Squash runtimes for all tests.
-// "FAIL\tgithub.com/dancsecs/sztestToMarkdown/sample_go_project_one\t0.0s".
+// "FAIL\tgithub.com/dancsecs/sztestToMarkdown/example1\t0.0s".
 var squashAllTestTime = regexp.MustCompile(`(?m)^FAIL\s(.+?)\s\d+\.\d+s$`)
 
 // Squash (cached) indicator on tests.

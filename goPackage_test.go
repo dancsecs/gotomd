@@ -44,7 +44,7 @@ func Test_GoPackage_GetInfo_InvalidObject(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	_, err := getInfo("./sample_go_project_one", "DOES_NOT_EXIST")
+	_, err := getInfo("./example1", "DOES_NOT_EXIST")
 	chk.Err(err, "unknown package object: DOES_NOT_EXIST")
 }
 
@@ -178,7 +178,7 @@ func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
 	}
 
 	for _, tst := range docInfoTests {
-		dInfo, err := getInfo("./sample_go_project_one", tst.action)
+		dInfo, err := getInfo("./example1", tst.action)
 		chk.NoErr(err)
 		chk.StrSlice(dInfo.header, tst.header, "HEADER For action: ", tst.action)
 		chk.StrSlice(dInfo.body, tst.body, "BODY For action: ", tst.action)

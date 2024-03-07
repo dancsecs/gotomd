@@ -1,4 +1,4 @@
-package sample_go_project_two
+package example2
 
 import (
 	"fmt"

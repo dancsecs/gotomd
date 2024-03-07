@@ -132,7 +132,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}coverage: 100.0&#xFE6A; of statements{{latexOff}}
     <br>
-    {{latexOn}}FAIL github.com/dancsecs/gotomd/sample_go_project_one 0.0s{{latexOff}}
+    {{latexOn}}FAIL github.com/dancsecs/gotomd/example1 0.0s{{latexOff}}
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
@@ -178,7 +178,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}coverage: 100.0&#xFE6A; of statements{{latexOff}}
     <br>
-    {{latexOn}}FAIL github.com/dancsecs/gotomd/sample_go_project_two 0.0s{{latexOff}}
+    {{latexOn}}FAIL github.com/dancsecs/gotomd/example2 0.0s{{latexOff}}
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
@@ -221,7 +221,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     --- FAIL: Test_FAIL_SampleGoProjectOne (0.0s)
     FAIL
     coverage: 100.0&#xFE6A; of statements
-    FAIL github.com/dancsecs/gotomd/sample_go_project_one 0.0s
+    FAIL github.com/dancsecs/gotomd/example1 0.0s
     FAIL
     </pre>
 
@@ -249,7 +249,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     --- FAIL: Test_FAIL_SampleGoProjectTwo (0.0s)
     FAIL
     coverage: 100.0&#xFE6A; of statements
-    FAIL github.com/dancsecs/gotomd/sample_go_project_two 0.0s
+    FAIL github.com/dancsecs/gotomd/example2 0.0s
     FAIL
     </pre>
   `)

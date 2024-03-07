@@ -27,11 +27,11 @@ import (
 	"github.com/dancsecs/sztest"
 )
 
-const sampleGoProjectOne = "sample_go_project_one"
+const sampleGoProjectOne = "example1"
 const sampleGoProjectOnePath = "." + string(os.PathSeparator) +
 	sampleGoProjectOne + string(os.PathSeparator)
 
-const sampleGoProjectTwo = "sample_go_project_two"
+const sampleGoProjectTwo = "example2"
 const sampleGoProjectTwoPath = "." + string(os.PathSeparator) +
 	sampleGoProjectTwo + string(os.PathSeparator)
 
@@ -347,7 +347,7 @@ func setup(dir string, files ...string) error {
 
 	files = append(files, "go.mod"+ext, "go.sum"+ext)
 	for i, mi := 0, len(files); i < mi && err == nil; i++ {
-		b, err = os.ReadFile(filepath.Join("sample_go_project_one", files[i]))
+		b, err = os.ReadFile(filepath.Join("example1", files[i]))
 		if err == nil {
 			err = os.WriteFile(
 				filepath.Join(dir, strings.TrimSuffix(files[i], ext)),
@@ -366,7 +366,7 @@ func getTestFiles(dir, fName string) ([]string, []string, error) {
 		return nil, nil, err
 	}
 
-	wntBytes, err := os.ReadFile(filepath.Join("sample_go_project_one", fName))
+	wntBytes, err := os.ReadFile(filepath.Join("example1", fName))
 	if err != nil {
 		return nil, nil, err
 	}
