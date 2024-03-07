@@ -86,7 +86,7 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 }
 
 func Test_Markdown_Expand(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztest.CaptureLog(t)
 	defer chk.Release()
 
 	d, err := getInfo("./sample_go_project_one", "TimesTwo")
@@ -104,6 +104,8 @@ func Test_Markdown_Expand(t *testing.T) {
 			"TimesTwo returns the value times two.\n"+
 			"<!--- gotomd::End::doc::TimesTwo -->\n",
 	)
+
+	chk.Log(`getInfo("TimesTwo")`)
 }
 
 func Test_Markdown_Search(t *testing.T) {

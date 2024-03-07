@@ -83,7 +83,7 @@
         "inamedparam",
         "ineffassign",
         "interfacebloat",
-        // "interfacer", // Deprecated
+        "interfacer", // Deprecated
         "intrange",
         "ireturn",
         "lll",  

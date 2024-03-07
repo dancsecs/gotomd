@@ -53,6 +53,7 @@ func Test_GetTest_RunTestNotDirectory(t *testing.T) {
 	)
 }
 
+//nolint:funlen // Ok.
 func Test_GetTest_RunTestColorize(t *testing.T) {
 	chk := sztest.CaptureStdout(t)
 	defer chk.Release()
@@ -62,8 +63,8 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 		szColorize = false
 	}()
 
-	file1 := sampleGoProjectOnePath + "package"
-	file2 := sampleGoProjectTwoPath + "package"
+	file1 := sampleGoProjectOnePath + pkgLabel
+	file2 := sampleGoProjectTwoPath + pkgLabel
 	s, err := getGoTst(file1 + " " + file2)
 
 	chk.NoErr(err)
@@ -184,12 +185,13 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
   `)
 }
 
+//nolint:funlen // Ok.
 func Test_GetTest_RunTestNoColor(t *testing.T) {
 	chk := sztest.CaptureStdout(t)
 	defer chk.Release()
 
-	file1 := sampleGoProjectOnePath + "package"
-	file2 := sampleGoProjectTwoPath + "package"
+	file1 := sampleGoProjectOnePath + pkgLabel
+	file2 := sampleGoProjectTwoPath + pkgLabel
 	s, err := getGoTst(file1 + " " + file2)
 
 	chk.NoErr(err)

@@ -58,6 +58,7 @@ const (
 	internalTestMarkMsgOff = `}`
 )
 
+//nolint:goCheckNoGlobals // Ok.
 var szEnvSetup = []string{
 	sztest.EnvMarkWntOn + "=" + markWntOn,
 	sztest.EnvMarkWntOff + "=" + markWntOff,
@@ -90,6 +91,7 @@ func translateToTestSymbols(s string) string {
 	s = strings.ReplaceAll(s, markGotOff, internalTestMarkGotOff)
 	s = strings.ReplaceAll(s, markMsgOn, internalTestMarkMsgOn)
 	s = strings.ReplaceAll(s, markMsgOff, internalTestMarkMsgOff)
+
 	return s
 }
 
@@ -108,5 +110,6 @@ func translateToBlankSymbols(s string) string {
 	s = strings.ReplaceAll(s, markGotOff, "")
 	s = strings.ReplaceAll(s, markMsgOn, "")
 	s = strings.ReplaceAll(s, markMsgOff, "")
+
 	return s
 }

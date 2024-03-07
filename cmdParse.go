@@ -19,6 +19,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -37,12 +38,21 @@ func parseCmd(cmd string) (string, string, error) {
 	dir := strings.TrimSpace(cmd[:lastSeparatorPos])
 	action := strings.TrimSpace(cmd[lastSeparatorPos+1:])
 	s, err := os.Stat(dir)
+
 	if err != nil || !s.IsDir() {
-		return "", "", fmt.Errorf("invalid directory specified as: %q", dir)
+		return "",
+			"",
+			fmt.Errorf("invalid directory specified as: %q", dir)
 	}
+
 	if action == "" {
-		return "", "", fmt.Errorf("invalid action: a non-blank action is required")
+		return "",
+			"",
+			errors.New(
+				"invalid action: a non-blank action is required",
+			)
 	}
+
 	return dir, action, nil
 }
 
@@ -52,16 +62,22 @@ func parseCmd(cmd string) (string, string, error) {
 // subsequent entries that do not specify a directory will default to
 // the last directory defined.
 func parseCmds(cmdStr string) ([]string, []string, error) {
-	var lastDir string
-	var d, a string
-	var err error
-	var dirs, actions []string
+	var (
+		lastDir       string
+		d, a          string
+		err           error
+		dirs, actions []string
+	)
+
 	cmds := regexp.MustCompile(`[\s\t]+`).Split(cmdStr, -1)
+
 	for i, mi := 0, len(cmds); i < mi && err == nil; i++ {
 		c := cmds[i]
-		if lastDir != "" && strings.LastIndex(c, string(os.PathSeparator)) < 0 {
+		if lastDir != "" &&
+			strings.LastIndex(c, string(os.PathSeparator)) < 0 {
 			c = "." + string(os.PathSeparator) + filepath.Join(lastDir, c)
 		}
+
 		d, a, err = parseCmd(c)
 		if err == nil {
 			dirs = append(dirs, d)
@@ -69,8 +85,10 @@ func parseCmds(cmdStr string) ([]string, []string, error) {
 			lastDir = d
 		}
 	}
+
 	if err != nil {
 		return nil, nil, err
 	}
+
 	return dirs, actions, nil
 }

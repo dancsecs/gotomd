@@ -55,6 +55,7 @@ var squashCached = regexp.MustCompile(
 func setupEnv(env []string) []string {
 	szEnv := szEnvSetup
 	newEnv := make([]string, 0, len(env)+len(szEnv))
+
 	for _, e := range env {
 		add := !strings.HasPrefix(e, "\"SZTEST_") &&
 			e != "\""+sztest.EnvTmpDir+"="
@@ -62,34 +63,44 @@ func setupEnv(env []string) []string {
 			newEnv = append(newEnv, e)
 		}
 	}
+
 	return append(newEnv, szEnv...)
 }
 
 //nolint:funlen // Ok.
 func runTest(dir, tests string) (string, string, error) {
-	var rawRes []byte
-	var args []string
-	res := ""
+	var (
+		rawRes []byte
+		args   []string
+		res    string
+	)
 
 	stat, err := os.Stat(dir)
 	if err == nil && !stat.IsDir() {
 		err = errors.New("not a directory")
 	}
+
 	if err == nil {
 		args = []string{"test", "-v", "-cover"}
 
-		if tests != "package" {
+		if tests != pkgLabel {
 			args = append(args, "-run", tests)
 		}
+
 		args = append(args, dir)
 		c := exec.Command("go", args...) //nolint:gosec // Ok.
 		//	c.Dir = dir
 		c.Env = setupEnv(os.Environ())
 		rawRes, _ = c.CombinedOutput() // We expect a general task error.
-		if bytes.HasPrefix(rawRes, []byte("testing: warning: no tests to run")) {
+
+		if bytes.HasPrefix(
+			rawRes,
+			[]byte("testing: warning: no tests to run"),
+		) {
 			err = errors.New("no tests to run")
 		}
 	}
+
 	if err == nil {
 		if szColorize {
 			res = translateToTestSymbols(string(rawRes))
@@ -103,14 +114,16 @@ func runTest(dir, tests string) (string, string, error) {
 
 			latexRes := ""
 			lines := strings.Split(res, "\n")
+
 			for _, line := range lines[:len(lines)-1] {
 				if latexRes != "" {
 					latexRes += "\n"
 				}
+
 				latexRes += "$\\small{\\texttt{" + line + "}}$\n<br>"
 			}
+
 			res = latexRes
-			//  res = "<---\n" + string(rawRes) + "\n -->\n\n" + latexRes
 		} else {
 			res = translateToBlankSymbols(string(rawRes))
 			res = "<pre>\n" + strings.TrimRight(res, "\n") + "\n</pre>"
@@ -120,8 +133,12 @@ func runTest(dir, tests string) (string, string, error) {
 			res = strings.ReplaceAll(res, "\t", tabSPaces)
 			res = strings.ReplaceAll(res, "%", hardPercent)
 		}
-		return "go " + strings.Join(args, " "), strings.TrimRight(res, "\n"), nil
+
+		return "go " + strings.Join(args, " "),
+			strings.TrimRight(res, "\n"),
+			nil
 	}
+
 	return "", "", err
 }
 
@@ -130,11 +147,13 @@ func buildTestCmds(dir, action []string) ([]string, []string) {
 		return nil, nil
 	}
 
-	var newDir []string
-	var newAction []string
-	var cDir string
-	var cAction string
-	var i, mi int
+	var (
+		newDir    []string
+		newAction []string
+		cDir      string
+		cAction   string
+		i, mi     int
+	)
 
 	cDir = dir[0]
 	cAction = action[0]
@@ -149,17 +168,21 @@ func buildTestCmds(dir, action []string) ([]string, []string) {
 			cAction = action[i]
 		}
 	}
+
 	if cDir != "" {
 		newDir = append(newDir, cDir)
 		newAction = append(newAction, cAction)
 	}
+
 	return newDir, newAction
 }
 
 func getGoTst(cmd string) (string, error) {
-	var res string
-	var tstRes string
-	var tstCmd string
+	var (
+		res    string
+		tstRes string
+		tstCmd string
+	)
 
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
@@ -172,6 +195,7 @@ func getGoTst(cmd string) (string, error) {
 			if res != "" {
 				res += "\n\n"
 			}
+
 			res += markBashCode(tstCmd) + "\n\n" + tstRes
 		}
 	}
@@ -179,5 +203,6 @@ func getGoTst(cmd string) (string, error) {
 	if err == nil {
 		return res, nil
 	}
+
 	return "", err
 }

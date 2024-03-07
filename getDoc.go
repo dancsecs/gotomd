@@ -31,8 +31,11 @@ func markBashCode(content string) string {
 }
 
 func getDoc(cmd string) (string, error) {
-	var d *docInfo
-	res := ""
+	var (
+		d   *docInfo
+		res string
+	)
+
 	dir, action, err := parseCmds(cmd)
 	for i, mi := 0, len(dir); i < mi && err == nil; i++ {
 		d, err = getInfo(dir[i], action[i])
@@ -40,19 +43,25 @@ func getDoc(cmd string) (string, error) {
 			if res != "" {
 				res += "\n\n"
 			}
+
 			res += d.declGoLang() + "\n\n" +
 				d.docMarkdown()
 		}
 	}
+
 	if err == nil {
 		return res, nil
 	}
+
 	return "", err
 }
 
 func getDocDecl(cmd string) (string, error) {
-	var d *docInfo
-	res := ""
+	var (
+		d   *docInfo
+		res string
+	)
+
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
@@ -61,19 +70,25 @@ func getDocDecl(cmd string) (string, error) {
 				if res != "" {
 					res += "\n"
 				}
+
 				res += strings.Join(d.header, "\n")
 			}
 		}
 	}
+
 	if err == nil {
 		return markGoCode(res), nil
 	}
+
 	return "", err
 }
 
 func getDocDeclSingle(cmd string) (string, error) {
-	var d *docInfo
-	res := ""
+	var (
+		d   *docInfo
+		res string
+	)
+
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
@@ -82,19 +97,25 @@ func getDocDeclSingle(cmd string) (string, error) {
 				if res != "" {
 					res += "\n"
 				}
+
 				res += d.oneLine()
 			}
 		}
 	}
+
 	if err == nil {
 		return markGoCode(res), nil
 	}
+
 	return "", err
 }
 
 func getDocDeclNatural(cmd string) (string, error) {
-	var d *docInfo
-	res := ""
+	var (
+		d   *docInfo
+		res string
+	)
+
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
@@ -103,13 +124,16 @@ func getDocDeclNatural(cmd string) (string, error) {
 				if res != "" {
 					res += "\n\n"
 				}
+
 				res += d.naturalComments() + "\n"
 				res += d.oneLine()
 			}
 		}
 	}
+
 	if err == nil {
 		return markGoCode(res), nil
 	}
+
 	return "", err
 }

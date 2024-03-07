@@ -42,9 +42,12 @@ func setupInPlaceGlobals(
 
 func setupInPlaceDirs(makeTarget bool) error {
 	const fName = "README_SHORT.md"
-	var err error
-	var tFile string
-	var fData []byte
+
+	var (
+		err   error
+		tFile string
+		fData []byte
+	)
 
 	if makeTarget {
 		fData, err = os.ReadFile(filepath.Join(sampleGoProjectOnePath, fName))
@@ -53,24 +56,31 @@ func setupInPlaceDirs(makeTarget bool) error {
 			err = os.WriteFile(tFile, fData, fs.FileMode(defaultPerm))
 		}
 	}
+
 	return err
 }
 
 func getInPlaceFiles() (string, []string, []string, error) {
 	const fName = "README_SHORT.md"
-	var targetPath string
-	var err error
-	var gotBytes []byte
-	var wntBytes []byte
+
+	var (
+		targetPath string
+		err        error
+		gotBytes   []byte
+		wntBytes   []byte
+	)
 
 	targetPath = filepath.Join(outputDir, fName)
+
 	gotBytes, err = os.ReadFile(targetPath)
 	if err == nil {
 		wntBytes, err = os.ReadFile(sampleGoProjectOnePath + fName)
 	}
+
 	if err != nil {
 		return "", nil, nil, err
 	}
+
 	return targetPath,
 		strings.Split(string(gotBytes), "\n"),
 		strings.Split(string(wntBytes), "\n"),

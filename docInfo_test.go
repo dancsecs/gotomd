@@ -28,7 +28,7 @@ func Test_DocInfo_OneLine(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	dInfo := &docInfo{}
+	dInfo := new(docInfo)
 
 	chk.Str(dInfo.oneLine(), "UNKNOWN DECLARATION")
 }
@@ -37,7 +37,7 @@ func Test_DocInfo_NaturalComments(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	dInfo := &docInfo{}
+	dInfo := new(docInfo)
 	dInfo.doc = append(dInfo.doc, "a", "b")
 
 	chk.Str(

@@ -30,6 +30,8 @@ import (
 	"strings"
 )
 
+const pkgLabel = "package"
+
 type packageInfo struct {
 	fSet      *token.FileSet
 	astPkg    *ast.Package
@@ -52,14 +54,17 @@ func (pi *packageInfo) findFunc(name string) *doc.Func {
 
 		for _, t := range pi.docPkg.Types {
 			plainFunctions = append(plainFunctions, t.Funcs...)
+
 			for _, f := range t.Methods {
 				addFunc(t.Name+"."+f.Name, f)
 			}
 		}
+
 		for _, f := range plainFunctions {
 			addFunc(f.Name, f)
 		}
 	}
+
 	return pi.functions[name]
 }
 
@@ -69,12 +74,14 @@ func (pi *packageInfo) findConst(name string) *doc.Value {
 			pi.constants[n] = c
 		}
 		pi.constants = make(map[string]*doc.Value, len(pi.docPkg.Consts))
+
 		for _, c := range pi.docPkg.Consts {
 			for _, n := range c.Names {
 				addConst(n, c)
 			}
 		}
 	}
+
 	return pi.constants[name]
 }
 
@@ -84,22 +91,26 @@ func (pi *packageInfo) findType(name string) *doc.Type {
 			pi.types[n] = t
 		}
 		pi.types = make(map[string]*doc.Type, len(pi.docPkg.Types))
+
 		for _, t := range pi.docPkg.Types {
 			addType(t.Name, t)
 		}
 	}
+
 	return pi.types[name]
 }
 
 // getInfoFunc looks up the documentation for a function.
 func (pi *packageInfo) getInfoFunc(f *doc.Func) (*docInfo, error) {
 	var dInfo *docInfo
+
 	dStart := pi.fSet.PositionFor(f.Decl.Pos(), true)
 	dEnd := pi.fSet.PositionFor(f.Decl.Body.Lbrace, true)
 	fEnd := pi.fSet.PositionFor(f.Decl.End(), true)
 	decl, body, err := pi.snipFile(
 		dStart.Filename, dStart.Offset, dEnd.Offset, fEnd.Offset,
 	)
+
 	if err == nil {
 		dInfo = &docInfo{
 			header: decl,
@@ -107,17 +118,20 @@ func (pi *packageInfo) getInfoFunc(f *doc.Func) (*docInfo, error) {
 			doc:    strings.Split(strings.TrimSpace(f.Doc), "\n"),
 		}
 	}
+
 	return dInfo, err
 }
 
 // getInfoConst looks up the documentation for a function.
 func (pi *packageInfo) getInfoConst(c *doc.Value) (*docInfo, error) {
 	var dInfo *docInfo
+
 	dStart := pi.fSet.PositionFor(c.Decl.Pos(), true)
 	fEnd := pi.fSet.PositionFor(c.Decl.End(), true)
 	decl, body, err := pi.snipFile(
 		dStart.Filename, dStart.Offset, -1, fEnd.Offset,
 	)
+
 	if err == nil {
 		dInfo = &docInfo{
 			header: decl,
@@ -125,18 +139,21 @@ func (pi *packageInfo) getInfoConst(c *doc.Value) (*docInfo, error) {
 			doc:    strings.Split(strings.TrimSpace(c.Doc), "\n"),
 		}
 	}
+
 	return dInfo, err
 }
 
 // getInfoType looks up the documentation for a function.
 func (pi *packageInfo) getInfoType(t *doc.Type) (*docInfo, error) {
 	var dInfo *docInfo
+
 	dStart := pi.fSet.PositionFor(t.Decl.Pos(), true)
 	dEnd := pi.fSet.PositionFor(t.Decl.Lparen, true)
 	fEnd := pi.fSet.PositionFor(t.Decl.End(), true)
 	decl, body, err := pi.snipFile(
 		dStart.Filename, dStart.Offset, dEnd.Offset, fEnd.Offset,
 	)
+
 	if err == nil {
 		dInfo = &docInfo{
 			header: decl,
@@ -144,6 +161,7 @@ func (pi *packageInfo) getInfoType(t *doc.Type) (*docInfo, error) {
 			doc:    strings.Split(strings.TrimSpace(t.Doc), "\n"),
 		}
 	}
+
 	return dInfo, err
 }
 
@@ -152,53 +170,71 @@ func (pi *packageInfo) getInfo(name string) (*docInfo, error) {
 	if verbose {
 		log.Printf("getInfo(%q)\n", name)
 	}
-	if name == "package" {
+
+	if name == pkgLabel {
 		// Return Package information.
 		return &docInfo{
-			header: []string{"package " + pi.docPkg.Name},
-			body:   []string{"package " + pi.docPkg.Name},
-			doc:    strings.Split(strings.TrimRight(pi.docPkg.Doc, "\n\t "), "\n"),
+			header: []string{pkgLabel + " " + pi.docPkg.Name},
+			body:   []string{pkgLabel + " " + pi.docPkg.Name},
+			doc: strings.Split(
+				strings.TrimRight(pi.docPkg.Doc, "\n\t "),
+				"\n",
+			),
 		}, nil
 	}
+
 	if f := pi.findFunc(name); f != nil {
 		// Process function
 		return pi.getInfoFunc(f)
 	}
+
 	if c := pi.findConst(name); c != nil {
 		// Process Constant
 		return pi.getInfoConst(c)
 	}
+
 	if t := pi.findType(name); t != nil {
-		// Process Constant
+		// Process Type
 		return pi.getInfoType(t)
 	}
+
 	return nil, errors.New("unknown package object: " + name)
 }
 
 func leadingTabsToSpaces(s []string) []string {
 	const fourSpaces = "    "
+
 	for i, l := range s {
 		newPrefix := ""
+
 		for j, mj := 0, len(l); j < mj; j++ {
 			if l[j] == '\t' {
 				newPrefix += fourSpaces
 			} else {
 				s[i] = newPrefix + l[j:]
+
 				break
 			}
 		}
 	}
+
 	return s
 }
 
 func (pi *packageInfo) snipFile(
 	fPath string, fPos, bPos, endPos int,
 ) ([]string, []string, error) {
-	var decl []string
-	var body []string
+	var (
+		decl []string
+		body []string
+		err  error
+	)
+
 	d, err := os.ReadFile(fPath) //nolint:gosec // Ok.
+
 	if err == nil {
 		res := string(d)
+
 		switch {
 		case bPos < 0:
 			decl = nil
@@ -210,23 +246,29 @@ func (pi *packageInfo) snipFile(
 				"\n",
 			))
 		}
+
 		body = leadingTabsToSpaces(strings.Split(res[fPos:endPos], "\n"))
 	}
-	return decl, body, nil
+
+	return decl, body, err
 }
 
 func createPackageInfo(dir string) (*packageInfo, error) {
-	var pkgInfo *packageInfo
+	var (
+		pkgInfo *packageInfo
+		f       map[string]*ast.Package
+		err     error
+	)
 
 	// Create the AST by parsing src.
 
 	if verbose {
 		log.Print("Loading Package info for: ", dir)
 	}
-	pkgInfo = &packageInfo{fSet: token.NewFileSet()}
 
-	var f map[string]*ast.Package
-	var err error
+	pkgInfo = new(packageInfo)
+	pkgInfo.fSet = token.NewFileSet()
+
 	f, err = parser.ParseDir(pkgInfo.fSet, dir, nil,
 		parser.ParseComments|parser.AllErrors,
 	)
@@ -237,22 +279,27 @@ func createPackageInfo(dir string) (*packageInfo, error) {
 			pkgInfo.docPkg = doc.New(
 				a, n, doc.PreserveAST|doc.AllDecls|doc.AllMethods,
 			)
+
 			return pkgInfo, nil
 		}
 	}
+
 	return nil, err
 }
 
 func getInfo(dir, name string) (*docInfo, error) {
-	var pkgInfo *packageInfo
-	var dInfo *docInfo
-	var ok bool
-	var err error
+	var (
+		pkgInfo *packageInfo
+		dInfo   *docInfo
+		ok      bool
+		err     error
+	)
 
 	cwd, err := os.Getwd()
 	if err == nil {
 		pDir := filepath.Join(cwd, dir)
 		pkgInfo, ok = packages[pDir]
+
 		if !ok {
 			pkgInfo, err = createPackageInfo(dir)
 			if err == nil {
@@ -264,8 +311,10 @@ func getInfo(dir, name string) (*docInfo, error) {
 	if err == nil {
 		dInfo, err = pkgInfo.getInfo(name)
 	}
+
 	if err == nil {
 		return dInfo, nil
 	}
+
 	return nil, err
 }

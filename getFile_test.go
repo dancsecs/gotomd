@@ -49,9 +49,9 @@ func Test_GetFile_GetGoFile(t *testing.T) {
 	chk.Str(
 		d,
 		""+
-			markBashCode("cat "+sampleGoProjectOnePath+"crumb.go")+
+			markBashCode(catCmd+sampleGoProjectOnePath+"crumb.go")+
 			"\n\n"+
-			markGoCode("package "+sampleGoProjectOne),
+			markGoCode(pkgLabel+" "+sampleGoProjectOne),
 	)
 }
 
@@ -67,13 +67,13 @@ func Test_GetFile_GetGoFile2(t *testing.T) {
 	chk.Str(
 		d,
 		""+
-			markBashCode("cat "+file1)+
+			markBashCode(catCmd+file1)+
 			"\n\n"+
-			markGoCode("package "+sampleGoProjectOne)+
+			markGoCode(pkgLabel+" "+sampleGoProjectOne)+
 			"\n\n"+
-			markBashCode("cat "+file2)+
+			markBashCode(catCmd+file2)+
 			"\n\n"+
-			markGoCode("package "+sampleGoProjectTwo)+
+			markGoCode(pkgLabel+" "+sampleGoProjectTwo)+
 			"",
 	)
 }

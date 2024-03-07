@@ -51,6 +51,7 @@ func (c *commandAction) search(cmd string) int {
 	if cmdIdx == len(c.cmdPrefix) || c.cmdPrefix[cmdIdx] != cmd {
 		cmdIdx = -1
 	}
+
 	return cmdIdx
 }
 
@@ -72,7 +73,7 @@ func (c *commandAction) Swap(i, j int) {
 }
 
 //nolint:goCheckNoGlobals // Ok.
-var action = commandAction{}
+var action = new(commandAction)
 
 //nolint:goCheckNoInits // Ok.
 func init() {
@@ -85,19 +86,25 @@ func init() {
 	action.sort()
 }
 
+//nolint:cyclop // Ok.
 func cleanMarkDownDocument(fData string) (string, error) {
-	var err error
-	var skipBlank = false
-	updatedFile := ""
-	skipTo := ""
+	var (
+		err         error
+		skipBlank   = false
+		updatedFile string
+		skipTo      string
+	)
+
 	lines := strings.Split(fData+"\n", "\n")
 	for i, mi := 0, len(lines)-1; i < mi && err == nil; i++ {
 		l := strings.TrimRight(lines[i], " ")
+
 		switch {
 		case skipBlank:
 			if l != "" {
 				err = errors.New("missing blank line in auto generated output")
 			}
+
 			skipBlank = false
 		case skipTo != "":
 			switch {
@@ -117,9 +124,11 @@ func cleanMarkDownDocument(fData string) (string, error) {
 			updatedFile += l + "\n"
 		}
 	}
+
 	if err != nil {
 		return "", err
 	}
+
 	return strings.TrimRight(updatedFile, "\n"), nil
 }
 
@@ -132,56 +141,74 @@ func expand(prefix, cmd, content string) string {
 
 func isCmd(l string) (int, int, error) {
 	const sep = "::"
-	var cmdIdx = -1
-	var end = 0
+
+	var (
+		cmdIdx = -1
+		end    = 0
+	)
+
 	if strings.HasPrefix(l, sztestPrefix) {
 		cmd := l[len(sztestPrefix):]
 		end = strings.Index(cmd, sep)
+
 		if end >= 0 {
 			cmd = cmd[:end+2]
 			cmdIdx = action.search(cmd)
 		}
+
 		if end < 0 || cmdIdx == -1 {
 			return 0, 0, errors.New("unknown cmd: " + l)
 		}
 	}
+
 	return cmdIdx, len(sztestPrefix) + end + len(sep), nil
 }
 
+//nolint:cyclop // Ok.
 func updateMarkDownDocument(dir, fData string) (string, error) {
-	const skipDirBlank = ""
-	const skipDirThis = "."
-	const skipDirThisDir = skipDirThis + string(os.PathSeparator)
+	const (
+		skipDirBlank   = ""
+		skipDirThis    = "."
+		skipDirThisDir = skipDirThis + string(os.PathSeparator)
+	)
 
-	var res string
-	var cmd string
-	var err error
-	var cmdIdx, cmdStart int
+	var (
+		res              string
+		cmd              string
+		err              error
+		cmdIdx, cmdStart int
+	)
 
 	if !(dir == skipDirBlank || dir == skipDirThis || dir == skipDirThisDir) {
 		var cwd string
 		cwd, err = os.Getwd()
+
 		if err == nil {
 			defer func() {
 				_ = os.Chdir(cwd)
 			}()
+
 			err = os.Chdir(dir)
 		}
 	}
+
 	updatedFile := szAutoPrefix + " See github.com/dancsecs/gotomd "
 	if !replace {
 		updatedFile += "**DO NOT MODIFY** "
 	}
+
 	updatedFile += "-->\n\n"
 	lines := strings.Split(fData+"\n", "\n")
 
 	for i, mi := 0, len(lines)-1; i < mi && err == nil; i++ {
 		l := strings.TrimRight(lines[i], " ")
 		cmdIdx, cmdStart, err = isCmd(l)
+
 		if err == nil {
 			if cmdIdx >= 0 {
 				cmd = l[cmdStart : len(l)-len(" -->")]
 				res, err = action.run(cmdIdx, cmd)
+
 				if err == nil {
 					updatedFile += expand(action.cmdPrefix[cmdIdx], cmd, res)
 				}
@@ -190,8 +217,10 @@ func updateMarkDownDocument(dir, fData string) (string, error) {
 			}
 		}
 	}
+
 	if err != nil {
 		return "", err
 	}
+
 	return strings.TrimRight(updatedFile, "\n"), nil
 }

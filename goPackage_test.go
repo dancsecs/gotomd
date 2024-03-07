@@ -48,6 +48,7 @@ func Test_GoPackage_GetInfo_InvalidObject(t *testing.T) {
 	chk.Err(err, "unknown package object: DOES_NOT_EXIST")
 }
 
+//nolint:funlen // Ok.
 func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
@@ -163,7 +164,9 @@ func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
 				"    a, b, c int,",
 				") string {",
 				"    const base10 = 10",
+				"",
 				"    t := a + c + b",
+				"",
 				"    return s.F1 + strconv.FormatInt(int64(t), base10)",
 				"}",
 			},

@@ -25,7 +25,7 @@ import (
 	"strings"
 )
 
-const defaultPermissions = 0644
+const defaultPermissions = 0o0644
 
 //nolint:goCheckNoGlobals // Ok.
 var (
@@ -59,16 +59,17 @@ func usage() {
 func captureFlagDefaults() string {
 	buf := strings.Builder{}
 	origOut := flag.CommandLine.Output()
+
 	defer func() {
 		flag.CommandLine.SetOutput(origOut)
 	}()
 	flag.CommandLine.SetOutput(&buf)
 
 	flag.CommandLine.Usage()
+
 	return buf.String()
 }
 
-//nolint:funlen // Ok.
 func processArgs() {
 	flag.BoolVar(&verbose, "v", false,
 		"Provide more information when processing.",
@@ -93,7 +94,8 @@ func processArgs() {
 		"Direct all output to the specified directory.",
 	)
 	flag.IntVar(&defaultPerm, "p", defaultPermissions,
-		"Permissions to use when creating new file (can only set RW bits).",
+		"Permissions to use when creating new file"+
+			" (can only set RW bits).",
 	)
 
 	flag.CommandLine.Usage = usage
@@ -105,7 +107,7 @@ func processArgs() {
 		)
 	}
 
-	if defaultPerm&(^0666) != 0 {
+	if defaultPerm&(^0o0666) != 0 {
 		panic("invalid default permissions specified\n" +
 			captureFlagDefaults(),
 		)
@@ -120,8 +122,11 @@ func processArgs() {
 	if outputDir != "." {
 		s, err := os.Stat(outputDir)
 		if err != nil || !s.IsDir() {
-			panic("invalid output directory specified: " + outputDir + "\n" +
-				captureFlagDefaults(),
+			panic(
+				"invalid output directory specified: " +
+					outputDir +
+					"\n" +
+					captureFlagDefaults(),
 			)
 		}
 	}

@@ -1,40 +1,4 @@
 linters-settings:
-  bidichk:
-    # The following configurations check for all mentioned invisible unicode runes.
-    # All runes are enabled by default.
-    left-to-right-embedding: true
-    right-to-left-embedding: true
-    pop-directional-formatting: true
-    left-to-right-override: true
-    right-to-left-override: true
-    left-to-right-isolate: true
-    right-to-left-isolate: true
-    first-strong-isolate: true
-    pop-directional-isolate: true
-
-  stylecheck:
-    checks: ["all","-ST1003"]
-
-  godot:
-    # Comments to be checked: `declarations`, `toplevel`, or `all`.
-    # Default: declarations
-    scope: toplevel
-    # List of regexps for excluding particular comment lines from check.
-    # Default: []
-    exclude:
-      # Exclude todo and fixme comments.
-      - "^fixme:"
-      - "^todo:"
-      - "\\*+$"
-      - "\\s*\\/+$"
-      - "^.{1,3}$"
-    # Check that each sentence ends with a period.
-    # Default: true
-    period: true
-    # Check that each sentence starts with a capital letter.
-    # Default: false
-    capital: false
-
   lll:
     # Max line length, lines longer will be reported.
     # '\t' is counted as 1 character by default, and can be changed with the tab-width option.
@@ -42,84 +6,44 @@ linters-settings:
     line-length: 79
     # Tab width in spaces.
     # Default: 1
-    tab-width: 2
-
-  golint:
-    # Minimal confidence for issues.
-    # Default: 0.8
-    min-confidence: 0.9
-
-  revive:
-    rules:
-      - name: exported
-        arguments:
-          - disableStutteringCheck
+    tab-width: 4
 
   depguard:
     rules:
       # Name of a rule.
       "main":
+        # Only apply to go test files.
+        files: _test.go
         # List of allowed packages.
         allow:
           - $gostd
           - github.com/dancsecs/sztest
 
 linters:
-  disable-all: true
-  enable:
-    - asciicheck
-    - bidichk
-    - deadcode
-    - depguard
-    - dogsled
-    - dupl
-    - errcheck
-    - exportloopref
-    - funlen
-    - gochecknoglobals
-    - gochecknoinits
-    - goconst
-    - gocritic
-    - gocyclo
-    - godot
-    - godox
-    - gofmt
-    - goimports
-    - gomnd
-    - goprintffuncname
-    - gosec
-    - gosimple
-    - govet
-    - ineffassign
-    - lll
-    - misspell
-    - nakedret
-    - nolintlint
-    - revive
-    - staticcheck
-    - stylecheck
-    - typecheck
-    - unconvert
-    - unused
-    - varcheck
-    - whitespace
+  # Enable all available linters.
+  # Default: false
+  enable-all: true
+  # Disable specific linter
+  # https://golangci-lint.run/usage/linters/#disabled-by-default
+  disable:
+    - forbidigo
+    - goerr113
+    - gofumpt
+    - paralleltest
+    - testpackage
+    - varnamelen
+    - wrapcheck
 
-  # don't enable:
-  # - gocognit
-  # - goerr113
-  # - nestif
-  # - prealloc
-  # - testpackage
-  # - wsl
-  # Depreciated
-  # - bodyclose
-  # - golint
-  # - interfacer
-  # - maligned
-  # - noctx
-  # - scopelint
-  # - structcheck
-  # - unparam
+    - deadcode # Deprecated
+    - exhaustivestruct # Deprecated
+    - golint # Deprecated
+    - ifshort # Deprecated
+    - interfacer # Deprecated
+    - maligned # Deprecated
+    - nosnakecase # Deprecated
+    - scopelint # Deprecated
+    - structcheck # Deprecated
+    - varcheck # Deprecated
 
 issues:
   # List of regexps of issue texts to exclude.
@@ -129,44 +53,22 @@ issues:
   # To list all excluded by default patterns execute `golangci-lint run --help`
   #
   # Default: https://golangci-lint.run/usage/false-positives/#default-exclusions
-  exclude:
-    - abcdef
+  # exclude:
+  #   - abcdef
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     # Exclude some linters from running on tests files.
     - path: _test\.go
       linters:
-        - funlen
         - lll
-        - dupl
         - goconst
-        - gomnd
         - gosec
-        - gochecknoinits
-        - gochecknoglobals
-    - text: cat
-      linters:
-        - goconst
-    - text: package
-      linters:
-        - goconst
-    # Exclude known linters from partially hard-vendored code,
-  include:
-    - EXC0001
-    - EXC0002
-    - EXC0003
-    - EXC0004
-    - EXC0005
-    - EXC0006
-    - EXC0007
-    - EXC0008
-    - EXC0009
-    - EXC0010
-    - EXC0011
-    - EXC0012
-    - EXC0013
-    - EXC0014
-    - EXC0015
+  
+  # Independently of option `exclude` we use default exclude patterns,
+  # it can be disabled by this option.
+  # To list all excluded by default patterns execute `golangci-lint run --help`.
+  # Default: true
+  exclude-use-default: false
   max-issues-per-linter: 0
   max-same-issues: 0
 

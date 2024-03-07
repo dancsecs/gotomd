@@ -30,6 +30,7 @@ func setupTest(
 	chk *sztest.Chk, tCleanOnly, tReplace, tForceOverwrite, tVerbose bool,
 ) {
 	chk.T().Helper()
+
 	origOutputDir := outputDir
 	origCWD, err := os.Getwd()
 	origCleanOnly := cleanOnly
@@ -50,6 +51,7 @@ func setupTest(
 			replace = origReplace
 			forceOverwrite = origForceOverwrite
 			verbose = origVerbose
+
 			return os.Chdir(origCWD)
 		})
 	}

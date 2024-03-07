@@ -30,6 +30,7 @@ type docInfo struct {
 
 func (di *docInfo) oneLine() string {
 	res := ""
+
 	switch len(di.header) {
 	case 0:
 		switch len(di.body) {
@@ -47,10 +48,13 @@ func (di *docInfo) oneLine() string {
 			if strings.HasSuffix(res, ",") {
 				res += " "
 			}
+
 			res += strings.TrimSpace(l)
 		}
+
 		res = strings.ReplaceAll(res, ", )", ")")
 	}
+
 	return res
 }
 
@@ -60,8 +64,10 @@ func (di *docInfo) naturalComments() string {
 		if res != "" {
 			res += "\n"
 		}
+
 		res += "// " + l
 	}
+
 	return res
 }
 

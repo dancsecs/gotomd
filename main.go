@@ -138,9 +138,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 `
 
 func main() {
-	var err error
-	var origWd string
-	var filesToProcess []string
+	var (
+		err            error
+		origWd         string
+		filesToProcess []string
+	)
 
 	// Restore original working directory on exit.
 	origWd, err = os.Getwd()
@@ -169,6 +171,7 @@ func main() {
 			err = expandMD(filesToProcess[i])
 		}
 	}
+
 	if err != nil {
 		panic(err)
 	}

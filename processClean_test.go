@@ -35,19 +35,25 @@ type cleanGlobals struct {
 
 func getCleanedFiles() (string, []string, []string, error) {
 	const fName = "README.md.gtm"
-	var targetPath string
-	var err error
-	var gotBytes []byte
-	var wntBytes []byte
+
+	var (
+		targetPath string
+		err        error
+		gotBytes   []byte
+		wntBytes   []byte
+	)
 
 	targetPath = filepath.Join(outputDir, fName)
+
 	gotBytes, err = os.ReadFile(targetPath)
 	if err == nil {
 		wntBytes, err = os.ReadFile(sampleGoProjectOnePath + fName)
 	}
+
 	if err != nil {
 		return "", nil, nil, err
 	}
+
 	return targetPath,
 		strings.Split(string(gotBytes), "\n"),
 		strings.Split(string(wntBytes), "\n"),
@@ -56,12 +62,14 @@ func getCleanedFiles() (string, []string, []string, error) {
 
 func setupCleanDirs(makeTarget bool) error {
 	const fName = "README.md.gtm"
+
 	var err error
 
 	if makeTarget {
 		tFile := filepath.Join(outputDir, fName)
 		err = os.WriteFile(tFile, nil, fs.FileMode(defaultPerm))
 	}
+
 	return err
 }
 

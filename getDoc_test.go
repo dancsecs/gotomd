@@ -73,11 +73,11 @@ func Test_GetDoc_GetGoDcl_Package(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDocDecl(sampleGoProjectOnePath + "package")
+	s, err := getDocDecl(sampleGoProjectOnePath + pkgLabel)
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		markGoCode("package "+sampleGoProjectOne+"\n"),
+		markGoCode(pkgLabel+" "+sampleGoProjectOne+"\n"),
 	)
 }
 
@@ -94,11 +94,12 @@ func Test_GetDoc_GetGoDcl_OneItem(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDocDecl(sampleGoProjectOnePath + "TimesTwo")
 	chk.AddSub(
-		`package .*$`,
-		"package ."+string(os.PathSeparator)+sampleGoProjectOne,
+		pkgLabel+` .*$`,
+		pkgLabel+" ."+string(os.PathSeparator)+sampleGoProjectOne,
 	)
+
+	s, err := getDocDecl(sampleGoProjectOnePath + "TimesTwo")
 	chk.NoErr(err)
 	chk.Str(
 		s,
@@ -110,11 +111,12 @@ func Test_GetDoc_GetGoDcl_TwoItems(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDocDecl(sampleGoProjectOnePath + "TimesTwo TimesThree")
 	chk.AddSub(
-		`package .*$`,
-		"package ."+string(os.PathSeparator)+sampleGoProjectOne,
+		pkgLabel+` .*$`,
+		pkgLabel+" ."+string(os.PathSeparator)+sampleGoProjectOne,
 	)
+
+	s, err := getDocDecl(sampleGoProjectOnePath + "TimesTwo TimesThree")
 	chk.NoErr(err)
 	chk.Str(
 		s,
@@ -135,11 +137,11 @@ func Test_GetDoc_GetGoDclSingle_PackageNoItems(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDocDeclSingle(sampleGoProjectOnePath + "package")
+	s, err := getDocDeclSingle(sampleGoProjectOnePath + pkgLabel)
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		markGoCode("package "+sampleGoProjectOne+"\n"),
+		markGoCode(pkgLabel+" "+sampleGoProjectOne+"\n"),
 	)
 }
 
@@ -157,9 +159,10 @@ func Test_GetDoc_GetGoDclSingle_OneItem(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDeclSingle(sampleGoProjectOnePath + "TimesTwo")
+
 	chk.AddSub(
-		`package .*$`,
-		"package ."+string(os.PathSeparator)+sampleGoProjectOne,
+		pkgLabel+` .*$`,
+		pkgLabel+" ."+string(os.PathSeparator)+sampleGoProjectOne,
 	)
 	chk.NoErr(err)
 	chk.Str(
@@ -172,11 +175,12 @@ func Test_GetDoc_GetGoDclSingle_TwoItems(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDocDeclSingle(sampleGoProjectOnePath + "TimesTwo TimesThree")
 	chk.AddSub(
-		`package .*$`,
-		"package ."+string(os.PathSeparator)+sampleGoProjectOne,
+		pkgLabel+` .*$`,
+		pkgLabel+" ."+string(os.PathSeparator)+sampleGoProjectOne,
 	)
+
+	s, err := getDocDeclSingle(sampleGoProjectOnePath + "TimesTwo TimesThree")
 	chk.NoErr(err)
 	chk.Str(
 		s,
@@ -198,9 +202,10 @@ func Test_GetDoc_GetGoDclNatural_OneItem(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDeclNatural(sampleGoProjectOnePath + "TimesTwo")
+
 	chk.AddSub(
-		`package .*$`,
-		"package ."+string(os.PathSeparator)+sampleGoProjectOne,
+		pkgLabel+` .*$`,
+		pkgLabel+" ."+string(os.PathSeparator)+sampleGoProjectOne,
 	)
 	chk.NoErr(err)
 	chk.Str(
@@ -217,9 +222,10 @@ func Test_GetDoc_GetGoDclNatural_TwoItems(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDeclNatural(sampleGoProjectOnePath + "TimesTwo TimesThree")
+
 	chk.AddSub(
-		`package .*$`,
-		"package ."+string(os.PathSeparator)+sampleGoProjectOne,
+		pkgLabel+` .*$`,
+		pkgLabel+" ."+string(os.PathSeparator)+sampleGoProjectOne,
 	)
 	chk.NoErr(err)
 	chk.Str(
@@ -238,11 +244,12 @@ func Test_GetDoc_GetDoc_TwoItems(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDoc(sampleGoProjectOnePath + "TimesTwo TimesThree")
 	chk.AddSub(
-		`package .*$`,
-		"package ."+string(os.PathSeparator)+sampleGoProjectOne,
+		pkgLabel+` .*$`,
+		pkgLabel+" ."+string(os.PathSeparator)+sampleGoProjectOne,
 	)
+
+	s, err := getDoc(sampleGoProjectOnePath + "TimesTwo TimesThree")
 	chk.NoErr(err)
 	chk.Str(
 		s,

@@ -191,6 +191,7 @@ func Test_SampleGoProjectOneReplaceTargetOverwrite(t *testing.T) {
 
 	got, wnt, err := getTestFiles(dir, "README.md")
 	chk.NoErr(err)
+
 	wnt[0] = strings.ReplaceAll(wnt[0], "**DO NOT MODIFY** ", "")
 	chk.StrSlice(got, wnt)
 
@@ -226,6 +227,7 @@ func Test_SampleGoProjectOneReplaceTargetOverwriteDir(t *testing.T) {
 
 	got, wnt, err := getTestFiles(dir, "README.md")
 	chk.NoErr(err)
+
 	wnt[0] = strings.ReplaceAll(wnt[0], "**DO NOT MODIFY** ", "")
 	chk.StrSlice(got, wnt)
 
@@ -268,6 +270,7 @@ func Test_SampleGoProjectOneReplaceTargetOverwriteDirFromClean(t *testing.T) {
 
 	got, wnt, err := getTestFiles(dir, "README.md")
 	chk.NoErr(err)
+
 	wnt[0] = strings.ReplaceAll(wnt[0], "**DO NOT MODIFY** ", "")
 	chk.StrSlice(got, wnt)
 
@@ -304,6 +307,7 @@ func Test_SampleGoProjectOneReplaceTargetOverwriteDirVerbose(t *testing.T) {
 
 	got, wnt, err := getTestFiles(dir, "README.md")
 	chk.NoErr(err)
+
 	wnt[0] = strings.ReplaceAll(wnt[0], "**DO NOT MODIFY** ", "")
 	chk.StrSlice(got, wnt)
 
@@ -334,10 +338,12 @@ func Test_SampleGoProjectOneReplaceTargetOverwriteDirVerbose(t *testing.T) {
 }
 
 func setup(dir string, files ...string) error {
-	var err error
-	var b []byte
-
 	const ext = ".sample"
+
+	var (
+		err error
+		b   []byte
+	)
 
 	files = append(files, "go.mod"+ext, "go.sum"+ext)
 	for i, mi := 0, len(files); i < mi && err == nil; i++ {
@@ -359,10 +365,12 @@ func getTestFiles(dir, fName string) ([]string, []string, error) {
 	if err != nil {
 		return nil, nil, err
 	}
+
 	wntBytes, err := os.ReadFile(filepath.Join("sample_go_project_one", fName))
 	if err != nil {
 		return nil, nil, err
 	}
+
 	return strings.Split(string(gotBytes), "\n"),
 		strings.Split(string(wntBytes), "\n"),
 		nil
@@ -398,6 +406,7 @@ func Test_SampleGoProjectOneCleanNoTargetAlternateOut(t *testing.T) {
 		license +
 			"filesToProcess:  " + pName + "\n",
 	)
+
 	rFile := filepath.Join(dir, "README.md")
 	wFile := filepath.Join(altDir, "README.md.gtm")
 	chk.Log("Cleaning " + rFile + " to: " + wFile)

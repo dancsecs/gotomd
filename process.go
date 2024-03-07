@@ -27,22 +27,31 @@ import (
 )
 
 func confirmOverwrite(fPath string, data string) (bool, error) {
-	var ok bool
-	var oldData []byte
+	var (
+		ok      bool
+		oldData []byte
+	)
+
 	_, err := os.Stat(fPath)
 	if errors.Is(err, os.ErrNotExist) {
 		return true, nil
 	}
+
 	if err == nil {
 		oldData, err = os.ReadFile(fPath) //nolint:gosec // Ok.
 	}
+
 	if err == nil && strings.TrimRight(string(oldData), "\n") == data {
 		fmt.Println("No change: " + fPath)
+
 		return false, nil
 	}
+
 	if err == nil {
 		fmt.Print("Confirm overwrite of ", fPath, " (Y to overwrite)? ")
+
 		var response string
+
 		if _, err = fmt.Scanln(&response); err == nil {
 			ok = response == "Y"
 			if !ok {
@@ -50,6 +59,7 @@ func confirmOverwrite(fPath string, data string) (bool, error) {
 			}
 		}
 	}
+
 	return ok, err
 }
 
@@ -58,6 +68,7 @@ func writeFile(fPath string, data string) error {
 
 	data = strings.ReplaceAll(data, "\t", "    ")
 	okToOverwrite := forceOverwrite
+
 	if !okToOverwrite {
 		okToOverwrite, err = confirmOverwrite(fPath, data)
 	}
@@ -77,15 +88,19 @@ func writeFile(fPath string, data string) error {
 			}
 		}
 	}
+
 	return err
 }
 
+//nolint:cyclop // Ok.
 func getFilesToProcess() ([]string, error) {
-	var err error
-	var files []os.DirEntry
-	var stat os.FileInfo
-	var filesToProcess []string
-	var filter = ".md"
+	var (
+		err            error
+		files          []os.DirEntry
+		stat           os.FileInfo
+		filesToProcess []string
+		filter         = ".md"
+	)
 
 	if !cleanOnly && !replace {
 		filter += ".gtm"
@@ -101,6 +116,7 @@ func getFilesToProcess() ([]string, error) {
 					filesToProcess = append(filesToProcess,
 						flag.Arg(i)+string(os.PathSeparator)+fName,
 					)
+
 					if verbose {
 						fmt.Println("filesToProcess: ",
 							flag.Arg(i)+string(os.PathSeparator)+fName,
@@ -115,11 +131,13 @@ func getFilesToProcess() ([]string, error) {
 				err = errors.New("file must have extension: " + filter)
 			} else {
 				filesToProcess = append(filesToProcess, flag.Arg(i))
+
 				if verbose {
 					fmt.Println("filesToProcess: ", flag.Arg(i))
 				}
 			}
 		}
 	}
+
 	return filesToProcess, err
 }

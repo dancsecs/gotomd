@@ -22,24 +22,33 @@ import (
 	"os"
 )
 
+const catCmd = "cat "
+
 func getGoFile(cmd string) (string, error) {
-	var fData []byte
-	var res = ""
+	var (
+		fData []byte
+		res   string
+	)
+
 	dir, fName, err := parseCmds(cmd)
 	for i, mi := 0, len(dir); i < mi && err == nil; i++ {
 		fPath := dir[i] + string(os.PathSeparator) + fName[i]
 		fData, err = os.ReadFile(fPath) //nolint:gosec // Ok.
+
 		if err == nil {
 			if res != "" {
 				res += "\n\n"
 			}
+
 			res += "" +
-				markBashCode("cat "+fPath) + "\n\n" +
+				markBashCode(catCmd+fPath) + "\n\n" +
 				markGoCode(string(fData))
 		}
 	}
+
 	if err == nil {
 		return res, nil
 	}
+
 	return "", err
 }

@@ -27,18 +27,22 @@ import (
 )
 
 func expandMD(rPath string) error {
-	var err error
-	var rDir, rFile string
-	var wDir, wFile string
-	var wPath string
-	var fileBytes []byte
-	var res string
+	var (
+		err         error
+		rDir, rFile string
+		wDir, wFile string
+		wPath       string
+		fileBytes   []byte
+		res         string
+	)
 
 	rDir, rFile = filepath.Split(rPath)
 	wDir = rDir
+
 	if outputDir != "." {
 		wDir = outputDir
 	}
+
 	wFile = strings.TrimSuffix(rFile, ".gtm")
 	wPath = filepath.Join(wDir, wFile)
 
@@ -46,9 +50,7 @@ func expandMD(rPath string) error {
 		log.Printf("Expanding %s to: %s", rPath, wPath)
 	}
 
-	if err == nil {
-		fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
-	}
+	fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
 
 	if err == nil {
 		fileData := string(bytes.TrimRight(fileBytes, "\n"))
