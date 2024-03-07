@@ -90,7 +90,9 @@ func (s *StructureType) GetF1(
 	a, b, c int,
 ) string {
 	const base10 = 10
+
 	t := a + c + b
+
 	return s.F1 + strconv.FormatInt(int64(t), base10)
 }
 

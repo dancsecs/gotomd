@@ -14,7 +14,7 @@ func Test_PASS_SampleGoProjectOne(t *testing.T) {
 	chk.Int(TimesTwo(2), 4)
 	chk.Int(TimesThree(222222222), 666666666)
 
-	structure := StructureType{}
+	structure := new(StructureType)
 	structure.F1 = "Total: "
 	chk.Str(structure.GetF1(1, 2, 3), "Total: 6")
 }
@@ -34,7 +34,7 @@ func Test_FAIL_SampleGoProjectOne(t *testing.T) {
 	fmt.Println("This output line will be different")
 	chk.Stdout("This output line is different")
 
-	structure := StructureType{}
+	structure := new(StructureType)
 	structure.F1 = "Total: "
 	chk.Str(structure.GetF1(1, 2, 3), "Sum: 6")
 }
