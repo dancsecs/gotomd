@@ -41,7 +41,7 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 	chk.NoErr(
-		setup(dir, "README.md", "README.md.gtm", "sample_test.go", "sample.go"),
+		setup(dir, "README.md", "README.md.gtm", "example1_test.go", "example1.go"),
 	)
 
 	rName := filepath.Join(dir, "README.md.gtm")
@@ -97,7 +97,7 @@ func Test_Example1ReplaceNoTarget(t *testing.T) {
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
-	chk.NoErr(setup(dir, "sample_test.go", "sample.go"))
+	chk.NoErr(setup(dir, "example1_test.go", "example1.go"))
 
 	fName := filepath.Join(dir, "README.md")
 
@@ -125,7 +125,7 @@ func Test_Example1ReplaceTargetCancel(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 	chk.NoErr(
-		setup(dir, "README.md", "sample_test.go", "sample.go"),
+		setup(dir, "README.md", "example1_test.go", "example1.go"),
 	)
 
 	fName := filepath.Join(dir, "README.md")
@@ -173,7 +173,7 @@ func Test_Example1ReplaceTargetOverwrite(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 	chk.NoErr(
-		setup(dir, "README.md", "sample_test.go", "sample.go"),
+		setup(dir, "README.md", "example1_test.go", "example1.go"),
 	)
 
 	fName := filepath.Join(dir, "README.md")
@@ -210,7 +210,7 @@ func Test_Example1ReplaceTargetOverwriteDir(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 	chk.NoErr(
-		setup(dir, "README.md", "sample_test.go", "sample.go"),
+		setup(dir, "README.md", "example1_test.go", "example1.go"),
 	)
 
 	chk.SetupArgsAndFlags([]string{
@@ -246,7 +246,7 @@ func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 	chk.NoErr(
-		setup(dir, "README.md.gtm", "sample_test.go", "sample.go"),
+		setup(dir, "README.md.gtm", "example1_test.go", "example1.go"),
 	)
 
 	chk.NoErr(
@@ -289,7 +289,7 @@ func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 	chk.NoErr(
-		setup(dir, "README.md", "sample_test.go", "sample.go"),
+		setup(dir, "README.md", "example1_test.go", "example1.go"),
 	)
 
 	chk.SetupArgsAndFlags([]string{
@@ -338,7 +338,7 @@ func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
 }
 
 func setup(dir string, files ...string) error {
-	const ext = ".sample"
+	const ext = ".example"
 
 	var (
 		err error
@@ -383,7 +383,7 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 	dir := chk.CreateTmpDir()
 	altDir := chk.CreateTmpSubDir("altDir")
 
-	chk.NoErr(setup(dir, "README.md", "sample_test.go", "sample.go"))
+	chk.NoErr(setup(dir, "README.md", "example1_test.go", "example1.go"))
 
 	chk.SetupArgsAndFlags([]string{
 		"programName",

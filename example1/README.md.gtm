@@ -34,7 +34,7 @@ or run all tests in a package:
 
 or include a file
 
-<!--- gotomd::file::./sample.go -->
+<!--- gotomd::file::./example1.go -->
 
 or a single declaration:
 

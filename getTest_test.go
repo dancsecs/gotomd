@@ -102,7 +102,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}=== RUN   Test_FAIL_Example1{{latexOff}}
     <br>
-    {{latexOn}}    sample_test.go:28: unexpected int:{{latexOff}}
+    {{latexOn}}    example1_test.go:28: unexpected int:{{latexOff}}
     <br>
     {{latexOn}}        {{msgOn}}2+2=5 (is true for big values of two){{msgOff}}:{{latexOff}}
     <br>
@@ -110,17 +110,17 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}        {{wntOn}}WNT: {{wntOff}}{{chgOn}}5{{chgOff}}{{latexOff}}
     <br>
-    {{latexOn}}    sample_test.go:29: unexpected string:{{latexOff}}
+    {{latexOn}}    example1_test.go:29: unexpected string:{{latexOff}}
     <br>
     {{latexOn}}        {{gotOn}}GOT: {{gotOff}}{{insOn}}New in Got{{insOff}} Similar in ({{chgOn}}1{{chgOff}}) both{{latexOff}}
     <br>
     {{latexOn}}        {{wntOn}}WNT: {{wntOff}} Similar in ({{chgOn}}2{{chgOff}}) both{{delOn}}, new in Wnt{{delOff}}{{latexOff}}
     <br>
-    {{latexOn}}    sample_test.go:35: Unexpected stdout Entry: got (1 lines) - want (1 lines){{latexOff}}
+    {{latexOn}}    example1_test.go:35: Unexpected stdout Entry: got (1 lines) - want (1 lines){{latexOff}}
     <br>
     {{latexOn}}        {{chgOn}}0{{chgOff}}:{{chgOn}}0{{chgOff}} This output line {{delOn}}is{{delOff}}{{sepOn}}/{{sepOff}}{{insOn}}will be{{insOff}} different{{latexOff}}
     <br>
-    {{latexOn}}    sample_test.go:39: unexpected string:{{latexOff}}
+    {{latexOn}}    example1_test.go:39: unexpected string:{{latexOff}}
     <br>
     {{latexOn}}        {{gotOn}}GOT: {{gotOff}}{{chgOn}}Total{{chgOff}}: 6{{latexOff}}
     <br>
@@ -148,7 +148,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}=== RUN   Test_FAIL_Example2{{latexOff}}
     <br>
-    {{latexOn}}    sample_test.go:28: unexpected int:{{latexOff}}
+    {{latexOn}}    example2_test.go:28: unexpected int:{{latexOff}}
     <br>
     {{latexOn}}        {{msgOn}}2+2=5 (is true for big values of two){{msgOff}}:{{latexOff}}
     <br>
@@ -156,17 +156,17 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}        {{wntOn}}WNT: {{wntOff}}{{chgOn}}5{{chgOff}}{{latexOff}}
     <br>
-    {{latexOn}}    sample_test.go:29: unexpected string:{{latexOff}}
+    {{latexOn}}    example2_test.go:29: unexpected string:{{latexOff}}
     <br>
     {{latexOn}}        {{gotOn}}GOT: {{gotOff}}{{insOn}}New in Got{{insOff}} Similar in ({{chgOn}}1{{chgOff}}) both{{latexOff}}
     <br>
     {{latexOn}}        {{wntOn}}WNT: {{wntOff}} Similar in ({{chgOn}}2{{chgOff}}) both{{delOn}}, new in Wnt{{delOff}}{{latexOff}}
     <br>
-    {{latexOn}}    sample_test.go:35: Unexpected stdout Entry: got (1 lines) - want (1 lines){{latexOff}}
+    {{latexOn}}    example2_test.go:35: Unexpected stdout Entry: got (1 lines) - want (1 lines){{latexOff}}
     <br>
     {{latexOn}}        {{chgOn}}0{{chgOff}}:{{chgOn}}0{{chgOff}} This output line {{delOn}}is{{delOff}}{{sepOn}}/{{sepOff}}{{insOn}}will be{{insOff}} different{{latexOff}}
     <br>
-    {{latexOn}}    sample_test.go:39: unexpected string:{{latexOff}}
+    {{latexOn}}    example2_test.go:39: unexpected string:{{latexOff}}
     <br>
     {{latexOn}}        {{gotOn}}GOT: {{gotOff}}{{chgOn}}Total{{chgOff}}: 6{{latexOff}}
     <br>
@@ -206,16 +206,16 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     === RUN   Test_PASS_Example1
     --- PASS: Test_PASS_Example1 (0.0s)
     === RUN   Test_FAIL_Example1
-    \s   sample_test.go:28: unexpected int:
+    \s   example1_test.go:28: unexpected int:
     \s       2+2=5 (is true for big values of two):
     \s       GOT: 4
     \s       WNT: 5
-    \s   sample_test.go:29: unexpected string:
+    \s   example1_test.go:29: unexpected string:
     \s       GOT: New in Got Similar in (1) both
     \s       WNT:  Similar in (2) both, new in Wnt
-    \s   sample_test.go:35: Unexpected stdout Entry: got (1 lines) - want (1 lines)
+    \s   example1_test.go:35: Unexpected stdout Entry: got (1 lines) - want (1 lines)
     \s       0:0 This output line is/will be different
-    \s   sample_test.go:39: unexpected string:
+    \s   example1_test.go:39: unexpected string:
     \s       GOT: Total: 6
     \s       WNT: Sum: 6
     --- FAIL: Test_FAIL_Example1 (0.0s)
@@ -234,16 +234,16 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     === RUN   Test_PASS_Example2
     --- PASS: Test_PASS_Example2 (0.0s)
     === RUN   Test_FAIL_Example2
-    \s   sample_test.go:28: unexpected int:
+    \s   example2_test.go:28: unexpected int:
     \s       2+2=5 (is true for big values of two):
     \s       GOT: 4
     \s       WNT: 5
-    \s   sample_test.go:29: unexpected string:
+    \s   example2_test.go:29: unexpected string:
     \s       GOT: New in Got Similar in (1) both
     \s       WNT:  Similar in (2) both, new in Wnt
-    \s   sample_test.go:35: Unexpected stdout Entry: got (1 lines) - want (1 lines)
+    \s   example2_test.go:35: Unexpected stdout Entry: got (1 lines) - want (1 lines)
     \s       0:0 This output line is/will be different
-    \s   sample_test.go:39: unexpected string:
+    \s   example2_test.go:39: unexpected string:
     \s       GOT: Total: 6
     \s       WNT: Sum: 6
     --- FAIL: Test_FAIL_Example2 (0.0s)
