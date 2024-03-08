@@ -20,7 +20,6 @@ package main
 
 import (
 	"fmt"
-	"go/ast"
 	"go/doc"
 	"go/parser"
 	"go/token"
@@ -34,7 +33,6 @@ const pkgLabel = "package"
 
 type packageInfo struct {
 	fSet      *token.FileSet
-	astPkg    *ast.Package
 	docPkg    *doc.Package
 	functions map[string]*doc.Func
 	constants map[string]*doc.Value
@@ -254,29 +252,20 @@ func (pi *packageInfo) snipFile(
 }
 
 func createPackageInfo(dir string) (*packageInfo, error) {
-	var (
-		pkgInfo *packageInfo
-		fileSet map[string]*ast.Package
-		err     error
-	)
-
-	// Create the AST by parsing src.
-
 	if verbose {
 		log.Print("Loading Package info for: ", dir)
 	}
 
-	pkgInfo = new(packageInfo)
+	pkgInfo := new(packageInfo)
 	pkgInfo.fSet = token.NewFileSet()
 
-	fileSet, err = parser.ParseDir(pkgInfo.fSet, dir, nil,
+	fileSet, err := parser.ParseDir(pkgInfo.fSet, dir, nil,
 		parser.ParseComments|parser.AllErrors,
 	)
 
 	if err == nil {
 		for n, a := range fileSet { // Process the first non _test package.
 			if !strings.HasSuffix(n, "_test") {
-				pkgInfo.astPkg = a
 				pkgInfo.docPkg = doc.New(
 					a, n, doc.PreserveAST|doc.AllDecls|doc.AllMethods,
 				)
