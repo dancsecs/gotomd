@@ -27,13 +27,15 @@ import (
 	"github.com/dancsecs/sztest"
 )
 
-const example1 = "example1"
-const example1Path = "." + string(os.PathSeparator) +
-	example1 + string(os.PathSeparator)
+const (
+	example1     = "example1"
+	example1Path = "." + string(os.PathSeparator) +
+		example1 + string(os.PathSeparator)
 
-const example2 = "example2"
-const example2Path = "." + string(os.PathSeparator) +
-	example2 + string(os.PathSeparator)
+	example2     = "example2"
+	example2Path = "." + string(os.PathSeparator) +
+		example2 + string(os.PathSeparator)
+)
 
 func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	chk := sztest.CaptureLogAndStdout(t)

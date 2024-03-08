@@ -28,10 +28,12 @@ import (
 	"github.com/dancsecs/sztest"
 )
 
-const tabSPaces = "    "
-const hardSpace = "\\unicode{160}"
-const hardUnderscore = "&#x332;"
-const hardPercent = "&#xFE6A;"
+const (
+	tabSPaces      = "    "
+	hardSpace      = "\\unicode{160}"
+	hardUnderscore = "&#x332;"
+	hardPercent    = "&#xFE6A;"
+)
 
 // "--- PASS: Test_PASS_Example1 (0.0s)".
 // "--- FAIL: Test_FAIL_Example1 (0.0s)".

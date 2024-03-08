@@ -25,12 +25,14 @@ import (
 	"strings"
 )
 
-const sztestPrefix = "<!--- gotomd::"
-const szAutoPrefix = sztestPrefix + "Auto::"
-const sztestBgnPrefix = sztestPrefix + "Bgn::"
-const sztestEndPrefix = sztestPrefix + "End::"
-const szDocPrefix = "doc::"
-const szTstPrefix = "tst::"
+const (
+	sztestPrefix    = "<!--- gotomd::"
+	szAutoPrefix    = sztestPrefix + "Auto::"
+	sztestBgnPrefix = sztestPrefix + "Bgn::"
+	sztestEndPrefix = sztestPrefix + "End::"
+	szDocPrefix     = "doc::"
+	szTstPrefix     = "tst::"
+)
 
 type commandAction struct {
 	cmdPrefix []string

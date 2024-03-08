@@ -53,7 +53,7 @@ func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	var docInfoTests = []docInfoTest{
+	docInfoTests := []docInfoTest{
 		//  ----------------------------------------------------------------------
 		{
 			action: "TimesTwo",
