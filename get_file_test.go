@@ -33,11 +33,11 @@ func Test_GetFile_GetGoFileInvalid(t *testing.T) {
 	_, err := getGoFile(tstDir)
 	chk.Err(
 		err,
-		"relative directory must be specified in cmd: \""+tstDir+"\"",
+		ErrInvalidRelativeDir.Error()+": \""+tstDir+"\"",
 	)
 
 	_, err = getGoTst(example1Path + "TEST_DOES_NOT_EXIST")
-	chk.Err(err, "no tests to run")
+	chk.Err(err, ErrNoTestToRun.Error())
 }
 
 func Test_GetFile_GetGoFile(t *testing.T) {

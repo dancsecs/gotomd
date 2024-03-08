@@ -45,7 +45,7 @@ func Test_GoPackage_GetInfo_InvalidObject(t *testing.T) {
 	defer chk.Release()
 
 	_, err := getInfo("./example1", "DOES_NOT_EXIST")
-	chk.Err(err, "unknown package object: DOES_NOT_EXIST")
+	chk.Err(err, ErrUnknownObject.Error()+": DOES_NOT_EXIST")
 }
 
 //nolint:funlen // Ok.

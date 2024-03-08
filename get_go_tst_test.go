@@ -30,14 +30,15 @@ func Test_GetTest_GetGoTst(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	_, err := getGoTst("TEST_DIRECTORY_DOES_NOT_EXIST/")
+	cmd := "TEST_DIRECTORY_DOES_NOT_EXIST" + string(os.PathSeparator)
+	_, err := getGoTst(cmd)
 	chk.Err(
 		err,
-		"relative directory must be specified in cmd: \"TEST_DIRECTORY_DOES_NOT_EXIST/\"",
+		ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
 	)
 
 	_, err = getGoTst("./TEST_DOES_NOT_EXIST")
-	chk.Err(err, "no tests to run")
+	chk.Err(err, ErrNoTestToRun.Error())
 }
 
 func Test_GetTest_RunTestNotDirectory(t *testing.T) {

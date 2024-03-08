@@ -35,7 +35,8 @@ func Test_Markdown_CleanMarkDownDocument(t *testing.T) {
 
 	chk.Err(
 		err,
-		"out of sequence: End before begin: <!--- gotomd::End::tst::action2 -->",
+		ErrTagOutOfSequence.Error()+
+			": \"<!--- gotomd::End::tst::action2 -->\"",
 	)
 	chk.Str(md, "")
 }
@@ -50,7 +51,7 @@ func Test_Markdown_CleanMarkDownDocumentMissingBlankAfterAuto(t *testing.T) {
 
 	chk.Err(
 		err,
-		"missing blank line in auto generated output",
+		ErrMissingHeaderLine.Error(),
 	)
 	chk.Str(md, "")
 }
@@ -65,7 +66,7 @@ func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
 
 	chk.Err(
 		err,
-		"invalid directory specified as: \"./INVALID_ROOT_DIRECTORY\"",
+		ErrInvalidDirectory.Error()+": \"./INVALID_ROOT_DIRECTORY\"",
 	)
 	chk.Str(md, "")
 }
@@ -80,7 +81,7 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 
 	chk.Err(
 		err,
-		"unknown cmd: <!--- gotomd::unknownCommand -->",
+		ErrUnknownCommand.Error()+": \"<!--- gotomd::unknownCommand -->\"",
 	)
 	chk.Str(md, "")
 }

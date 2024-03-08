@@ -32,14 +32,20 @@ func Test_CmdParse_ParseCmd(t *testing.T) {
 	cmd := ""
 
 	dir, action, err := parseCmd(cmd)
-	chk.Err(err, "relative directory must be specified in cmd: \""+cmd+"\"")
+	chk.Err(
+		err,
+		ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
+	)
 	chk.Str(dir, "")
 	chk.Str(action, "")
 
 	cmd = string(os.PathSeparator) + "action"
 
 	dir, action, err = parseCmd(cmd)
-	chk.Err(err, "relative directory must be specified in cmd: \""+cmd+"\"")
+	chk.Err(
+		err,
+		ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
+	)
 	chk.Str(dir, "")
 	chk.Str(action, "")
 
@@ -48,7 +54,7 @@ func Test_CmdParse_ParseCmd(t *testing.T) {
 	dir, action, err = parseCmd(cmd)
 	chk.Err(
 		err,
-		"invalid action: a non-blank action is required",
+		ErrMissingAction.Error(),
 	)
 	chk.Str(dir, "")
 	chk.Str(action, "")
@@ -58,7 +64,7 @@ func Test_CmdParse_ParseCmd(t *testing.T) {
 	dir, action, err = parseCmd(cmd)
 	chk.Err(
 		err,
-		"relative directory must be specified in cmd: \""+cmd+"\"",
+		ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
 	)
 	chk.Str(dir, "")
 	chk.Str(action, "")
@@ -79,21 +85,27 @@ func Test_CmdParse_ParseCmds1(t *testing.T) {
 	dirs, actions, err := parseCmds(cmd)
 	chk.Nil(dirs)
 	chk.Nil(actions)
-	chk.Err(err, "relative directory must be specified in cmd: \""+cmd+"\"")
+	chk.Err(
+		err,
+		ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
+	)
 
 	cmd = string(os.PathSeparator) + "action"
 
 	dirs, actions, err = parseCmds(cmd)
 	chk.Nil(dirs)
 	chk.Nil(actions)
-	chk.Err(err, "relative directory must be specified in cmd: \""+cmd+"\"")
+	chk.Err(
+		err,
+		ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
+	)
 
 	cmd = "." + string(os.PathSeparator)
 
 	dirs, actions, err = parseCmds(cmd)
 	chk.Nil(dirs)
 	chk.Nil(actions)
-	chk.Err(err, "invalid action: a non-blank action is required")
+	chk.Err(err, ErrMissingAction.Error())
 
 	cmd = example1 + string(os.PathSeparator) + "action"
 
@@ -102,7 +114,7 @@ func Test_CmdParse_ParseCmds1(t *testing.T) {
 	chk.Nil(actions)
 	chk.Err(
 		err,
-		"relative directory must be specified in cmd: \""+cmd+"\"",
+		ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
 	)
 
 	cmd = example1Path + "action"
@@ -124,13 +136,19 @@ func Test_CmdParse_ParseCmds2(t *testing.T) {
 	dirs, actions, err := parseCmds(file1 + " " + file2)
 	chk.Nil(dirs)
 	chk.Nil(actions)
-	chk.Err(err, "relative directory must be specified in cmd: \""+file2+"\"")
+	chk.Err(
+		err,
+		ErrInvalidRelativeDir.Error()+": \""+file2+"\"",
+	)
 
 	file2 = example1 + string(os.PathSeparator) + "action"
 	dirs, actions, err = parseCmds(file1 + " " + file2)
 	chk.Nil(dirs)
 	chk.Nil(actions)
-	chk.Err(err, "relative directory must be specified in cmd: \""+file2+"\"")
+	chk.Err(
+		err,
+		ErrInvalidRelativeDir.Error()+": \""+file2+"\"",
+	)
 
 	file2 = "action2"
 	expDir := "." + string(os.PathSeparator) + example1

@@ -19,7 +19,7 @@
 package main
 
 import (
-	"errors"
+	"fmt"
 	"os"
 	"sort"
 	"strings"
@@ -102,7 +102,7 @@ func cleanMarkDownDocument(fData string) (string, error) {
 		switch {
 		case skipBlank:
 			if l != "" {
-				err = errors.New("missing blank line in auto generated output")
+				err = ErrMissingHeaderLine
 			}
 
 			skipBlank = false
@@ -111,7 +111,7 @@ func cleanMarkDownDocument(fData string) (string, error) {
 			case strings.HasPrefix(l, skipTo):
 				skipTo = ""
 			case strings.HasPrefix(l, sztestEndPrefix):
-				err = errors.New("out of sequence: End before begin: " + l)
+				err = fmt.Errorf("%w: %q", ErrTagOutOfSequence, l)
 			}
 		case strings.HasPrefix(l, sztestBgnPrefix):
 			skipTo = sztestEndPrefix + l[len(sztestBgnPrefix):]
@@ -157,7 +157,7 @@ func isCmd(l string) (int, int, error) {
 		}
 
 		if end < 0 || cmdIdx == -1 {
-			return 0, 0, errors.New("unknown cmd: " + l)
+			return 0, 0, fmt.Errorf("%w: %q", ErrUnknownCommand, l)
 		}
 	}
 

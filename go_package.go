@@ -19,7 +19,7 @@
 package main
 
 import (
-	"errors"
+	"fmt"
 	"go/ast"
 	"go/doc"
 	"go/parser"
@@ -198,7 +198,7 @@ func (pi *packageInfo) getInfo(name string) (*docInfo, error) {
 		return pi.getInfoType(t)
 	}
 
-	return nil, errors.New("unknown package object: " + name)
+	return nil, fmt.Errorf("%w: %s", ErrUnknownObject, name)
 }
 
 func leadingTabsToSpaces(s []string) []string {

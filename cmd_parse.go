@@ -19,7 +19,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -29,9 +28,7 @@ import (
 
 func parseCmd(cmd string) (string, string, error) {
 	if !strings.HasPrefix(cmd, "./") {
-		return "", "", fmt.Errorf(
-			"relative directory must be specified in cmd: %q", cmd,
-		)
+		return "", "", fmt.Errorf("%w: %q", ErrInvalidRelativeDir, cmd)
 	}
 
 	lastSeparatorPos := strings.LastIndex(cmd, string(os.PathSeparator))
@@ -42,15 +39,11 @@ func parseCmd(cmd string) (string, string, error) {
 	if err != nil || !s.IsDir() {
 		return "",
 			"",
-			fmt.Errorf("invalid directory specified as: %q", dir)
+			fmt.Errorf("%w: %q", ErrInvalidDirectory, dir)
 	}
 
 	if action == "" {
-		return "",
-			"",
-			errors.New(
-				"invalid action: a non-blank action is required",
-			)
+		return "", "", ErrMissingAction
 	}
 
 	return dir, action, nil

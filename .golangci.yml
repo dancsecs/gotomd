@@ -27,7 +27,6 @@ linters:
   # https://golangci-lint.run/usage/linters/#disabled-by-default
   disable:
     - forbidigo
-    - goerr113
     - gofumpt
     - paralleltest
     - testpackage

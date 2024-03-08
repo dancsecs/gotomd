@@ -65,7 +65,7 @@ func Test_GetDoc_GetGoDcl_NoItems(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDecl(example1Path)
-	chk.Err(err, "invalid action: a non-blank action is required")
+	chk.Err(err, ErrMissingAction.Error())
 	chk.Str(s, "")
 }
 
@@ -86,7 +86,7 @@ func Test_GetDoc_GetGoDcl_InvalidItem(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDecl(example1Path + "unknownItem")
-	chk.Err(err, "unknown package object: unknownItem")
+	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 }
 
@@ -129,7 +129,7 @@ func Test_GetDoc_GetGoDclSingle_NoItems(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDeclSingle(example1Path)
-	chk.Err(err, "invalid action: a non-blank action is required")
+	chk.Err(err, ErrMissingAction.Error())
 	chk.Str(s, "")
 }
 
@@ -150,7 +150,7 @@ func Test_GetDoc_GetGoDclSingle_InvalidItem(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDeclSingle(example1Path + "unknownItem")
-	chk.Err(err, "unknown package object: unknownItem")
+	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 }
 
@@ -193,7 +193,7 @@ func Test_GetDoc_GetGoDclNatural_InvalidItem(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDeclNatural(example1Path + "unknownItem")
-	chk.Err(err, "unknown package object: unknownItem")
+	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 }
 

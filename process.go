@@ -128,7 +128,10 @@ func getFilesToProcess() ([]string, error) {
 
 		if err == nil && !stat.IsDir() {
 			if !strings.HasSuffix(stat.Name(), filter) {
-				err = errors.New("file must have extension: " + filter)
+				err = fmt.Errorf(
+					"%w: expected - %s",
+					ErrUnexpectedExtension, filter,
+				)
 			} else {
 				filesToProcess = append(filesToProcess, flag.Arg(i))
 

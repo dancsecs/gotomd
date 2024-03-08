@@ -20,7 +20,6 @@ package main
 
 import (
 	"bytes"
-	"errors"
 	"os"
 	"os/exec"
 	"regexp"
@@ -77,7 +76,7 @@ func runTest(dir, tests string) (string, string, error) {
 
 	stat, err := os.Stat(dir)
 	if err == nil && !stat.IsDir() {
-		err = errors.New("not a directory")
+		err = ErrInvalidDirectory
 	}
 
 	if err == nil {
@@ -97,7 +96,7 @@ func runTest(dir, tests string) (string, string, error) {
 			rawRes,
 			[]byte("testing: warning: no tests to run"),
 		) {
-			err = errors.New("no tests to run")
+			err = ErrNoTestToRun
 		}
 	}
 
