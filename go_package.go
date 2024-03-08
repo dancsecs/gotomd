@@ -274,13 +274,15 @@ func createPackageInfo(dir string) (*packageInfo, error) {
 	)
 
 	if err == nil {
-		for n, a := range f { // Only process the first one.
-			pkgInfo.astPkg = a
-			pkgInfo.docPkg = doc.New(
-				a, n, doc.PreserveAST|doc.AllDecls|doc.AllMethods,
-			)
+		for n, a := range f { // Only process the first non _test package.
+			if !strings.HasSuffix(n, "_test") {
+				pkgInfo.astPkg = a
+				pkgInfo.docPkg = doc.New(
+					a, n, doc.PreserveAST|doc.AllDecls|doc.AllMethods,
+				)
 
-			return pkgInfo, nil
+				return pkgInfo, nil
+			}
 		}
 	}
 

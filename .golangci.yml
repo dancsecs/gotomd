@@ -29,7 +29,6 @@ linters:
     - forbidigo
     - gofumpt
     - paralleltest
-    - testpackage
     - varnamelen
 
     - deadcode # Deprecated
@@ -62,7 +61,7 @@ issues:
         - goconst
         - gosec
         - wrapcheck
-  
+
   # Independently of option `exclude` we use default exclude patterns,
   # it can be disabled by this option.
   # To list all excluded by default patterns execute `golangci-lint run --help`.
