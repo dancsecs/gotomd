@@ -41,7 +41,6 @@ issues:
         - lll
         - forbidigo
         - goconst
-        - gosec
         - paralleltest
         - wrapcheck
 

@@ -45,7 +45,7 @@ func getCleanedFiles() (string, []string, []string, error) {
 
 	targetPath = filepath.Join(outputDir, fName)
 
-	gotBytes, err = os.ReadFile(targetPath)
+	gotBytes, err = os.ReadFile(targetPath) //nolint:gosec // Ok.
 	if err == nil {
 		wntBytes, err = os.ReadFile(example1Path + fName)
 	}

@@ -362,6 +362,7 @@ func setup(dir string, files ...string) error {
 	return err
 }
 
+//nolint:gosec // Ok.
 func getTestFiles(dir, fName string) ([]string, []string, error) {
 	gotBytes, err := os.ReadFile(filepath.Join(dir, fName))
 	if err != nil {
