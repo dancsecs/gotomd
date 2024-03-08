@@ -60,7 +60,7 @@ func confirmOverwrite(fPath string, data string) (bool, error) {
 		}
 	}
 
-	return ok, err
+	return ok, err //nolint:wrapcheck // Caller will wrap error.
 }
 
 func writeFile(fPath string, data string) error {
@@ -89,7 +89,7 @@ func writeFile(fPath string, data string) error {
 		}
 	}
 
-	return err
+	return err //nolint:wrapcheck // Caller will wrap error.
 }
 
 //nolint:cyclop // Ok.

@@ -31,7 +31,6 @@ linters:
     - paralleltest
     - testpackage
     - varnamelen
-    - wrapcheck
 
     - deadcode # Deprecated
     - exhaustivestruct # Deprecated
@@ -62,6 +61,7 @@ issues:
         - lll
         - goconst
         - gosec
+        - wrapcheck
   
   # Independently of option `exclude` we use default exclude patterns,
   # it can be disabled by this option.

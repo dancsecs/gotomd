@@ -50,5 +50,5 @@ func getGoFile(cmd string) (string, error) {
 		return res, nil
 	}
 
-	return "", err
+	return "", err //nolint:wrapcheck // Caller will wrap error.
 }

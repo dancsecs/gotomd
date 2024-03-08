@@ -250,7 +250,7 @@ func (pi *packageInfo) snipFile(
 		body = leadingTabsToSpaces(strings.Split(res[fPos:endPos], "\n"))
 	}
 
-	return decl, body, err
+	return decl, body, err //nolint:wrapcheck // Caller will wrap error.
 }
 
 func createPackageInfo(dir string) (*packageInfo, error) {
@@ -284,7 +284,7 @@ func createPackageInfo(dir string) (*packageInfo, error) {
 		}
 	}
 
-	return nil, err
+	return nil, err //nolint:wrapcheck // Caller will wrap error.
 }
 
 func getInfo(dir, name string) (*docInfo, error) {
