@@ -46,4 +46,4 @@ issues:
 run:
   timeout: 5m
   issues-exit-code: 2
-  go: '1.21'
+  go: '1.22'
