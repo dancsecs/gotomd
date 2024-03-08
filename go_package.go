@@ -256,7 +256,7 @@ func (pi *packageInfo) snipFile(
 func createPackageInfo(dir string) (*packageInfo, error) {
 	var (
 		pkgInfo *packageInfo
-		f       map[string]*ast.Package
+		fileSet map[string]*ast.Package
 		err     error
 	)
 
@@ -269,12 +269,12 @@ func createPackageInfo(dir string) (*packageInfo, error) {
 	pkgInfo = new(packageInfo)
 	pkgInfo.fSet = token.NewFileSet()
 
-	f, err = parser.ParseDir(pkgInfo.fSet, dir, nil,
+	fileSet, err = parser.ParseDir(pkgInfo.fSet, dir, nil,
 		parser.ParseComments|parser.AllErrors,
 	)
 
 	if err == nil {
-		for n, a := range f { // Only process the first non _test package.
+		for n, a := range fileSet { // Process the first non _test package.
 			if !strings.HasSuffix(n, "_test") {
 				pkgInfo.astPkg = a
 				pkgInfo.docPkg = doc.New(

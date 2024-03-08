@@ -1,20 +1,12 @@
 linters-settings:
   lll:
-    # Max line length, lines longer will be reported.
-    # '\t' is counted as 1 character by default, and can be changed with the tab-width option.
-    # Default: 120.
     line-length: 79
-    # Tab width in spaces.
-    # Default: 1
     tab-width: 4
 
   depguard:
     rules:
-      # Name of a rule.
       "main":
-        # Only apply to go test files.
-        files: _test.go
-        # List of allowed packages.
+        files: _test.go # Only apply to go test files.
         allow:
           - $gostd
           - github.com/dancsecs/sztest
@@ -26,11 +18,7 @@ linters-settings:
         - ok bool
 
 linters:
-  # Enable all available linters.
-  # Default: false
   enable-all: true
-  # Disable specific linter
-  # https://golangci-lint.run/usage/linters/#disabled-by-default
   disable:
     - deadcode # Deprecated
     - exhaustivestruct # Deprecated
@@ -44,19 +32,11 @@ linters:
     - varcheck # Deprecated
 
 issues:
-  # List of regexps of issue texts to exclude.
-  #
-  # But independently of this option we use default exclude patterns,
-  # it can be disabled by `exclude-use-default: false`.
-  # To list all excluded by default patterns execute `golangci-lint run --help`
-  #
-  # Default: https://golangci-lint.run/usage/false-positives/#default-exclusions
-  # exclude:
-  #   - abcdef
-  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
   exclude-rules:
-    # Exclude some linters from running on tests files.
-    - path: _test\.go
+    - path: _test\.go  # Exclude on test files.
       linters:
         - lll
         - forbidigo
@@ -64,14 +44,6 @@ issues:
         - gosec
         - paralleltest
         - wrapcheck
-
-  # Independently of option `exclude` we use default exclude patterns,
-  # it can be disabled by this option.
-  # To list all excluded by default patterns execute `golangci-lint run --help`.
-  # Default: true
-  exclude-use-default: false
-  max-issues-per-linter: 0
-  max-same-issues: 0
 
 run:
   timeout: 5m
