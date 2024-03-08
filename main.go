@@ -155,7 +155,7 @@ func main() {
 	processArgs()
 
 	if showLicense {
-		fmt.Print(license)
+		fmt.Print(license) //nolint:forbidigo // Ok.
 	}
 
 	filesToProcess, err = getFilesToProcess()

@@ -26,6 +26,7 @@ import (
 	"strings"
 )
 
+//nolint:forbidigo // Ok.
 func confirmOverwrite(fPath string, data string) (bool, error) {
 	var (
 		ok      bool
@@ -92,7 +93,7 @@ func writeFile(fPath string, data string) error {
 	return err //nolint:wrapcheck // Caller will wrap error.
 }
 
-//nolint:cyclop // Ok.
+//nolint:cyclop,forbidigo // Ok.
 func getFilesToProcess() ([]string, error) {
 	var (
 		err            error

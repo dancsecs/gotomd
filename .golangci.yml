@@ -32,7 +32,6 @@ linters:
   # Disable specific linter
   # https://golangci-lint.run/usage/linters/#disabled-by-default
   disable:
-    - forbidigo
     - gofumpt
 
     - deadcode # Deprecated
@@ -62,6 +61,7 @@ issues:
     - path: _test\.go
       linters:
         - lll
+        - forbidigo
         - goconst
         - gosec
         - paralleltest
