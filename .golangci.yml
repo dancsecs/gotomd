@@ -38,7 +38,6 @@ issues:
   exclude-rules:
     - path: _test\.go  # Exclude on test files.
       linters:
-        - lll
         - forbidigo
         - goconst
         - paralleltest

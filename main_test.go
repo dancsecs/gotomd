@@ -43,7 +43,13 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 	chk.NoErr(
-		setup(dir, "README.md", "README.md.gtm", "example1_test.go", "example1.go"),
+		setup(
+			dir,
+			"README.md",
+			"README.md.gtm",
+			"example1_test.go",
+			"example1.go",
+		),
 	)
 
 	rName := filepath.Join(dir, "README.md.gtm")
@@ -239,7 +245,9 @@ func Test_Example1ReplaceTargetOverwriteDir(t *testing.T) {
 		"open "+dir+"/README.md.gtm: no such file or directory",
 	)
 
-	chk.Stdout("Confirm overwrite of " + dir + "/README.md (Y to overwrite)?\\s")
+	chk.Stdout(
+		"Confirm overwrite of " + dir + "/README.md (Y to overwrite)?\\s",
+	)
 }
 
 func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
@@ -282,7 +290,9 @@ func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
 		"open "+dir+"/README.md.gtm: no such file or directory",
 	)
 
-	chk.Stdout("Confirm overwrite of " + dir + "/README.md (Y to overwrite)?\\s")
+	chk.Stdout(
+		"Confirm overwrite of " + dir + "/README.md (Y to overwrite)?\\s",
+	)
 }
 
 func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {

@@ -92,6 +92,8 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 	chk.AddSub(`\t\d+\.\d+s`, "\t0.0s")
 	chk.AddSub(` `, hardSpace)
 	chk.AddSub(`_`, hardUnderscore)
+
+	//nolint:lll // Ok.
 	chk.Stdout("" +
 		markBashCode(
 			"go test -v -cover ."+
@@ -198,6 +200,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
 	chk.NoErr(err)
 	fmt.Printf("%s\n", s)
 
+	//nolint:lll // Ok.
 	chk.Stdout("" +
 		markBashCode(
 			"go test -v -cover ."+

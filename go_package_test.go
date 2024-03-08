@@ -48,7 +48,7 @@ func Test_GoPackage_GetInfo_InvalidObject(t *testing.T) {
 	chk.Err(err, ErrUnknownObject.Error()+": DOES_NOT_EXIST")
 }
 
-//nolint:funlen // Ok.
+//nolint:funlen,lll // Ok.
 func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
