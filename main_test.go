@@ -341,17 +341,17 @@ func setup(dir string, files ...string) error {
 	const ext = ".example"
 
 	var (
-		err error
-		b   []byte
+		err       error
+		fileBytes []byte
 	)
 
 	files = append(files, "go.mod"+ext, "go.sum"+ext)
 	for i, mi := 0, len(files); i < mi && err == nil; i++ {
-		b, err = os.ReadFile(filepath.Join("example1", files[i]))
+		fileBytes, err = os.ReadFile(filepath.Join("example1", files[i]))
 		if err == nil {
 			err = os.WriteFile(
 				filepath.Join(dir, strings.TrimSuffix(files[i], ext)),
-				b,
+				fileBytes,
 				os.FileMode(defaultPerm),
 			)
 		}

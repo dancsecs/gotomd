@@ -97,31 +97,31 @@ func cleanMarkDownDocument(fData string) (string, error) {
 
 	lines := strings.Split(fData+"\n", "\n")
 	for i, mi := 0, len(lines)-1; i < mi && err == nil; i++ {
-		l := strings.TrimRight(lines[i], " ")
+		line := strings.TrimRight(lines[i], " ")
 
 		switch {
 		case skipBlank:
-			if l != "" {
+			if line != "" {
 				err = ErrMissingHeaderLine
 			}
 
 			skipBlank = false
 		case skipTo != "":
 			switch {
-			case strings.HasPrefix(l, skipTo):
+			case strings.HasPrefix(line, skipTo):
 				skipTo = ""
-			case strings.HasPrefix(l, sztestEndPrefix):
-				err = fmt.Errorf("%w: %q", ErrTagOutOfSequence, l)
+			case strings.HasPrefix(line, sztestEndPrefix):
+				err = fmt.Errorf("%w: %q", ErrTagOutOfSequence, line)
 			}
-		case strings.HasPrefix(l, sztestBgnPrefix):
-			skipTo = sztestEndPrefix + l[len(sztestBgnPrefix):]
+		case strings.HasPrefix(line, sztestBgnPrefix):
+			skipTo = sztestEndPrefix + line[len(sztestBgnPrefix):]
 			// Add unexpanded line.
-			updatedFile += sztestPrefix + l[len(sztestEndPrefix):] + "\n"
-		case strings.HasPrefix(l, szAutoPrefix):
+			updatedFile += sztestPrefix + line[len(sztestEndPrefix):] + "\n"
+		case strings.HasPrefix(line, szAutoPrefix):
 			// Do not add auto generated line or next blank line to output.
 			skipBlank = true
 		default:
-			updatedFile += l + "\n"
+			updatedFile += line + "\n"
 		}
 	}
 
@@ -139,7 +139,7 @@ func expand(prefix, cmd, content string) string {
 		sztestEndPrefix + prefix + cmd + " -->\n"
 }
 
-func isCmd(l string) (int, int, error) {
+func isCmd(line string) (int, int, error) {
 	const sep = "::"
 
 	var (
@@ -147,8 +147,8 @@ func isCmd(l string) (int, int, error) {
 		end    = 0
 	)
 
-	if strings.HasPrefix(l, sztestPrefix) {
-		cmd := l[len(sztestPrefix):]
+	if strings.HasPrefix(line, sztestPrefix) {
+		cmd := line[len(sztestPrefix):]
 		end = strings.Index(cmd, sep)
 
 		if end >= 0 {
@@ -157,7 +157,7 @@ func isCmd(l string) (int, int, error) {
 		}
 
 		if end < 0 || cmdIdx == -1 {
-			return 0, 0, fmt.Errorf("%w: %q", ErrUnknownCommand, l)
+			return 0, 0, fmt.Errorf("%w: %q", ErrUnknownCommand, line)
 		}
 	}
 
@@ -201,19 +201,19 @@ func updateMarkDownDocument(dir, fData string) (string, error) {
 	lines := strings.Split(fData+"\n", "\n")
 
 	for i, mi := 0, len(lines)-1; i < mi && err == nil; i++ {
-		l := strings.TrimRight(lines[i], " ")
-		cmdIdx, cmdStart, err = isCmd(l)
+		line := strings.TrimRight(lines[i], " ")
+		cmdIdx, cmdStart, err = isCmd(line)
 
 		if err == nil {
 			if cmdIdx >= 0 {
-				cmd = l[cmdStart : len(l)-len(" -->")]
+				cmd = line[cmdStart : len(line)-len(" -->")]
 				res, err = action.run(cmdIdx, cmd)
 
 				if err == nil {
 					updatedFile += expand(action.cmdPrefix[cmdIdx], cmd, res)
 				}
 			} else {
-				updatedFile += l + "\n"
+				updatedFile += line + "\n"
 			}
 		}
 	}

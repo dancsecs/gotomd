@@ -76,40 +76,40 @@ var szEnvSetup = []string{
 	sztest.EnvMarkSepOff + "=" + markSepOff,
 }
 
-func translateToTestSymbols(s string) string {
-	s = strings.ReplaceAll(s, markDelOn, internalTestMarkDelOn)
-	s = strings.ReplaceAll(s, markDelOff, internalTestMarkDelOff)
-	s = strings.ReplaceAll(s, markInsOn, internalTestMarkInsOn)
-	s = strings.ReplaceAll(s, markInsOff, internalTestMarkInsOff)
-	s = strings.ReplaceAll(s, markChgOn, internalTestMarkChgOn)
-	s = strings.ReplaceAll(s, markChgOff, internalTestMarkChgOff)
-	s = strings.ReplaceAll(s, markSepOn, internalTestMarkSepOn)
-	s = strings.ReplaceAll(s, markSepOff, internalTestMarkSepOff)
-	s = strings.ReplaceAll(s, markWntOn, internalTestMarkWntOn)
-	s = strings.ReplaceAll(s, markWntOff, internalTestMarkWntOff)
-	s = strings.ReplaceAll(s, markGotOn, internalTestMarkGotOn)
-	s = strings.ReplaceAll(s, markGotOff, internalTestMarkGotOff)
-	s = strings.ReplaceAll(s, markMsgOn, internalTestMarkMsgOn)
-	s = strings.ReplaceAll(s, markMsgOff, internalTestMarkMsgOff)
+func translateToTestSymbols(lines string) string {
+	lines = strings.ReplaceAll(lines, markDelOn, internalTestMarkDelOn)
+	lines = strings.ReplaceAll(lines, markDelOff, internalTestMarkDelOff)
+	lines = strings.ReplaceAll(lines, markInsOn, internalTestMarkInsOn)
+	lines = strings.ReplaceAll(lines, markInsOff, internalTestMarkInsOff)
+	lines = strings.ReplaceAll(lines, markChgOn, internalTestMarkChgOn)
+	lines = strings.ReplaceAll(lines, markChgOff, internalTestMarkChgOff)
+	lines = strings.ReplaceAll(lines, markSepOn, internalTestMarkSepOn)
+	lines = strings.ReplaceAll(lines, markSepOff, internalTestMarkSepOff)
+	lines = strings.ReplaceAll(lines, markWntOn, internalTestMarkWntOn)
+	lines = strings.ReplaceAll(lines, markWntOff, internalTestMarkWntOff)
+	lines = strings.ReplaceAll(lines, markGotOn, internalTestMarkGotOn)
+	lines = strings.ReplaceAll(lines, markGotOff, internalTestMarkGotOff)
+	lines = strings.ReplaceAll(lines, markMsgOn, internalTestMarkMsgOn)
+	lines = strings.ReplaceAll(lines, markMsgOff, internalTestMarkMsgOff)
 
-	return s
+	return lines
 }
 
-func translateToBlankSymbols(s string) string {
-	s = strings.ReplaceAll(s, markDelOn, "")
-	s = strings.ReplaceAll(s, markDelOff, "")
-	s = strings.ReplaceAll(s, markInsOn, "")
-	s = strings.ReplaceAll(s, markInsOff, "")
-	s = strings.ReplaceAll(s, markChgOn, "")
-	s = strings.ReplaceAll(s, markChgOff, "")
-	s = strings.ReplaceAll(s, markSepOn, "")
-	s = strings.ReplaceAll(s, markSepOff, "")
-	s = strings.ReplaceAll(s, markWntOn, "")
-	s = strings.ReplaceAll(s, markWntOff, "")
-	s = strings.ReplaceAll(s, markGotOn, "")
-	s = strings.ReplaceAll(s, markGotOff, "")
-	s = strings.ReplaceAll(s, markMsgOn, "")
-	s = strings.ReplaceAll(s, markMsgOff, "")
+func translateToBlankSymbols(lines string) string {
+	lines = strings.ReplaceAll(lines, markDelOn, "")
+	lines = strings.ReplaceAll(lines, markDelOff, "")
+	lines = strings.ReplaceAll(lines, markInsOn, "")
+	lines = strings.ReplaceAll(lines, markInsOff, "")
+	lines = strings.ReplaceAll(lines, markChgOn, "")
+	lines = strings.ReplaceAll(lines, markChgOff, "")
+	lines = strings.ReplaceAll(lines, markSepOn, "")
+	lines = strings.ReplaceAll(lines, markSepOff, "")
+	lines = strings.ReplaceAll(lines, markWntOn, "")
+	lines = strings.ReplaceAll(lines, markWntOff, "")
+	lines = strings.ReplaceAll(lines, markGotOn, "")
+	lines = strings.ReplaceAll(lines, markGotOff, "")
+	lines = strings.ReplaceAll(lines, markMsgOn, "")
+	lines = strings.ReplaceAll(lines, markMsgOff, "")
 
-	return s
+	return lines
 }

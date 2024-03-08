@@ -57,7 +57,7 @@ func parseCmd(cmd string) (string, string, error) {
 func parseCmds(cmdStr string) ([]string, []string, error) {
 	var (
 		lastDir       string
-		d, a          string
+		dir, action   string
 		err           error
 		dirs, actions []string
 	)
@@ -65,17 +65,17 @@ func parseCmds(cmdStr string) ([]string, []string, error) {
 	cmds := regexp.MustCompile(`[\s\t]+`).Split(cmdStr, -1)
 
 	for i, mi := 0, len(cmds); i < mi && err == nil; i++ {
-		c := cmds[i]
+		cmd := cmds[i]
 		if lastDir != "" &&
-			strings.LastIndex(c, string(os.PathSeparator)) < 0 {
-			c = "." + string(os.PathSeparator) + filepath.Join(lastDir, c)
+			strings.LastIndex(cmd, string(os.PathSeparator)) < 0 {
+			cmd = "." + string(os.PathSeparator) + filepath.Join(lastDir, cmd)
 		}
 
-		d, a, err = parseCmd(c)
+		dir, action, err = parseCmd(cmd)
 		if err == nil {
-			dirs = append(dirs, d)
-			actions = append(actions, a)
-			lastDir = d
+			dirs = append(dirs, dir)
+			actions = append(actions, action)
+			lastDir = dir
 		}
 	}
 

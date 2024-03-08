@@ -19,6 +19,12 @@ linters-settings:
           - $gostd
           - github.com/dancsecs/sztest
 
+  varnamelen:
+      ignore-decls:
+        - i int
+        - mi int
+        - ok bool
+
 linters:
   # Enable all available linters.
   # Default: false
@@ -28,7 +34,6 @@ linters:
   disable:
     - forbidigo
     - gofumpt
-    - varnamelen
 
     - deadcode # Deprecated
     - exhaustivestruct # Deprecated

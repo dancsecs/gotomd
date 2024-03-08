@@ -262,29 +262,29 @@ func Test_GetTest_BuildTestCmds(t *testing.T) {
 
 	dirs := []string{}
 	actions := []string{}
-	d, a := buildTestCmds(dirs, actions)
-	chk.StrSlice(d, nil)
-	chk.StrSlice(a, nil)
+	dir, action := buildTestCmds(dirs, actions)
+	chk.StrSlice(dir, nil)
+	chk.StrSlice(action, nil)
 
 	actions = append(actions, "D1A1")
-	d, a = buildTestCmds(dirs, actions)
-	chk.StrSlice(d, nil)
-	chk.StrSlice(a, nil)
+	dir, action = buildTestCmds(dirs, actions)
+	chk.StrSlice(dir, nil)
+	chk.StrSlice(action, nil)
 
 	dirs = append(dirs, "D1")
-	d, a = buildTestCmds(dirs, actions)
-	chk.StrSlice(d, []string{"D1"})
-	chk.StrSlice(a, []string{"D1A1"})
+	dir, action = buildTestCmds(dirs, actions)
+	chk.StrSlice(dir, []string{"D1"})
+	chk.StrSlice(action, []string{"D1A1"})
 
 	dirs = append(dirs, "D1")
 	actions = append(actions, "D1A2")
-	d, a = buildTestCmds(dirs, actions)
-	chk.StrSlice(d, []string{"D1"})
-	chk.StrSlice(a, []string{"D1A1 D1A2"})
+	dir, action = buildTestCmds(dirs, actions)
+	chk.StrSlice(dir, []string{"D1"})
+	chk.StrSlice(action, []string{"D1A1 D1A2"})
 
 	dirs = append(dirs, "D2")
 	actions = append(actions, "D2A1")
-	d, a = buildTestCmds(dirs, actions)
-	chk.StrSlice(d, []string{"D1", "D2"})
-	chk.StrSlice(a, []string{"D1A1 D1A2", "D2A1"})
+	dir, action = buildTestCmds(dirs, actions)
+	chk.StrSlice(dir, []string{"D1", "D2"})
+	chk.StrSlice(action, []string{"D1A1 D1A2", "D2A1"})
 }

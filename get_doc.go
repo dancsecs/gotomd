@@ -32,20 +32,20 @@ func markBashCode(content string) string {
 
 func getDoc(cmd string) (string, error) {
 	var (
-		d   *docInfo
-		res string
+		dInfo *docInfo
+		res   string
 	)
 
 	dir, action, err := parseCmds(cmd)
 	for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-		d, err = getInfo(dir[i], action[i])
+		dInfo, err = getInfo(dir[i], action[i])
 		if err == nil {
 			if res != "" {
 				res += "\n\n"
 			}
 
-			res += d.declGoLang() + "\n\n" +
-				d.docMarkdown()
+			res += dInfo.declGoLang() + "\n\n" +
+				dInfo.docMarkdown()
 		}
 	}
 
@@ -58,20 +58,20 @@ func getDoc(cmd string) (string, error) {
 
 func getDocDecl(cmd string) (string, error) {
 	var (
-		d   *docInfo
-		res string
+		dInfo *docInfo
+		res   string
 	)
 
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-			d, err = getInfo(dir[i], action[i])
+			dInfo, err = getInfo(dir[i], action[i])
 			if err == nil {
 				if res != "" {
 					res += "\n"
 				}
 
-				res += strings.Join(d.header, "\n")
+				res += strings.Join(dInfo.header, "\n")
 			}
 		}
 	}
@@ -85,20 +85,20 @@ func getDocDecl(cmd string) (string, error) {
 
 func getDocDeclSingle(cmd string) (string, error) {
 	var (
-		d   *docInfo
-		res string
+		dInfo *docInfo
+		res   string
 	)
 
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-			d, err = getInfo(dir[i], action[i])
+			dInfo, err = getInfo(dir[i], action[i])
 			if err == nil {
 				if res != "" {
 					res += "\n"
 				}
 
-				res += d.oneLine()
+				res += dInfo.oneLine()
 			}
 		}
 	}
@@ -112,21 +112,21 @@ func getDocDeclSingle(cmd string) (string, error) {
 
 func getDocDeclNatural(cmd string) (string, error) {
 	var (
-		d   *docInfo
-		res string
+		dInfo *docInfo
+		res   string
 	)
 
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-			d, err = getInfo(dir[i], action[i])
+			dInfo, err = getInfo(dir[i], action[i])
 			if err == nil {
 				if res != "" {
 					res += "\n\n"
 				}
 
-				res += d.naturalComments() + "\n"
-				res += d.oneLine()
+				res += dInfo.naturalComments() + "\n"
+				res += dInfo.oneLine()
 			}
 		}
 	}

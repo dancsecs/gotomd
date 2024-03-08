@@ -101,12 +101,12 @@ func (pi *packageInfo) findType(name string) *doc.Type {
 }
 
 // getInfoFunc looks up the documentation for a function.
-func (pi *packageInfo) getInfoFunc(f *doc.Func) (*docInfo, error) {
+func (pi *packageInfo) getInfoFunc(docFunc *doc.Func) (*docInfo, error) {
 	var dInfo *docInfo
 
-	dStart := pi.fSet.PositionFor(f.Decl.Pos(), true)
-	dEnd := pi.fSet.PositionFor(f.Decl.Body.Lbrace, true)
-	fEnd := pi.fSet.PositionFor(f.Decl.End(), true)
+	dStart := pi.fSet.PositionFor(docFunc.Decl.Pos(), true)
+	dEnd := pi.fSet.PositionFor(docFunc.Decl.Body.Lbrace, true)
+	fEnd := pi.fSet.PositionFor(docFunc.Decl.End(), true)
 	decl, body, err := pi.snipFile(
 		dStart.Filename, dStart.Offset, dEnd.Offset, fEnd.Offset,
 	)
@@ -115,7 +115,7 @@ func (pi *packageInfo) getInfoFunc(f *doc.Func) (*docInfo, error) {
 		dInfo = &docInfo{
 			header: decl,
 			body:   body,
-			doc:    strings.Split(strings.TrimSpace(f.Doc), "\n"),
+			doc:    strings.Split(strings.TrimSpace(docFunc.Doc), "\n"),
 		}
 	}
 
@@ -123,11 +123,11 @@ func (pi *packageInfo) getInfoFunc(f *doc.Func) (*docInfo, error) {
 }
 
 // getInfoConst looks up the documentation for a function.
-func (pi *packageInfo) getInfoConst(c *doc.Value) (*docInfo, error) {
+func (pi *packageInfo) getInfoConst(docConst *doc.Value) (*docInfo, error) {
 	var dInfo *docInfo
 
-	dStart := pi.fSet.PositionFor(c.Decl.Pos(), true)
-	fEnd := pi.fSet.PositionFor(c.Decl.End(), true)
+	dStart := pi.fSet.PositionFor(docConst.Decl.Pos(), true)
+	fEnd := pi.fSet.PositionFor(docConst.Decl.End(), true)
 	decl, body, err := pi.snipFile(
 		dStart.Filename, dStart.Offset, -1, fEnd.Offset,
 	)
@@ -136,7 +136,7 @@ func (pi *packageInfo) getInfoConst(c *doc.Value) (*docInfo, error) {
 		dInfo = &docInfo{
 			header: decl,
 			body:   body,
-			doc:    strings.Split(strings.TrimSpace(c.Doc), "\n"),
+			doc:    strings.Split(strings.TrimSpace(docConst.Doc), "\n"),
 		}
 	}
 
@@ -144,12 +144,12 @@ func (pi *packageInfo) getInfoConst(c *doc.Value) (*docInfo, error) {
 }
 
 // getInfoType looks up the documentation for a function.
-func (pi *packageInfo) getInfoType(t *doc.Type) (*docInfo, error) {
+func (pi *packageInfo) getInfoType(docType *doc.Type) (*docInfo, error) {
 	var dInfo *docInfo
 
-	dStart := pi.fSet.PositionFor(t.Decl.Pos(), true)
-	dEnd := pi.fSet.PositionFor(t.Decl.Lparen, true)
-	fEnd := pi.fSet.PositionFor(t.Decl.End(), true)
+	dStart := pi.fSet.PositionFor(docType.Decl.Pos(), true)
+	dEnd := pi.fSet.PositionFor(docType.Decl.Lparen, true)
+	fEnd := pi.fSet.PositionFor(docType.Decl.End(), true)
 	decl, body, err := pi.snipFile(
 		dStart.Filename, dStart.Offset, dEnd.Offset, fEnd.Offset,
 	)
@@ -158,7 +158,7 @@ func (pi *packageInfo) getInfoType(t *doc.Type) (*docInfo, error) {
 		dInfo = &docInfo{
 			header: decl,
 			body:   body,
-			doc:    strings.Split(strings.TrimSpace(t.Doc), "\n"),
+			doc:    strings.Split(strings.TrimSpace(docType.Doc), "\n"),
 		}
 	}
 
@@ -201,24 +201,24 @@ func (pi *packageInfo) getInfo(name string) (*docInfo, error) {
 	return nil, fmt.Errorf("%w: %s", ErrUnknownObject, name)
 }
 
-func leadingTabsToSpaces(s []string) []string {
+func leadingTabsToSpaces(lines []string) []string {
 	const fourSpaces = "    "
 
-	for i, l := range s {
+	for i, line := range lines {
 		newPrefix := ""
 
-		for j, mj := 0, len(l); j < mj; j++ {
-			if l[j] == '\t' {
+		for j, mj := 0, len(line); j < mj; j++ {
+			if line[j] == '\t' {
 				newPrefix += fourSpaces
 			} else {
-				s[i] = newPrefix + l[j:]
+				lines[i] = newPrefix + line[j:]
 
 				break
 			}
 		}
 	}
 
-	return s
+	return lines
 }
 
 func (pi *packageInfo) snipFile(

@@ -158,7 +158,7 @@ func Test_GetDoc_GetGoDclSingle_OneItem(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDocDeclSingle(example1Path + "TimesTwo")
+	line, err := getDocDeclSingle(example1Path + "TimesTwo")
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
@@ -166,7 +166,7 @@ func Test_GetDoc_GetGoDclSingle_OneItem(t *testing.T) {
 	)
 	chk.NoErr(err)
 	chk.Str(
-		s,
+		line,
 		markGoCode("func TimesTwo(i int) int\n"),
 	)
 }
@@ -201,7 +201,7 @@ func Test_GetDoc_GetGoDclNatural_OneItem(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDocDeclNatural(example1Path + "TimesTwo")
+	line, err := getDocDeclNatural(example1Path + "TimesTwo")
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
@@ -209,7 +209,7 @@ func Test_GetDoc_GetGoDclNatural_OneItem(t *testing.T) {
 	)
 	chk.NoErr(err)
 	chk.Str(
-		s,
+		line,
 		markGoCode(
 			"// TimesTwo returns the value times two.\n"+
 				"func TimesTwo(i int) int",
@@ -221,7 +221,7 @@ func Test_GetDoc_GetGoDclNatural_TwoItems(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDocDeclNatural(example1Path + "TimesTwo TimesThree")
+	line, err := getDocDeclNatural(example1Path + "TimesTwo TimesThree")
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
@@ -229,7 +229,7 @@ func Test_GetDoc_GetGoDclNatural_TwoItems(t *testing.T) {
 	)
 	chk.NoErr(err)
 	chk.Str(
-		s,
+		line,
 		markGoCode(
 			"// TimesTwo returns the value times two.\n"+
 				"func TimesTwo(i int) int\n"+

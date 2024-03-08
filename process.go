@@ -74,17 +74,17 @@ func writeFile(fPath string, data string) error {
 	}
 
 	if err == nil && okToOverwrite {
-		var f *os.File
+		var file *os.File
 
 		//nolint:gosec // Ok.
-		f, err = os.OpenFile(fPath,
+		file, err = os.OpenFile(fPath,
 			os.O_TRUNC|os.O_WRONLY|os.O_CREATE,
 			os.FileMode(defaultPerm),
 		)
 		if err == nil {
-			_, err = f.WriteString(data + "\n")
+			_, err = file.WriteString(data + "\n")
 			if err == nil {
-				err = f.Close()
+				err = file.Close()
 			}
 		}
 	}
