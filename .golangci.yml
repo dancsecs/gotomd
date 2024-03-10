@@ -5,7 +5,7 @@ linters-settings:
 
   depguard:
     rules:
-      "main":
+      "Main":
         files: _test.go # Only apply to go test files.
         allow:
           - $gostd
