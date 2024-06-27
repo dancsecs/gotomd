@@ -41,7 +41,7 @@ var (
 
 func usage() {
 	cmdName := os.Args[0]
-	fmt.Fprint(flag.CommandLine.Output(),
+	_, _ = fmt.Fprint(flag.CommandLine.Output(),
 		"Usage of ", cmdName,
 		" [-c | -r]"+
 			" [-f]"+
@@ -53,6 +53,7 @@ func usage() {
 			" [file|dir...]"+
 			"\n",
 	)
+
 	flag.PrintDefaults()
 }
 

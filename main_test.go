@@ -55,12 +55,12 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	rName := filepath.Join(dir, "README.md.gtm")
 	tName := filepath.Join(dir, "README.md")
 
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		"-v",
 		"-z",
 		dir,
-	})
+	)
 
 	chk.SetStdinData("Y\n")
 
@@ -109,11 +109,11 @@ func Test_Example1ReplaceNoTarget(t *testing.T) {
 
 	fName := filepath.Join(dir, "README.md")
 
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		"-r",
 		fName,
-	})
+	)
 
 	chk.Panic(
 		main,
@@ -137,12 +137,12 @@ func Test_Example1ReplaceTargetCancel(t *testing.T) {
 	)
 
 	fName := filepath.Join(dir, "README.md")
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		"-v",
 		"-r",
 		fName,
-	})
+	)
 
 	chk.SetStdinData("N\n")
 
@@ -185,12 +185,13 @@ func Test_Example1ReplaceTargetOverwrite(t *testing.T) {
 	)
 
 	fName := filepath.Join(dir, "README.md")
-	chk.SetupArgsAndFlags([]string{
+
+	chk.SetArgs(
 		"programName",
 		"-r",
 		"-z",
 		fName,
-	})
+	)
 
 	chk.SetStdinData("Y\n")
 
@@ -221,12 +222,12 @@ func Test_Example1ReplaceTargetOverwriteDir(t *testing.T) {
 		setup(dir, "README.md", "example1_test.go", "example1.go"),
 	)
 
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		"-r",
 		"-z",
 		dir,
-	})
+	)
 
 	chk.SetStdinData("Y\n")
 
@@ -266,12 +267,12 @@ func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
 		),
 	)
 
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		"-r",
 		"-z",
 		dir,
-	})
+	)
 
 	chk.SetStdinData("Y\n")
 
@@ -304,13 +305,13 @@ func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
 		setup(dir, "README.md", "example1_test.go", "example1.go"),
 	)
 
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		"-v",
 		"-r",
 		"-z",
 		dir,
-	})
+	)
 
 	chk.SetStdinData("Y\n")
 
@@ -398,14 +399,14 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 
 	chk.NoErr(setup(dir, "README.md", "example1_test.go", "example1.go"))
 
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		"-v",
 		"-l",
 		"-c",
 		"-o", altDir,
 		filepath.Join(dir, "README.md"),
-	})
+	)
 
 	// Nor Run the main function with no -f arg requiring confirmation
 	main()

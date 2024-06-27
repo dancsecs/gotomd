@@ -28,9 +28,9 @@ func Test_ArgUsage_SampleNoArgsNotDirectory(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
-	})
+	)
 
 	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
 	chk.Panic(
@@ -44,10 +44,10 @@ func Test_ArgUsage_SampleInvalidFile(t *testing.T) {
 	defer chk.Release()
 
 	fPath := chk.CreateTmpFile(nil)
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		fPath,
-	})
+	)
 
 	chk.Panic(
 		main,
@@ -60,11 +60,11 @@ func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
 	defer chk.Release()
 
 	fPath := chk.CreateTmpFile(nil)
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		"-p", "0744",
 		fPath,
-	})
+	)
 
 	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
 	chk.Panic(
@@ -78,12 +78,12 @@ func Test_ArgUsage_InvalidCleanAndReplace(t *testing.T) {
 	defer chk.Release()
 
 	fPath := chk.CreateTmpFile(nil)
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		"-r",
 		"-c",
 		fPath,
-	})
+	)
 
 	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
 	chk.Panic(
@@ -97,11 +97,11 @@ func Test_ArgUsage_InvalidOutDirectory(t *testing.T) {
 	defer chk.Release()
 
 	fPath := chk.CreateTmpFile(nil)
-	chk.SetupArgsAndFlags([]string{
+	chk.SetArgs(
 		"programName",
 		"-o", "DIRECTORY_DOES_NOT_EXIST",
 		fPath,
-	})
+	)
 
 	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
 	chk.Panic(

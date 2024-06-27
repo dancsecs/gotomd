@@ -29,8 +29,8 @@ import (
 )
 
 const (
-	tabSPaces      = "    "
-	hardSpace      = "\\unicode{160}"
+	tabSpaces      = "    "
+	hardSpace      = "&#xa0;"
 	hardUnderscore = "&#x332;"
 	hardPercent    = "&#xFE6A;"
 )
@@ -108,7 +108,7 @@ func runTest(dir, tests string) (string, string, error) {
 			res = squashTestTime.ReplaceAllString(res, `${1} (0.0s)`)
 			res = squashAllTestTime.ReplaceAllString(res, `FAIL ${1} 0.0s`)
 			res = squashCached.ReplaceAllString(res, `${1}${2}`)
-			res = strings.ReplaceAll(res, "\t", tabSPaces)
+			res = strings.ReplaceAll(res, "\t", tabSpaces)
 			res = strings.ReplaceAll(res, "%", hardPercent)
 			res = strings.ReplaceAll(res, " ", hardSpace)
 			res = strings.ReplaceAll(res, "_", hardUnderscore)
@@ -131,7 +131,7 @@ func runTest(dir, tests string) (string, string, error) {
 			res = squashTestTime.ReplaceAllString(res, `${1} (0.0s)`)
 			res = squashAllTestTime.ReplaceAllString(res, `FAIL ${1} 0.0s`)
 			res = squashCached.ReplaceAllString(res, `${1}${2}`)
-			res = strings.ReplaceAll(res, "\t", tabSPaces)
+			res = strings.ReplaceAll(res, "\t", tabSpaces)
 			res = strings.ReplaceAll(res, "%", hardPercent)
 		}
 

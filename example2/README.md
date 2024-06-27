@@ -80,15 +80,15 @@ and run a specific test
 go test -v -cover -run Test_PASS_Example2 .
 ```
 
-$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;PASS&#x332;Example2}}$
+$\small{\texttt{===&#xa0;RUN&#xa0;&#xa0;&#xa0;Test&#x332;PASS&#x332;Example2}}$
 <br>
-$\small{\texttt{---\unicode{160}PASS:\unicode{160}Test&#x332;PASS&#x332;Example2\unicode{160}(0.0s)}}$
+$\small{\texttt{---&#xa0;PASS:&#xa0;Test&#x332;PASS&#x332;Example2&#xa0;(0.0s)}}$
 <br>
 $\small{\texttt{PASS}}$
 <br>
-$\small{\texttt{coverage:\unicode{160}100.0&#xFE6A;\unicode{160}of\unicode{160}statements}}$
+$\small{\texttt{coverage:&#xa0;100.0&#xFE6A;&#xa0;of&#xa0;statements}}$
 <br>
-$\small{\texttt{ok\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}github.com/dancsecs/gotomd/example2\unicode{160}\unicode{160}\unicode{160}\unicode{160}coverage:\unicode{160}100.0&#xFE6A;\unicode{160}of\unicode{160}statements}}$
+$\small{\texttt{ok&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;github.com/dancsecs/gotomd/example2&#xa0;&#xa0;&#xa0;&#xa0;coverage:&#xa0;100.0&#xFE6A;&#xa0;of&#xa0;statements}}$
 <br>
 <!--- gotomd::End::tst::./Test_PASS_Example2 -->
 
@@ -99,43 +99,43 @@ or run all tests in a package:
 go test -v -cover .
 ```
 
-$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;PASS&#x332;Example2}}$
+$\small{\texttt{===&#xa0;RUN&#xa0;&#xa0;&#xa0;Test&#x332;PASS&#x332;Example2}}$
 <br>
-$\small{\texttt{---\unicode{160}PASS:\unicode{160}Test&#x332;PASS&#x332;Example2\unicode{160}(0.0s)}}$
+$\small{\texttt{---&#xa0;PASS:&#xa0;Test&#x332;PASS&#x332;Example2&#xa0;(0.0s)}}$
 <br>
-$\small{\texttt{===\unicode{160}RUN\unicode{160}\unicode{160}\unicode{160}Test&#x332;FAIL&#x332;Example2}}$
+$\small{\texttt{===&#xa0;RUN&#xa0;&#xa0;&#xa0;Test&#x332;FAIL&#x332;Example2}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}example2&#x332;test.go:29:\unicode{160}unexpected\unicode{160}int:}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;example2&#x332;test.go:29:&#xa0;unexpected&#xa0;int:}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\emph{2+2=5\unicode{160}(is\unicode{160}true\unicode{160}for\unicode{160}big\unicode{160}values\unicode{160}of\unicode{160}two)}:}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\emph{2+2=5&#xa0;(is&#xa0;true&#xa0;for&#xa0;big&#xa0;values&#xa0;of&#xa0;two)}:}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\color{magenta}GOT:\unicode{160}\color{default}\color{darkturquoise}4\color{default}}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{magenta}GOT:&#xa0;\color{default}\color{darkturquoise}4\color{default}}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\color{cyan}WNT:\unicode{160}\color{default}\color{darkturquoise}5\color{default}}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{cyan}WNT:&#xa0;\color{default}\color{darkturquoise}5\color{default}}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}example2&#x332;test.go:30:\unicode{160}unexpected\unicode{160}string:}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;example2&#x332;test.go:30:&#xa0;unexpected&#xa0;string:}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\color{magenta}GOT:\unicode{160}\color{default}\color{green}New\unicode{160}in\unicode{160}Got\color{default}\unicode{160}Similar\unicode{160}in\unicode{160}(\color{darkturquoise}1\color{default})\unicode{160}both}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{magenta}GOT:&#xa0;\color{default}\color{green}New&#xa0;in&#xa0;Got\color{default}&#xa0;Similar&#xa0;in&#xa0;(\color{darkturquoise}1\color{default})&#xa0;both}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\color{cyan}WNT:\unicode{160}\color{default}\unicode{160}Similar\unicode{160}in\unicode{160}(\color{darkturquoise}2\color{default})\unicode{160}both\color{red},\unicode{160}new\unicode{160}in\unicode{160}Wnt\color{default}}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{cyan}WNT:&#xa0;\color{default}&#xa0;Similar&#xa0;in&#xa0;(\color{darkturquoise}2\color{default})&#xa0;both\color{red},&#xa0;new&#xa0;in&#xa0;Wnt\color{default}}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}example2&#x332;test.go:36:\unicode{160}Unexpected\unicode{160}stdout\unicode{160}Entry:\unicode{160}got\unicode{160}(1\unicode{160}lines)\unicode{160}-\unicode{160}want\unicode{160}(1\unicode{160}lines)}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;example2&#x332;test.go:36:&#xa0;Unexpected&#xa0;stdout&#xa0;Entry:&#xa0;got&#xa0;(1&#xa0;lines)&#xa0;-&#xa0;want&#xa0;(1&#xa0;lines)}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\color{darkturquoise}0\color{default}:\color{darkturquoise}0\color{default}\unicode{160}This\unicode{160}output\unicode{160}line\unicode{160}\color{red}is\color{default}\color{yellow}/\color{default}\color{green}will\unicode{160}be\color{default}\unicode{160}different}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{darkturquoise}0\color{default}:\color{darkturquoise}0\color{default}&#xa0;This&#xa0;output&#xa0;line&#xa0;\color{red}is\color{default}\color{yellow}/\color{default}\color{green}will&#xa0;be\color{default}&#xa0;different}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}example2&#x332;test.go:40:\unicode{160}unexpected\unicode{160}string:}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;example2&#x332;test.go:40:&#xa0;unexpected&#xa0;string:}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\color{magenta}GOT:\unicode{160}\color{default}\color{darkturquoise}Total\color{default}:\unicode{160}6}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{magenta}GOT:&#xa0;\color{default}\color{darkturquoise}Total\color{default}:&#xa0;6}}$
 <br>
-$\small{\texttt{\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\unicode{160}\color{cyan}WNT:\unicode{160}\color{default}\color{darkturquoise}Sum\color{default}:\unicode{160}6}}$
+$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{cyan}WNT:&#xa0;\color{default}\color{darkturquoise}Sum\color{default}:&#xa0;6}}$
 <br>
-$\small{\texttt{---\unicode{160}FAIL:\unicode{160}Test&#x332;FAIL&#x332;Example2\unicode{160}(0.0s)}}$
+$\small{\texttt{---&#xa0;FAIL:&#xa0;Test&#x332;FAIL&#x332;Example2&#xa0;(0.0s)}}$
 <br>
 $\small{\texttt{FAIL}}$
 <br>
-$\small{\texttt{coverage:\unicode{160}100.0&#xFE6A;\unicode{160}of\unicode{160}statements}}$
+$\small{\texttt{coverage:&#xa0;100.0&#xFE6A;&#xa0;of&#xa0;statements}}$
 <br>
-$\small{\texttt{FAIL\unicode{160}github.com/dancsecs/gotomd/example2\unicode{160}0.0s}}$
+$\small{\texttt{FAIL&#xa0;github.com/dancsecs/gotomd/example2&#xa0;0.0s}}$
 <br>
 $\small{\texttt{FAIL}}$
 <br>

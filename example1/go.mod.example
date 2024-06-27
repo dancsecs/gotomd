@@ -1,5 +1,5 @@
 module github.com/dancsecs/gotomd/example1
 
-go 1.21
+go 1.22
 
-require github.com/dancsecs/sztest v0.0.0-20240206131544-8287b34a6307
+require github.com/dancsecs/sztest v0.1.0
