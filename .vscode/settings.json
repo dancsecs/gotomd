@@ -153,13 +153,13 @@
         "SZTEST_MARK_GOT_OFF": "",
         "SZTEST_MARK_MSG_ON": "",
         "SZTEST_MARK_MSG_OFF": "",
-        "SZTEST_MARK_INS_ON": "⨭",
-        "SZTEST_MARK_INS_OFF": "⨮",
-        "SZTEST_MARK_DEL_ON": "⨴",
-        "SZTEST_MARK_DEL_OFF": "⨵",
-        "SZTEST_MARK_CHG_ON": "«",
-        "SZTEST_MARK_CHG_OFF": "»",
-        "SZTEST_MARK_SEP_ON": "",
-        "SZTEST_MARK_SEP_OFF": ""
+        "SZTEST_MARK_INS_ON": "⨭+>",
+        "SZTEST_MARK_INS_OFF": "<+⨮",
+        "SZTEST_MARK_DEL_ON": "⨴X>",
+        "SZTEST_MARK_DEL_OFF": "<X⨵",
+        "SZTEST_MARK_CHG_ON": "««>",
+        "SZTEST_MARK_CHG_OFF": "<»»",
+        "SZTEST_MARK_SEP_ON": "<<",
+        "SZTEST_MARK_SEP_OFF": ">>"
     }
 }
