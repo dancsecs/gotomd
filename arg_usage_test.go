@@ -51,7 +51,7 @@ func Test_ArgUsage_SampleInvalidFile(t *testing.T) {
 
 	chk.Panic(
 		main,
-		ErrUnexpectedExtension.Error()+": expected - .md.gtm",
+		ErrUnexpectedExtension.Error()+": expected - .gtm.md",
 	)
 }
 

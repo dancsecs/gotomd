@@ -104,7 +104,7 @@ func getFilesToProcess() ([]string, error) {
 	)
 
 	if !cleanOnly && !replace {
-		filter += ".gtm"
+		filter = ".gtm" + filter
 	}
 
 	for i, mi := 0, flag.NArg(); i < mi && err == nil; i++ {

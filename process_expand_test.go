@@ -99,7 +99,7 @@ func Test_ProcessExpand_NoTargetNoForceNoVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(expandMD(example1Path + "README_SHORT.md.gtm"))
+	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -119,7 +119,7 @@ func Test_ProcessExpand_NoTargetForceNoVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(expandMD(example1Path + "README_SHORT.md.gtm"))
+	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -139,14 +139,14 @@ func Test_ProcessExpand_NoTargetNoForceVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(expandMD(example1Path + "README_SHORT.md.gtm"))
+	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
 
 	tFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Log(
-		"Expanding "+example1Path+"README_SHORT.md.gtm to: "+tFile,
+		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
 		"getInfo(\"package\")",
 	)
 
@@ -162,14 +162,14 @@ func Test_ProcessExpand_NoTargetForceVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(expandMD(example1Path + "README_SHORT.md.gtm"))
+	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
 
 	tFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Log(
-		"Expanding "+example1Path+"README_SHORT.md.gtm to: "+tFile,
+		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
 		"getInfo(\"package\")",
 	)
 
@@ -187,7 +187,7 @@ func Test_ProcessExpand_CancelOverwriteTargetForceNoVerbose(t *testing.T) {
 
 	chk.SetStdinData("N\n")
 
-	chk.NoErr(expandMD(example1Path + "README_SHORT.md.gtm"))
+	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -209,14 +209,14 @@ func Test_ProcessExpand_CancelOverwriteForceVerbose(t *testing.T) {
 
 	chk.SetStdinData("N\n")
 
-	chk.NoErr(expandMD(example1Path + "README_SHORT.md.gtm"))
+	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
 
 	tFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Log(
-		"Expanding "+example1Path+"README_SHORT.md.gtm to: "+tFile,
+		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
 		"getInfo(\"package\")",
 	)
 
@@ -234,7 +234,7 @@ func Test_ProcessExpand_OverwriteTargetForceNoVerbose(t *testing.T) {
 
 	chk.SetStdinData("Y\n")
 
-	chk.NoErr(expandMD(example1Path + "README_SHORT.md.gtm"))
+	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -256,14 +256,14 @@ func Test_ProcessExpand_OverwriteForceVerbose(t *testing.T) {
 
 	chk.SetStdinData("Y\n")
 
-	chk.NoErr(expandMD(example1Path + "README_SHORT.md.gtm"))
+	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
 
 	wFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Log(
-		"Expanding "+example1Path+"README_SHORT.md.gtm to: "+wFile,
+		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+wFile,
 		"getInfo(\"package\")",
 	)
 

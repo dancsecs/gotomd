@@ -23,6 +23,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func cleanMD(rPath string) error {
@@ -42,7 +43,7 @@ func cleanMD(rPath string) error {
 		wDir = outputDir
 	}
 
-	wFile = rFile + ".gtm"
+	wFile = "." + strings.TrimSuffix(rFile, ".md") + ".gtm.md"
 	wPath = filepath.Join(wDir, wFile)
 
 	if verbose {

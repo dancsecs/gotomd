@@ -46,13 +46,13 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 		setup(
 			dir,
 			"README.md",
-			"README.md.gtm",
+			".README.gtm.md",
 			"example1_test.go",
 			"example1.go",
 		),
 	)
 
-	rName := filepath.Join(dir, "README.md.gtm")
+	rName := filepath.Join(dir, ".README.gtm.md")
 	tName := filepath.Join(dir, "README.md")
 
 	chk.SetArgs(
@@ -204,10 +204,11 @@ func Test_Example1ReplaceTargetOverwrite(t *testing.T) {
 	wnt[0] = strings.ReplaceAll(wnt[0], "**DO NOT MODIFY** ", "")
 	chk.StrSlice(got, wnt)
 
-	_, _, err = getTestFiles(dir, "README.md.gtm")
+	_, _, err = getTestFiles(dir, ".README.gtm.md")
 	chk.Err(
 		err,
-		"open "+fName+".gtm: no such file or directory",
+		"open "+filepath.Join(dir, ".README.gtm.md")+
+			": no such file or directory",
 	)
 
 	chk.Stdout("Confirm overwrite of " + fName + " (Y to overwrite)?\\s")
@@ -240,10 +241,10 @@ func Test_Example1ReplaceTargetOverwriteDir(t *testing.T) {
 	wnt[0] = strings.ReplaceAll(wnt[0], "**DO NOT MODIFY** ", "")
 	chk.StrSlice(got, wnt)
 
-	_, _, err = getTestFiles(dir, "README.md.gtm")
+	_, _, err = getTestFiles(dir, ".README.gtm.md")
 	chk.Err(
 		err,
-		"open "+dir+"/README.md.gtm: no such file or directory",
+		"open "+dir+"/.README.gtm.md: no such file or directory",
 	)
 
 	chk.Stdout(
@@ -257,12 +258,12 @@ func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 	chk.NoErr(
-		setup(dir, "README.md.gtm", "example1_test.go", "example1.go"),
+		setup(dir, ".README.gtm.md", "example1_test.go", "example1.go"),
 	)
 
 	chk.NoErr(
 		os.Rename(
-			filepath.Join(dir, "README.md.gtm"),
+			filepath.Join(dir, ".README.gtm.md"),
 			filepath.Join(dir, "README.md"),
 		),
 	)
@@ -285,10 +286,10 @@ func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
 	wnt[0] = strings.ReplaceAll(wnt[0], "**DO NOT MODIFY** ", "")
 	chk.StrSlice(got, wnt)
 
-	_, _, err = getTestFiles(dir, "README.md.gtm")
+	_, _, err = getTestFiles(dir, ".README.gtm.md")
 	chk.Err(
 		err,
-		"open "+dir+"/README.md.gtm: no such file or directory",
+		"open "+dir+"/.README.gtm.md: no such file or directory",
 	)
 
 	chk.Stdout(
@@ -411,7 +412,7 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 	// Nor Run the main function with no -f arg requiring confirmation
 	main()
 
-	got, wnt, err := getTestFiles(altDir, "README.md.gtm")
+	got, wnt, err := getTestFiles(altDir, ".README.gtm.md")
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
@@ -422,6 +423,6 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 	)
 
 	rFile := filepath.Join(dir, "README.md")
-	wFile := filepath.Join(altDir, "README.md.gtm")
+	wFile := filepath.Join(altDir, ".README.gtm.md")
 	chk.Log("Cleaning " + rFile + " to: " + wFile)
 }

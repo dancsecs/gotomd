@@ -43,7 +43,10 @@ func expandMD(rPath string) error {
 		wDir = outputDir
 	}
 
-	wFile = strings.TrimSuffix(rFile, ".gtm")
+	wFile = strings.TrimSuffix(
+		strings.TrimPrefix(rFile, "."),
+		".gtm.md",
+	) + ".md"
 	wPath = filepath.Join(wDir, wFile)
 
 	if verbose {

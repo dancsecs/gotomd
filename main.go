@@ -24,7 +24,7 @@ included by reference into the github README.md file directly from the Go
 code permitting program documentation to be maintained in one place (the Go
 code.)
 
-It can use a template file (```*.md.gtm```) or can maintain a ```*.md``` file
+It can use a template file (```.*.gtm.md```) or can maintain a ```*.md``` file
 in place.
 
 Usage of gotomd [-c | -r] [-fvl] [-p perm] [-o outDir] [-U file] [-u uint] path [path...]
@@ -34,7 +34,7 @@ The flags are:
   -c
       Reverse operation and remove generated markdown (Cannot be used
       with the -r option). Files with a .md extension are expected with
-      a an .md.gtm file being produced.
+      an .gtm.md file being produced with a leading dot.
   -f
       Do not confirm overwrite of destination.
   -l
@@ -53,7 +53,7 @@ The flags are:
   -v
       Provide more information when processing.
 
-Directives are placed into the ```*.md.gtm``` file (or directly into the
+Directives are placed into the ```.*.gtm.md``` file (or directly into the
 ```*.md``` document if the replace in place option is given.  These directives
 are embedded into HTML style comments.
 

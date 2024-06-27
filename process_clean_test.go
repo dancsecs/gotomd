@@ -34,7 +34,7 @@ type cleanGlobals struct {
 }
 
 func getCleanedFiles() (string, []string, []string, error) {
-	const fName = "README.md.gtm"
+	const fName = ".README.gtm.md"
 
 	var (
 		targetPath string
@@ -61,7 +61,7 @@ func getCleanedFiles() (string, []string, []string, error) {
 }
 
 func setupCleanDirs(makeTarget bool) error {
-	const fName = "README.md.gtm"
+	const fName = ".README.gtm.md"
 
 	var err error
 
@@ -178,7 +178,7 @@ func Test_ProcessClean_CancelOverwriteNoForceNoVerbose(t *testing.T) {
 	// Run command expecting the overwrite to be cancelled.
 	chk.NoErr(cleanMD(example1Path + "README.md"))
 
-	tFile := filepath.Join(outputDir, "README.md.gtm")
+	tFile := filepath.Join(outputDir, ".README.gtm.md")
 	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)? " +
 		"overwrite cancelled",
 	)
@@ -213,7 +213,7 @@ func Test_ProcessClean_CancelOverwriteNoForceVerbose(t *testing.T) {
 	// Run command expecting the overwrite to be cancelled.
 	chk.NoErr(cleanMD(example1Path + "README.md"))
 
-	tFile := filepath.Join(outputDir, "README.md.gtm")
+	tFile := filepath.Join(outputDir, ".README.gtm.md")
 	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)? " +
 		"overwrite cancelled",
 	)
@@ -233,7 +233,7 @@ func Test_ProcessClean_CancelOverwriteForceVerbose(t *testing.T) {
 
 	chk.Stdout()
 
-	tFile := filepath.Join(outputDir, "README.md.gtm")
+	tFile := filepath.Join(outputDir, ".README.gtm.md")
 	chk.Log("Cleaning " + example1Path + "README.md to: " + tFile)
 }
 
@@ -253,7 +253,7 @@ func Test_ProcessClean_OverwriteNoForceNoVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	tFile := filepath.Join(outputDir, "README.md.gtm")
+	tFile := filepath.Join(outputDir, ".README.gtm.md")
 	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)?\\s")
 
 	chk.Log()
@@ -294,7 +294,7 @@ func Test_ProcessClean_OverwriteNoForceVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	tFile := filepath.Join(outputDir, "README.md.gtm")
+	tFile := filepath.Join(outputDir, ".README.gtm.md")
 	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)?\\s")
 
 	chk.Log("Cleaning " + example1Path + "README.md to: " + tFile)
@@ -316,6 +316,6 @@ func Test_ProcessClean_OverwriteForceVerbose(t *testing.T) {
 
 	chk.Stdout()
 
-	tFile := filepath.Join(outputDir, "README.md.gtm")
+	tFile := filepath.Join(outputDir, ".README.gtm.md")
 	chk.Log("Cleaning " + example1Path + "README.md to: " + tFile)
 }
