@@ -84,6 +84,7 @@ func init() {
 	action.add("dcln::", getDocDeclNatural)
 	action.add("dcls::", getDocDeclSingle)
 	action.add("file::", getGoFile)
+	action.add("run::", getGoRun)
 	action.add("tst::", getGoTst)
 	action.sort()
 }
