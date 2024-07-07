@@ -53,10 +53,6 @@ The flags are:
       bits). (default 420)
   -r
       Replace the *.MD in place (Cannot be used with the -c flag).
-  -U  string
-      Collect cpu profile data into named file.
-  -u  uint
-      Number of iterations to run when collecting cpu profile information.
   -v
       Provide more information when processing.
 
@@ -103,6 +99,11 @@ where ACTION can be one of the following:
 - gotomd::file::./relativeDirectory/fName
 
     Include the specified file in a code block.
+
+- gotomd::run::./relativeDirectory [args ...]
+
+    Have go run the package (assumes main) in the specified directory passing
+    the arguments as listed.
 
 When expanded in the target file the content will be framed by similar
 comments prefixed with 'Bgn' and 'End' as:
