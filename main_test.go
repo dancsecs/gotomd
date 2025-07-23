@@ -366,7 +366,7 @@ func setup(dir string, files ...string) error {
 			err = os.WriteFile(
 				filepath.Join(dir, strings.TrimSuffix(files[i], ext)),
 				fileBytes,
-				os.FileMode(defaultPerm),
+				os.FileMode(defaultPerm), //nolint:gosec // Ok.
 			)
 		}
 	}

@@ -26,6 +26,20 @@ import (
 	"strings"
 )
 
+func joinKeepPrefix(dir, file string) string {
+	const relativePrefix = "." + string(os.PathSeparator)
+
+	keep := strings.HasPrefix(dir, relativePrefix)
+
+	joined := filepath.Join(dir, file)
+
+	if keep && !strings.HasPrefix(joined, relativePrefix) {
+		joined = relativePrefix + joined
+	}
+
+	return joined
+}
+
 func runGo(dir, cmd string) (string, string, error) {
 	var (
 		rawRes []byte
@@ -41,7 +55,7 @@ func runGo(dir, cmd string) (string, string, error) {
 	if err == nil {
 		cmdArgs := strings.Split(cmd, " ")
 		args = append(
-			[]string{"run", filepath.Join(dir, cmdArgs[0])},
+			[]string{"run", joinKeepPrefix(dir, cmdArgs[0])},
 			cmdArgs[1:]...,
 		)
 	}
@@ -86,7 +100,7 @@ func getGoRun(cmd string) (string, error) {
 	}
 
 	if err == nil {
-		res += markBashCode(runCmd) + "\n\n" + runRes
+		res += "---\n" + markBashCode(runCmd) + "\n\n" + runRes + "\n---"
 	}
 
 	if err == nil {

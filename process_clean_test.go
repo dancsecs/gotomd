@@ -67,6 +67,7 @@ func setupCleanDirs(makeTarget bool) error {
 
 	if makeTarget {
 		tFile := filepath.Join(outputDir, fName)
+		//nolint:gosec // Ok.
 		err = os.WriteFile(tFile, nil, fs.FileMode(defaultPerm))
 	}
 

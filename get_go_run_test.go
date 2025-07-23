@@ -75,13 +75,13 @@ func Test_GetRun_RunExampleNoPackage(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		out,
-		"```bash\n"+
-			"go run example3/main.go -v\n"+
+		"---\n```bash\n"+
+			"go run ./example3/main.go -v\n"+
 			"```\n"+
 			"\n"+
 			"<pre>\n"+
 			"Running with 1 arguments\n"+
 			"-v\n"+
-			"</pre>",
+			"</pre>\n---",
 	)
 }

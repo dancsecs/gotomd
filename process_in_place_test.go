@@ -53,6 +53,7 @@ func setupInPlaceDirs(makeTarget bool) error {
 		fData, err = os.ReadFile(filepath.Join(example1Path, fName))
 		if err == nil {
 			tFile = filepath.Join(outputDir, fName)
+			//nolint:gosec // Ok.
 			err = os.WriteFile(tFile, fData, fs.FileMode(defaultPerm))
 		}
 	}
