@@ -162,6 +162,8 @@ func main() {
 	filesToProcess, err = getFilesToProcess()
 
 	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
+		clearPackageCache()
+
 		switch {
 		case cleanOnly:
 			//   err = cleanMD(filesToProcess[i])

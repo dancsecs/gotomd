@@ -42,6 +42,18 @@ type packageInfo struct {
 //nolint:goCheckNoGlobals // Ok.
 var packages = make(map[string]*packageInfo)
 
+func clearPackageCache() {
+	keys := make([]string, 0, len(packages))
+
+	for k := range packages {
+		keys = append(keys, k)
+	}
+
+	for _, k := range keys {
+		delete(packages, k)
+	}
+}
+
 func (pi *packageInfo) findFunc(name string) *doc.Func {
 	if pi.functions == nil {
 		addFunc := func(n string, f *doc.Func) {

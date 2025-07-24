@@ -23,6 +23,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -107,22 +108,24 @@ func getFilesToProcess() ([]string, error) {
 		filter = ".gtm" + filter
 	}
 
+	addFileToProcess := func(newFileToProcess string) {
+		filesToProcess = append(filesToProcess, newFileToProcess)
+
+		if verbose {
+			fmt.Println("filesToProcess: ", newFileToProcess)
+		}
+	}
+
 	for i, mi := 0, flag.NArg(); i < mi && err == nil; i++ {
-		stat, err = os.Stat(flag.Arg(i))
+		argPath := filepath.Clean(flag.Arg((i)))
+		stat, err = os.Stat(argPath)
+
 		if err == nil && stat.IsDir() {
-			files, err = os.ReadDir(flag.Arg(i))
+			files, err = os.ReadDir(argPath)
 			for j, mj := 0, len(files); j < mj && err == nil; j++ {
 				fName := files[j].Name()
 				if strings.HasSuffix(fName, filter) {
-					filesToProcess = append(filesToProcess,
-						flag.Arg(i)+string(os.PathSeparator)+fName,
-					)
-
-					if verbose {
-						fmt.Println("filesToProcess: ",
-							flag.Arg(i)+string(os.PathSeparator)+fName,
-						)
-					}
+					addFileToProcess(filepath.Join(argPath, fName))
 				}
 			}
 		}
@@ -134,11 +137,7 @@ func getFilesToProcess() ([]string, error) {
 					ErrUnexpectedExtension, filter,
 				)
 			} else {
-				filesToProcess = append(filesToProcess, flag.Arg(i))
-
-				if verbose {
-					fmt.Println("filesToProcess: ", flag.Arg(i))
-				}
+				addFileToProcess(filepath.Clean(argPath))
 			}
 		}
 	}

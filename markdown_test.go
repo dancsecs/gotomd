@@ -106,7 +106,10 @@ func Test_Markdown_Expand(t *testing.T) {
 			"<!--- gotomd::End::doc::TimesTwo -->\n",
 	)
 
-	chk.Log(`getInfo("TimesTwo")`)
+	chk.Log(
+		"Loading Package info for: ./example1",
+		`getInfo("TimesTwo")`,
+	)
 }
 
 func Test_Markdown_Search(t *testing.T) {
