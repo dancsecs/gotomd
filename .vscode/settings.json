@@ -120,6 +120,7 @@
         "staticcheck",
         "structcheck", // Deprecated
         "stylecheck",
+        "szargs",
         "tagalign",
         "tagliatelle",
         "tenv",

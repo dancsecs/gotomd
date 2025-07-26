@@ -20,7 +20,6 @@ package main
 
 import (
 	"errors"
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -95,7 +94,7 @@ func writeFile(fPath string, data string) error {
 }
 
 //nolint:cyclop,forbidigo // Ok.
-func getFilesToProcess() ([]string, error) {
+func getFilesToProcess(rawFilesToProcess []string) ([]string, error) {
 	var (
 		err            error
 		files          []os.DirEntry
@@ -116,28 +115,30 @@ func getFilesToProcess() ([]string, error) {
 		}
 	}
 
-	for i, mi := 0, flag.NArg(); i < mi && err == nil; i++ {
-		argPath := filepath.Clean(flag.Arg((i)))
+	for i, mi := 0, len(rawFilesToProcess); i < mi && err == nil; i++ {
+		argPath := filepath.Clean(rawFilesToProcess[i])
+
 		stat, err = os.Stat(argPath)
-
-		if err == nil && stat.IsDir() {
-			files, err = os.ReadDir(argPath)
-			for j, mj := 0, len(files); j < mj && err == nil; j++ {
-				fName := files[j].Name()
-				if strings.HasSuffix(fName, filter) {
-					addFileToProcess(filepath.Join(argPath, fName))
+		if err == nil { //nolint:nestif // Ok file or dir logic.
+			if stat.IsDir() {
+				// Process a directory for all matching extensions.
+				files, err = os.ReadDir(argPath)
+				for j, mj := 0, len(files); j < mj && err == nil; j++ {
+					fName := files[j].Name()
+					if strings.HasSuffix(fName, filter) {
+						addFileToProcess(filepath.Join(argPath, fName))
+					}
 				}
-			}
-		}
-
-		if err == nil && !stat.IsDir() {
-			if !strings.HasSuffix(stat.Name(), filter) {
-				err = fmt.Errorf(
-					"%w: expected - %s",
-					ErrUnexpectedExtension, filter,
-				)
 			} else {
-				addFileToProcess(filepath.Clean(argPath))
+				// Process the file (if it has the correct extension).
+				if strings.HasSuffix(stat.Name(), filter) {
+					addFileToProcess(filepath.Clean(argPath))
+				} else {
+					err = fmt.Errorf(
+						"%w: expected - %s",
+						ErrUnexpectedExtension, filter,
+					)
+				}
 			}
 		}
 	}

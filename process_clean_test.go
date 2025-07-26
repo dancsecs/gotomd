@@ -82,7 +82,7 @@ func setupCleanGlobals(
 }
 
 // +-------------------------------------------------------+
-// | Flag possibilities for type of test.                  |
+// | Option possibilities for type of test.                |
 // +------------+-----------+------------------+-----------+
 // | cleanOnly  |  replace  |  forceOverwrite  |  verbose  |
 // +------------+-----------+------------------+-----------+

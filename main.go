@@ -29,7 +29,7 @@ in place.
 
 Usage of gotomd [-c | -r] [-fvl] [-p perm] [-o outDir] [-U file] [-u uint] path [path...]
 
-The flags are:
+The options are:
 
   -c
       Reverse operation and remove generated markdown (Cannot be used
@@ -45,7 +45,7 @@ The flags are:
       Permissions to use when creating new file (can only set RW
       bits). (default 420)
   -r
-      Replace the *.MD in place (Cannot be used with the -c flag).
+      Replace the *.MD in place (Cannot be used with the -c option).
   -v
       Provide more information when processing.
 
@@ -153,13 +153,13 @@ func main() {
 		}()
 	}
 
-	processArgs()
+	filesToProcess = processArgs()
 
 	if showLicense {
 		fmt.Print(license) //nolint:forbidigo // Ok.
 	}
 
-	filesToProcess, err = getFilesToProcess()
+	filesToProcess, err = getFilesToProcess(filesToProcess)
 
 	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
 		clearPackageCache()

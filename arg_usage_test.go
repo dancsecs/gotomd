@@ -24,19 +24,19 @@ import (
 	"github.com/dancsecs/sztest"
 )
 
-func Test_ArgUsage_SampleNoArgsNotDirectory(t *testing.T) {
+func Test_ArgUsage_SampleNoArgsDefaultsToCWD(t *testing.T) {
 	chk := sztest.CaptureNothing(t)
 	defer chk.Release()
 
+	dir := chk.CreateTmpDir()
+
 	chk.SetArgs(
 		"programName",
+		"-o",
+		dir,
 	)
 
-	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
-	chk.Panic(
-		main,
-		"at least one file or directory must be specified\\nUsage Information",
-	)
+	main()
 }
 
 func Test_ArgUsage_SampleInvalidFile(t *testing.T) {
@@ -69,7 +69,7 @@ func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
 	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
 	chk.Panic(
 		main,
-		"invalid default permissions specified\\nUsage Information",
+		ErrInvalidDefPerm.Error()+"\\nUsage Information",
 	)
 }
 
@@ -88,7 +88,7 @@ func Test_ArgUsage_InvalidCleanAndReplace(t *testing.T) {
 	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
 	chk.Panic(
 		main,
-		"only one of -c and -r may be specified\\nUsage Information",
+		ErrInvalidOptionsRC.Error()+"\\nUsage Information",
 	)
 }
 
@@ -106,7 +106,7 @@ func Test_ArgUsage_InvalidOutDirectory(t *testing.T) {
 	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
 	chk.Panic(
 		main,
-		"invalid output directory specified: "+
-			"DIRECTORY_DOES_NOT_EXIST\\nUsage Information",
+		ErrInvalidOutputDir.Error()+": "+
+			"'DIRECTORY_DOES_NOT_EXIST'\\nUsage Information",
 	)
 }

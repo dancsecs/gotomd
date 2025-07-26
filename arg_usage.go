@@ -19,10 +19,10 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
-	"strings"
+
+	"github.com/dancsecs/szargs"
 )
 
 const defaultPermissions = 0o0644
@@ -39,96 +39,104 @@ var (
 	showLicense    = false
 )
 
-func usage() {
-	cmdName := os.Args[0]
-	_, _ = fmt.Fprint(flag.CommandLine.Output(),
-		"Usage of ", cmdName,
-		" [-c | -r]"+
-			" [-f]"+
-			" [-v]"+
-			" [-z]"+
-			" [-p perm]"+
-			" [-o outDir]"+
-			" file|dir"+
-			" [file|dir...]"+
-			"\n",
+//nolint:cyclop,funlen // Ok for now.
+func processArgs() []string {
+	var (
+		args  *szargs.Args
+		found bool
 	)
 
-	flag.PrintDefaults()
-}
+	args = szargs.New("Golang to 'github' markdown.", os.Args)
 
-func captureFlagDefaults() string {
-	buf := strings.Builder{}
-	origOut := flag.CommandLine.Output()
-
-	defer func() {
-		flag.CommandLine.SetOutput(origOut)
-	}()
-	flag.CommandLine.SetOutput(&buf)
-
-	flag.CommandLine.Usage()
-
-	return buf.String()
-}
-
-func processArgs() {
-	flag.BoolVar(&verbose, "v", false,
+	verbose = args.Count(
+		"[-v | --verbose ...]",
 		"Provide more information when processing.",
-	)
-	flag.BoolVar(&cleanOnly, "c", false,
+	) > 0
+
+	cleanOnly = args.Is(
+		"[-c | --clean]",
 		"Reverse operation and remove generated markdown "+
-			"(Cannot be used with the -r option).",
+			"(Cannot be used with the [-r | --replace] option).",
 	)
-	flag.BoolVar(&replace, "r", false,
-		"Replace the *.MD in place (Cannot be used with the -c flag).",
+
+	replace = args.Is(
+		"[-r | --replace]",
+		"Replace the *.MD in place "+
+			"(Cannot be used with the [-c | --clean] option).",
 	)
-	flag.BoolVar(&showLicense, "l", false,
+
+	showLicense = args.Is(
+		"[-l | --license]",
 		"Display license before program exits.",
 	)
-	flag.BoolVar(&forceOverwrite, "f", false,
+
+	forceOverwrite = args.Is(
+		"[-f | --force]",
 		"Do not confirm overwrite of destination.",
 	)
-	flag.BoolVar(&szColorize, "z", false,
+
+	szColorize = args.Is(
+		"[-z | --colorize]",
 		"Colorize go test output.",
 	)
-	flag.StringVar(&outputDir, "o", ".",
+
+	outputDir, found = args.ValueString(
+		"[-o | --output dir]",
 		"Direct all output to the specified directory.",
 	)
-	flag.IntVar(&defaultPerm, "p", defaultPermissions,
+	if !found {
+		outputDir = "."
+	}
+
+	defaultPerm, found = args.ValueInt(
+		"[-p | --permission]",
 		"Permissions to use when creating new file"+
 			" (can only set RW bits).",
 	)
 
-	flag.CommandLine.Usage = usage
-	_ = flag.CommandLine.Parse(os.Args[1:])
-
-	if flag.CommandLine.NArg() < 1 {
-		panic("at least one file or directory must be specified\n" +
-			captureFlagDefaults(),
-		)
+	if !found {
+		defaultPerm = defaultPermissions
 	}
 
 	if defaultPerm&(^0o0666) != 0 {
-		panic("invalid default permissions specified\n" +
-			captureFlagDefaults(),
-		)
+		args.PushErr(ErrInvalidDefPerm)
 	}
 
 	if replace && cleanOnly {
-		panic("only one of -c and -r may be specified\n" +
-			captureFlagDefaults(),
-		)
+		args.PushErr(ErrInvalidOptionsRC)
 	}
 
 	if outputDir != "." {
 		s, err := os.Stat(outputDir)
 		if err != nil || !s.IsDir() {
-			panic(
-				"invalid output directory specified: " +
-					outputDir +
-					"\n" +
-					captureFlagDefaults(),
+			args.PushErr(
+				fmt.Errorf("%w: '%s'", ErrInvalidOutputDir, outputDir),
 			)
 		}
 	}
+
+	if !args.HasNext() {
+		args.PushArg(".") // Default to current directory if no args given.
+	}
+
+	var filesToProcess []string
+	for args.HasNext() && !args.HasErr() {
+		filesToProcess = append(filesToProcess, args.NextString(
+			"[path ...]",
+			"A specific gotomd file template with the extension '*.gtm.md'\n"+
+				"or a directory which will be searched for all matching\n"+
+				"template '*.gtm.md' files.   It defaults to the current\n"+
+				"directory: '.'",
+		))
+	}
+
+	if !args.HasErr() {
+		args.Done()
+	}
+
+	if args.HasErr() {
+		panic(args.Err().Error() + "\n\n" + args.Usage())
+	}
+
+	return filesToProcess
 }
