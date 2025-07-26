@@ -138,28 +138,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 `
 
-func main() {
-	var (
-		err            error
-		origWd         string
-		filesToProcess []string
-	)
-
-	// Restore original working directory on exit.
-	origWd, err = os.Getwd()
-	if err == nil {
-		defer func() {
-			_ = os.Chdir(origWd)
-		}()
-	}
-
-	filesToProcess = processArgs()
-
-	if showLicense {
-		fmt.Print(license) //nolint:forbidigo // Ok.
-	}
-
-	filesToProcess, err = getFilesToProcess(filesToProcess)
+func processFiles(filesToProcess []string) error {
+	var err error
 
 	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
 		clearPackageCache()
@@ -173,6 +153,43 @@ func main() {
 		default:
 			err = expandMD(filesToProcess[i])
 		}
+	}
+
+	return err
+}
+
+func main() {
+	var (
+		err            error
+		origWd         string
+		filesToProcess []string
+		usage          string
+	)
+
+	// Restore original working directory on exit.
+	origWd, err = os.Getwd()
+	if err == nil {
+		defer func() {
+			_ = os.Chdir(origWd)
+		}()
+	}
+
+	filesToProcess, usage, err = processArgs()
+
+	if showLicense {
+		fmt.Print(license) //nolint:forbidigo  // Ok.
+	}
+
+	if showHelp {
+		fmt.Println(usage) //nolint:forbidigo  // Ok.
+	}
+
+	if err == nil {
+		filesToProcess, err = getFilesToProcess(filesToProcess)
+	}
+
+	if err == nil {
+		err = processFiles(filesToProcess)
 	}
 
 	if err != nil {

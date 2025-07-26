@@ -37,10 +37,11 @@ var (
 	outputDir      = "."
 	defaultPerm    = defaultPermissions
 	showLicense    = false
+	showHelp       = false
 )
 
 //nolint:cyclop,funlen // Ok for now.
-func processArgs() []string {
+func processArgs() ([]string, string, error) {
 	var (
 		args  *szargs.Args
 		found bool
@@ -70,6 +71,11 @@ func processArgs() []string {
 		"Display license before program exits.",
 	)
 
+	showHelp = args.Is(
+		"[-h | --help]",
+		"Display program usage information.",
+	)
+
 	forceOverwrite = args.Is(
 		"[-f | --force]",
 		"Do not confirm overwrite of destination.",
@@ -89,7 +95,7 @@ func processArgs() []string {
 	}
 
 	defaultPerm, found = args.ValueInt(
-		"[-p | --permission]",
+		"[-p | --permission perm]",
 		"Permissions to use when creating new file"+
 			" (can only set RW bits).",
 	)
@@ -115,7 +121,7 @@ func processArgs() []string {
 		}
 	}
 
-	if !args.HasNext() {
+	if !args.HasNext() && !showLicense && !showHelp {
 		args.PushArg(".") // Default to current directory if no args given.
 	}
 
@@ -135,8 +141,8 @@ func processArgs() []string {
 	}
 
 	if args.HasErr() {
-		panic(args.Err().Error() + "\n\n" + args.Usage())
+		return nil, args.Usage(), args.Err()
 	}
 
-	return filesToProcess
+	return filesToProcess, args.Usage(), nil
 }

@@ -404,6 +404,7 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 		"programName",
 		"-v",
 		"-l",
+		"-h",
 		"-c",
 		"-o", altDir,
 		filepath.Join(dir, "README.md"),
@@ -418,8 +419,49 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 
 	pName := filepath.Join(dir, "README.md")
 	chk.Stdout(
-		license +
-			"filesToProcess:  " + pName + "\n",
+		license+"programName",
+		"Golang to 'github' markdown.",
+		"",
+		"Usage: programName [-v | --verbose ...] "+
+			"[-c | --clean] [-r | --replace] [-l | --license] "+
+			"[-h | --help] [-f | --force] [-z | --colorize] "+
+			"[-o | --output dir] [-p | --permission perm] [path ...]",
+		"",
+		"[-v | --verbose ...]",
+		"Provide more information when processing.",
+		"",
+		"[-c | --clean]",
+		"Reverse operation and remove generated markdown "+
+			"(Cannot be used with the [-r | --replace] option).",
+		"",
+		"[-r | --replace]",
+		"Replace the *.MD in place (Cannot be used with the "+
+			"[-c | --clean] option).",
+		"",
+		"[-l | --license]",
+		"Display license before program exits.",
+		"",
+		"[-h | --help]",
+		"Display program usage information.",
+		"",
+		"[-f | --force]",
+		"Do not confirm overwrite of destination.",
+		"",
+		"[-z | --colorize]",
+		"Colorize go test output.",
+		"",
+		"[-o | --output dir]",
+		"Direct all output to the specified directory.",
+		"",
+		"[-p | --permission perm]",
+		"Permissions to use when creating new file (can only set RW bits).",
+		"",
+		"[path ...]",
+		"A specific gotomd file template with the extension '*.gtm.md'",
+		"or a directory which will be searched for all matching",
+		"template '*.gtm.md' files.   It defaults to the current",
+		"directory: '.'",
+		"filesToProcess:  "+pName+"\n",
 	)
 
 	rFile := filepath.Join(dir, "README.md")

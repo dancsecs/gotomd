@@ -66,10 +66,9 @@ func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
 		fPath,
 	)
 
-	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
 	chk.Panic(
 		main,
-		ErrInvalidDefPerm.Error()+"\\nUsage Information",
+		ErrInvalidDefPerm.Error(),
 	)
 }
 
@@ -85,10 +84,9 @@ func Test_ArgUsage_InvalidCleanAndReplace(t *testing.T) {
 		fPath,
 	)
 
-	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
 	chk.Panic(
 		main,
-		ErrInvalidOptionsRC.Error()+"\\nUsage Information",
+		ErrInvalidOptionsRC.Error(),
 	)
 }
 
@@ -103,10 +101,9 @@ func Test_ArgUsage_InvalidOutDirectory(t *testing.T) {
 		fPath,
 	)
 
-	chk.AddSub(`(?s)\n.*$`, "\\nUsage Information")
 	chk.Panic(
 		main,
 		ErrInvalidOutputDir.Error()+": "+
-			"'DIRECTORY_DOES_NOT_EXIST'\\nUsage Information",
+			"'DIRECTORY_DOES_NOT_EXIST'",
 	)
 }
