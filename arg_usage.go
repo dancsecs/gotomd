@@ -38,6 +38,7 @@ var (
 	defaultPerm    = defaultPermissions
 	showLicense    = false
 	showHelp       = false
+	setDefault     = false
 )
 
 //nolint:cyclop,funlen // Ok for now.
@@ -121,7 +122,9 @@ func processArgs() ([]string, string, error) {
 		}
 	}
 
-	if !args.HasNext() && !showLicense && !showHelp {
+	if !args.HasNext() {
+		setDefault = showLicense || showHelp
+
 		args.PushArg(".") // Default to current directory if no args given.
 	}
 
@@ -134,6 +137,10 @@ func processArgs() ([]string, string, error) {
 				"template '*.gtm.md' files.   It defaults to the current\n"+
 				"directory: '.'",
 		))
+	}
+
+	if setDefault {
+		filesToProcess = nil
 	}
 
 	if !args.HasErr() {

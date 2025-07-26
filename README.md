@@ -34,28 +34,6 @@ code.)
 It can use a template file (```.*.gtm.md```) or can maintain a ```*.md``` file
 in place.
 
-Usage of gotomd [-c | -r] [-fvl] [-p perm] [-o outDir] [-U file] [-u uint] path [path...]
-
-The options are:
-
-  -c
-      Reverse operation and remove generated markdown (Cannot be used
-      with the -r option). Files with a .md extension are expected with
-      an .gtm.md file being produced with a leading dot.
-  -f
-      Do not confirm overwrite of destination.
-  -l
-      Display license before program exits.
-  -o string
-      Direct all output to the specified directory. (default ".")
-  -p int
-      Permissions to use when creating new file (can only set RW
-      bits). (default 420)
-  -r
-      Replace the *.MD in place (Cannot be used with the -c option).
-  -v
-      Provide more information when processing.
-
 Directives are placed into the ```.*.gtm.md``` file (or directly into the
 ```*.md``` document if the replace in place option is given.  These directives
 are embedded into HTML style comments.
@@ -118,4 +96,34 @@ const szAutoPrefix = sztestPrefix + "Auto::"
 and a blank line following will be inserted into the output file.  If the
 action is not "replace in place" then an addition **DO NOT MODIFY**
 warning is included.
+
+---
+gotomd Golang to 'github' markdown.
+
+Usage: gotomd [-v | --verbose ...] [-c | --clean] [-r | --replace] [-l | --license] [-h | --help] [-f | --force] [-z | --colorize] [-o | --output dir] [-p | --permission perm] [path ...]
+
+  - [-v | --verbose ...] Provide more information when processing.
+
+  - [-c | --clean] Reverse operation and remove generated markdown (Cannot be
+    used with the [-r | --replace] option).
+
+  - [-r | --replace] Replace the *.MD in place (Cannot be used with the [-c |
+    --clean] option).
+
+  - [-l | --license] Display license before program exits.
+
+  - [-h | --help] Display program usage information.
+
+  - [-f | --force] Do not confirm overwrite of destination.
+
+  - [-z | --colorize] Colorize go test output.
+
+  - [-o | --output dir] Direct all output to the specified directory.
+
+  - [-p | --permission perm] Permissions to use when creating new file (can
+    only set RW bits).
+
+  - [path ...] A specific gotomd file template with the extension '*.gtm.md'
+    or a directory which will be searched for all matching template '*.gtm.md'
+    files. It defaults to the current directory: '.'
 <!--- gotomd::End::doc::./package -->

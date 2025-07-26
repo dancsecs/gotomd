@@ -391,6 +391,7 @@ func getTestFiles(dir, fName string) ([]string, []string, error) {
 		nil
 }
 
+//nolint:funlen // Ok.
 func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 	chk := sztest.CaptureLogAndStdout(t)
 	defer chk.Release()
@@ -467,4 +468,66 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 	rFile := filepath.Join(dir, "README.md")
 	wFile := filepath.Join(altDir, ".README.gtm.md")
 	chk.Log("Cleaning " + rFile + " to: " + wFile)
+}
+
+func Test_JustHelp(t *testing.T) {
+	chk := sztest.CaptureLogAndStdout(t)
+	defer chk.Release()
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-l",
+		"-h",
+	)
+
+	// Nor Run the main function with no -f arg requiring confirmation
+	main()
+
+	chk.Stdout(
+		license+"programName",
+		"Golang to 'github' markdown.",
+		"",
+		"Usage: programName [-v | --verbose ...] "+
+			"[-c | --clean] [-r | --replace] [-l | --license] "+
+			"[-h | --help] [-f | --force] [-z | --colorize] "+
+			"[-o | --output dir] [-p | --permission perm] [path ...]",
+		"",
+		"[-v | --verbose ...]",
+		"Provide more information when processing.",
+		"",
+		"[-c | --clean]",
+		"Reverse operation and remove generated markdown "+
+			"(Cannot be used with the [-r | --replace] option).",
+		"",
+		"[-r | --replace]",
+		"Replace the *.MD in place (Cannot be used with the "+
+			"[-c | --clean] option).",
+		"",
+		"[-l | --license]",
+		"Display license before program exits.",
+		"",
+		"[-h | --help]",
+		"Display program usage information.",
+		"",
+		"[-f | --force]",
+		"Do not confirm overwrite of destination.",
+		"",
+		"[-z | --colorize]",
+		"Colorize go test output.",
+		"",
+		"[-o | --output dir]",
+		"Direct all output to the specified directory.",
+		"",
+		"[-p | --permission perm]",
+		"Permissions to use when creating new file (can only set RW bits).",
+		"",
+		"[path ...]",
+		"A specific gotomd file template with the extension '*.gtm.md'",
+		"or a directory which will be searched for all matching",
+		"template '*.gtm.md' files.   It defaults to the current",
+		"directory: '.'",
+	)
+
+	chk.Log()
 }
