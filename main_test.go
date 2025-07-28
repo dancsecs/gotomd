@@ -37,6 +37,65 @@ const (
 		example2 + string(os.PathSeparator)
 )
 
+//nolint:goCheckNoGlobals // Ok for test.
+var usage = []string{
+	"programName",
+	"Golang to 'github' markdown.",
+	"",
+	"Usage: programName [-v | --verbose ...] " +
+		"[-c | --clean] [-r | --replace]",
+	"\\s   [-l | --license] [-h | --help] " +
+		"[-f | --force] [-z | --colorize] ",
+	"\\s   [-o | --output dir] [-p | --permission perm] [path ...]",
+	"",
+	"\\s - [-v | --verbose ...]</br>",
+	"\\s   Provide more information when processing.",
+	"",
+	"",
+	"\\s - [-c | --clean]</br>",
+	"\\s   Reverse operation and remove generated markdown " +
+		"(Cannot be used with the [-r",
+	"\\s   | --replace] option).",
+	"",
+	"",
+	"\\s - [-r | --replace]</br>",
+	"\\s   Replace the *.MD in place (Cannot be used with the " +
+		"[-c | --clean] option).",
+	"",
+	"",
+	"\\s - [-l | --license]</br>",
+	"\\s   Display license before program exits.",
+	"",
+	"",
+	"\\s - [-h | --help]</br>",
+	"\\s   Display program usage information.",
+	"",
+	"",
+	"\\s - [-f | --force]</br>",
+	"\\s   Do not confirm overwrite of destination.",
+	"",
+	"",
+	"\\s - [-z | --colorize]</br>",
+	"\\s   Colorize go test output.",
+	"",
+	"",
+	"\\s - [-o | --output dir]</br>",
+	"\\s   Direct all output to the specified directory.",
+	"",
+	"",
+	"\\s - [-p | --permission perm]</br>",
+	"\\s   Permissions to use when creating new file " +
+		"(can only set RW bits).",
+	"",
+	"",
+	"\\s - [path ...]</br>",
+	"\\s   A specific gotomd file template with the extension '*.gtm.md'" +
+		" or a directory",
+	"\\s   which will be searched for all matching template " +
+		"'*.gtm.md' files.   It",
+	"\\s   defaults to the current directory: '.'",
+}
+
 func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	chk := sztest.CaptureLogAndStdout(t)
 	defer chk.Release()
@@ -391,7 +450,6 @@ func getTestFiles(dir, fName string) ([]string, []string, error) {
 		nil
 }
 
-//nolint:funlen // Ok.
 func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 	chk := sztest.CaptureLogAndStdout(t)
 	defer chk.Release()
@@ -420,48 +478,8 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 
 	pName := filepath.Join(dir, "README.md")
 	chk.Stdout(
-		license+"programName",
-		"Golang to 'github' markdown.",
+		license+strings.Join(usage, "\n"),
 		"",
-		"Usage: programName [-v | --verbose ...] "+
-			"[-c | --clean] [-r | --replace] [-l | --license] "+
-			"[-h | --help] [-f | --force] [-z | --colorize] "+
-			"[-o | --output dir] [-p | --permission perm] [path ...]",
-		"",
-		"[-v | --verbose ...]",
-		"Provide more information when processing.",
-		"",
-		"[-c | --clean]",
-		"Reverse operation and remove generated markdown "+
-			"(Cannot be used with the [-r | --replace] option).",
-		"",
-		"[-r | --replace]",
-		"Replace the *.MD in place (Cannot be used with the "+
-			"[-c | --clean] option).",
-		"",
-		"[-l | --license]",
-		"Display license before program exits.",
-		"",
-		"[-h | --help]",
-		"Display program usage information.",
-		"",
-		"[-f | --force]",
-		"Do not confirm overwrite of destination.",
-		"",
-		"[-z | --colorize]",
-		"Colorize go test output.",
-		"",
-		"[-o | --output dir]",
-		"Direct all output to the specified directory.",
-		"",
-		"[-p | --permission perm]",
-		"Permissions to use when creating new file (can only set RW bits).",
-		"",
-		"[path ...]",
-		"A specific gotomd file template with the extension '*.gtm.md'",
-		"or a directory which will be searched for all matching",
-		"template '*.gtm.md' files.   It defaults to the current",
-		"directory: '.'",
 		"filesToProcess:  "+pName+"\n",
 	)
 
@@ -485,48 +503,7 @@ func Test_JustHelp(t *testing.T) {
 	main()
 
 	chk.Stdout(
-		license+"programName",
-		"Golang to 'github' markdown.",
-		"",
-		"Usage: programName [-v | --verbose ...] "+
-			"[-c | --clean] [-r | --replace] [-l | --license] "+
-			"[-h | --help] [-f | --force] [-z | --colorize] "+
-			"[-o | --output dir] [-p | --permission perm] [path ...]",
-		"",
-		"[-v | --verbose ...]",
-		"Provide more information when processing.",
-		"",
-		"[-c | --clean]",
-		"Reverse operation and remove generated markdown "+
-			"(Cannot be used with the [-r | --replace] option).",
-		"",
-		"[-r | --replace]",
-		"Replace the *.MD in place (Cannot be used with the "+
-			"[-c | --clean] option).",
-		"",
-		"[-l | --license]",
-		"Display license before program exits.",
-		"",
-		"[-h | --help]",
-		"Display program usage information.",
-		"",
-		"[-f | --force]",
-		"Do not confirm overwrite of destination.",
-		"",
-		"[-z | --colorize]",
-		"Colorize go test output.",
-		"",
-		"[-o | --output dir]",
-		"Direct all output to the specified directory.",
-		"",
-		"[-p | --permission perm]",
-		"Permissions to use when creating new file (can only set RW bits).",
-		"",
-		"[path ...]",
-		"A specific gotomd file template with the extension '*.gtm.md'",
-		"or a directory which will be searched for all matching",
-		"template '*.gtm.md' files.   It defaults to the current",
-		"directory: '.'",
+		license + strings.Join(usage, "\n"),
 	)
 
 	chk.Log()

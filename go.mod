@@ -6,4 +6,4 @@ toolchain go1.24.5
 
 require github.com/dancsecs/sztest v0.1.1
 
-require github.com/dancsecs/szargs v0.0.6
+require github.com/dancsecs/szargs v0.0.7

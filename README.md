@@ -89,7 +89,7 @@ comments prefixed with 'Bgn' and 'End' as:
 const sztestBgnPrefix = sztestPrefix + "Bgn::"
 const sztestEndPrefix = sztestPrefix + "End::"
 
-A header prefixed with
+# A header prefixed with
 
 const szAutoPrefix = sztestPrefix + "Auto::"
 
@@ -98,32 +98,44 @@ action is not "replace in place" then an addition **DO NOT MODIFY**
 warning is included.
 
 ---
-gotomd Golang to 'github' markdown.
 
-Usage: gotomd [-v | --verbose ...] [-c | --clean] [-r | --replace] [-l | --license] [-h | --help] [-f | --force] [-z | --colorize] [-o | --output dir] [-p | --permission perm] [path ...]
+gotomd
+Golang to 'github' markdown.
 
-  - [-v | --verbose ...] Provide more information when processing.
+Usage: gotomd [-v | --verbose ...] [-c | --clean] [-r | --replace]
+    [-l | --license] [-h | --help] [-f | --force] [-z | --colorize]
+    [-o | --output dir] [-p | --permission perm] [path ...]
 
-  - [-c | --clean] Reverse operation and remove generated markdown (Cannot be
-    used with the [-r | --replace] option).
+  - [-v | --verbose ...]</br>
+    Provide more information when processing.
 
-  - [-r | --replace] Replace the *.MD in place (Cannot be used with the [-c |
-    --clean] option).
+  - [-c | --clean]</br>
+    Reverse operation and remove generated markdown (Cannot be used with the
+    [-r | --replace] option).
 
-  - [-l | --license] Display license before program exits.
+  - [-r | --replace]</br>
+    Replace the *.MD in place (Cannot be used with the [-c | --clean] option).
 
-  - [-h | --help] Display program usage information.
+  - [-l | --license]</br>
+    Display license before program exits.
 
-  - [-f | --force] Do not confirm overwrite of destination.
+  - [-h | --help]</br>
+    Display program usage information.
 
-  - [-z | --colorize] Colorize go test output.
+  - [-f | --force]</br>
+    Do not confirm overwrite of destination.
 
-  - [-o | --output dir] Direct all output to the specified directory.
+  - [-z | --colorize]</br>
+    Colorize go test output.
 
-  - [-p | --permission perm] Permissions to use when creating new file (can
-    only set RW bits).
+  - [-o | --output dir]</br>
+    Direct all output to the specified directory.
 
-  - [path ...] A specific gotomd file template with the extension '*.gtm.md'
-    or a directory which will be searched for all matching template '*.gtm.md'
-    files. It defaults to the current directory: '.'
+  - [-p | --permission perm]</br>
+    Permissions to use when creating new file (can only set RW bits).
+
+  - [path ...]</br>
+    A specific gotomd file template with the extension '*.gtm.md' or a directory
+    which will be searched for all matching template '*.gtm.md' files.   It
+    defaults to the current directory: '.'
 <!--- gotomd::End::doc::./package -->

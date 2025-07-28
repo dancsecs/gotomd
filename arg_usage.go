@@ -132,9 +132,9 @@ func processArgs() ([]string, string, error) {
 	for args.HasNext() && !args.HasErr() {
 		filesToProcess = append(filesToProcess, args.NextString(
 			"[path ...]",
-			"A specific gotomd file template with the extension '*.gtm.md'\n"+
-				"or a directory which will be searched for all matching\n"+
-				"template '*.gtm.md' files.   It defaults to the current\n"+
+			"A specific gotomd file template with the extension '*.gtm.md' "+
+				"or a directory which will be searched for all matching "+
+				"template '*.gtm.md' files.   It defaults to the current "+
 				"directory: '.'",
 		))
 	}
