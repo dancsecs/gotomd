@@ -25,6 +25,7 @@ import (
 	"testing"
 
 	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 const (
@@ -46,21 +47,22 @@ var usage = []string{
 		"[-c | --clean] [-r | --replace]",
 	"\\s   [-l | --license] [-h | --help] " +
 		"[-f | --force] [-z | --colorize] ",
-	"\\s   [-o | --output dir] [-p | --permission perm] [path ...]",
+	"\\s   [-o | --output <dir>] [-u | --usage <filename>]",
+	"\\s   [-p | --permission <perm>] [path ...]",
 	"",
 	"\\s - [-v | --verbose ...]</br>",
 	"\\s   Provide more information when processing.",
 	"",
 	"",
 	"\\s - [-c | --clean]</br>",
-	"\\s   Reverse operation and remove generated markdown " +
-		"(Cannot be used with the [-r",
-	"\\s   | --replace] option).",
+	"\\s   Reverse operation and remove generated markdown",
+	"",
+	"\\s   (Cannot be used with the [-r | --replace] option).",
 	"",
 	"",
 	"\\s - [-r | --replace]</br>",
-	"\\s   Replace the *.MD in place (Cannot be used with the " +
-		"[-c | --clean] option).",
+	"\\s   Replace the *.MD in place\n",
+	"\\s   (Cannot be used with the [-c | --clean] option).",
 	"",
 	"",
 	"\\s - [-l | --license]</br>",
@@ -79,21 +81,33 @@ var usage = []string{
 	"\\s   Colorize go test output.",
 	"",
 	"",
-	"\\s - [-o | --output dir]</br>",
+	"\\s - [-o | --output <dir>]</br>",
 	"\\s   Direct all output to the specified directory.",
 	"",
 	"",
-	"\\s - [-p | --permission perm]</br>",
-	"\\s   Permissions to use when creating new file " +
-		"(can only set RW bits).",
+	"\\s - [-u | --usage <filename>]</br>",
+	"\\s   Replace the usage section in the given Go source file " +
+		"using content",
+	"\\s   from standard input.  The section is identified as the " +
+		"text between the",
+	"\\s   first occurrence of '^\\n/*\\n# Usage$' and the following package",
+	"\\s   declaration.  This allows keeping command-line usage " +
+		"output (e.g., from",
+	"\\s   --help) synchronized with the package documentation.",
+	"",
+	"",
+	"\\s - [-p | --permission <perm>]</br>",
+	"\\s   Permissions to use when creating new file.",
+	"",
+	"\\s   (can only set RW bits)",
 	"",
 	"",
 	"\\s - [path ...]</br>",
 	"\\s   A specific gotomd file template with the extension '*.gtm.md'" +
-		" or a directory",
-	"\\s   which will be searched for all matching template " +
-		"'*.gtm.md' files.   It",
-	"\\s   defaults to the current directory: '.'",
+		" or a",
+	"\\s   directory which will be searched for all matching template " +
+		"'*.gtm.md'",
+	"\\s   files.  It defaults to the current directory: '.'",
 }
 
 func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
@@ -507,4 +521,506 @@ func Test_JustHelp(t *testing.T) {
 	)
 
 	chk.Log()
+}
+
+func Test_Usage_DoesNotExist(t *testing.T) {
+	chk := sztest.CaptureLogAndStdout(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-u", filepath.Join(dir, "DOES_NOT_EXIST.go"),
+	)
+
+	chk.Panic(
+		main,
+		"could not read file: "+
+			"open /tmp/Test_Usage_DoesNotExist/DOES_NOT_EXIST.go: "+
+			"no such file or directory",
+	)
+
+	chk.Log()
+	chk.Stdout()
+}
+
+func Test_Usage_WarningEmptyFile(t *testing.T) {
+	chk := sztest.CaptureLogAndStdout(t)
+	defer chk.Release()
+
+	const rwAccess = 0o0600
+
+	dir := chk.CreateTmpDir()
+
+	chk.NoErr(os.WriteFile(
+		filepath.Join(dir, "file.go"),
+		[]byte(""+
+			"",
+		),
+		rwAccess,
+	),
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-u", filepath.Join(dir, "file.go"),
+	)
+
+	msg := strings.Join([]string{
+		"This line will be the first replaced.",
+		"And this line will be second and last replaced.",
+	},
+		"\n",
+	)
+	chk.SetStdinData(msg)
+
+	main()
+
+	//nolint:gosec // Ok.
+	updatedBytes, err := os.ReadFile(filepath.Join(dir, "file.go"))
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(string(updatedBytes), "\n"),
+		[]string{
+			"/*",
+			"# Usage",
+			"This line will be the first replaced.",
+			"And this line will be second and last replaced.",
+			"*/",
+		},
+	)
+	chk.Log()
+	chk.Stdout()
+}
+
+func Test_Usage_WarningBlankFile(t *testing.T) {
+	chk := sztest.CaptureLogAndStdout(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	goFile := chk.CreateTmpFileAs(dir, "file.go",
+		[]byte(""+
+			"\n"+
+			"",
+		),
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-u", goFile,
+	)
+
+	msg := strings.Join([]string{
+		"This line will be the first replaced.",
+		"And this line will be second and last replaced.",
+	},
+		"\n",
+	)
+	chk.SetStdinData(msg)
+
+	main()
+
+	//nolint:gosec // Ok.
+	updatedBytes, err := os.ReadFile(goFile)
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(string(updatedBytes), "\n"),
+		[]string{
+			"/*",
+			"# Usage",
+			"This line will be the first replaced.",
+			"And this line will be second and last replaced.",
+			"*/",
+		},
+	)
+	chk.Log()
+	chk.Stdout()
+}
+
+func Test_Usage_WarningJustPackage(t *testing.T) {
+	chk := sztestlog.CaptureAll(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	goFile := chk.CreateTmpFileAs(dir, "file.go",
+		[]byte(""+
+			"package name\n"+
+			"",
+		),
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-u", goFile,
+	)
+
+	msg := strings.Join([]string{
+		"This line will be the first replaced.",
+		"And this line will be second and last replaced.",
+	},
+		"\n",
+	)
+	chk.SetStdinData(msg)
+
+	main()
+
+	//nolint:gosec // Ok.
+	updatedBytes, err := os.ReadFile(goFile)
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(string(updatedBytes), "\n"),
+		[]string{
+			"/*",
+			"# Usage",
+			"This line will be the first replaced.",
+			"And this line will be second and last replaced.",
+			"*/",
+			"package name",
+			"",
+		},
+	)
+	chk.Stderr()
+	chk.Log(
+		"W:no previous usage found in: '" + goFile + "'",
+	)
+	chk.Stdout()
+}
+
+func Test_Usage_WarningJustPackageDuplicated(t *testing.T) {
+	chk := sztestlog.CaptureAll(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	goFile := chk.CreateTmpFileAs(dir, "file.go",
+		[]byte(""+
+			"/*\n"+
+			"package notReal\n"+
+			"*/\n"+
+			"package name\n"+
+			"",
+		),
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-u", goFile,
+	)
+
+	msg := strings.Join([]string{
+		"This line will be the first replaced.",
+		"And this line will be second and last replaced.",
+	},
+		"\n",
+	)
+	chk.SetStdinData(msg)
+
+	main()
+
+	//nolint:gosec // Ok.
+	updatedBytes, err := os.ReadFile(goFile)
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(string(updatedBytes), "\n"),
+		[]string{
+			"/*",
+			"package notReal",
+			"*/",
+			"",
+			"/*",
+			"# Usage",
+			"This line will be the first replaced.",
+			"And this line will be second and last replaced.",
+			"*/",
+			"package name",
+			"",
+		},
+	)
+	chk.Stderr()
+	chk.Log(
+		"W:multiple package delimiters.",
+		"W:no previous usage found in: '"+goFile+"'",
+	)
+	chk.Stdout()
+}
+
+func Test_Usage_WarningJustUsageWithBlankPrefix(t *testing.T) {
+	chk := sztestlog.CaptureAll(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	goFile := chk.CreateTmpFileAs(dir, "file.go",
+		[]byte(""+
+			"\n"+
+			"/*\n"+
+			"# Usage\n"+
+			"/*\n"+
+			"",
+		),
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-u", goFile,
+	)
+
+	msg := strings.Join([]string{
+		"This line will be the first replaced.",
+		"And this line will be second and last replaced.",
+	},
+		"\n",
+	)
+	chk.SetStdinData(msg)
+
+	main()
+
+	//nolint:gosec // Ok.
+	updatedBytes, err := os.ReadFile(goFile)
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(string(updatedBytes), "\n"),
+		[]string{
+			"/*",
+			"# Usage",
+			"This line will be the first replaced.",
+			"And this line will be second and last replaced.",
+			"*/",
+		},
+	)
+	chk.Stderr()
+	chk.Log(
+		"W:package header not found in: '" + goFile + "'",
+	)
+	chk.Stdout()
+}
+
+func Test_Usage_WarningJustUsageWithNoBlankPrefix(t *testing.T) {
+	chk := sztestlog.CaptureAll(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	goFile := chk.CreateTmpFileAs(dir, "file.go",
+		[]byte(""+
+			"/*\n"+
+			"# Usage\n"+
+			"/*\n"+
+			"",
+		),
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-u", goFile,
+	)
+
+	msg := strings.Join([]string{
+		"This line will be the first replaced.",
+		"And this line will be second and last replaced.",
+	},
+		"\n",
+	)
+	chk.SetStdinData(msg)
+
+	main()
+
+	//nolint:gosec // Ok.
+	updatedBytes, err := os.ReadFile(goFile)
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(string(updatedBytes), "\n"),
+		[]string{
+			"/*",
+			"# Usage",
+			"This line will be the first replaced.",
+			"And this line will be second and last replaced.",
+			"*/",
+		},
+	)
+	chk.Stderr()
+	chk.Log(
+		"W:package header not found in: '" + goFile + "'",
+	)
+	chk.Stdout()
+}
+
+func Test_Usage_WarningPreUsageWithBlankPrefix(t *testing.T) {
+	chk := sztestlog.CaptureAll(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	goFile := chk.CreateTmpFileAs(dir, "file.go",
+		[]byte(""+
+			"This line is pre usage\n"+
+			"\n"+
+			"/*\n"+
+			"# Usage\n"+
+			"/*\n"+
+			"",
+		),
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-u", goFile,
+	)
+
+	msg := strings.Join([]string{
+		"This line will be the first replaced.",
+		"And this line will be second and last replaced.",
+	},
+		"\n",
+	)
+	chk.SetStdinData(msg)
+
+	main()
+
+	//nolint:gosec // Ok.
+	updatedBytes, err := os.ReadFile(goFile)
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(string(updatedBytes), "\n"),
+		[]string{
+			"This line is pre usage",
+			"",
+			"/*",
+			"# Usage",
+			"This line will be the first replaced.",
+			"And this line will be second and last replaced.",
+			"*/",
+		},
+	)
+	chk.Stderr()
+	chk.Log(
+		"W:package header not found in: '" + goFile + "'",
+	)
+	chk.Stdout()
+}
+
+func Test_Usage_WarningPreUsageWithNoBlankPrefix(t *testing.T) {
+	chk := sztestlog.CaptureAll(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	goFile := chk.CreateTmpFileAs(dir, "file.go",
+		[]byte(""+
+			"This line is pre usage\n"+
+			"/*\n"+
+			"# Usage\n"+
+			"/*\n"+
+			"",
+		),
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-u", goFile,
+	)
+
+	msg := strings.Join([]string{
+		"This line will be the first replaced.",
+		"And this line will be second and last replaced.",
+	},
+		"\n",
+	)
+	chk.SetStdinData(msg)
+
+	main()
+
+	//nolint:gosec // Ok.
+	updatedBytes, err := os.ReadFile(goFile)
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(string(updatedBytes), "\n"),
+		[]string{
+			"This line is pre usage",
+			"",
+			"/*",
+			"# Usage",
+			"This line will be the first replaced.",
+			"And this line will be second and last replaced.",
+			"*/",
+		},
+	)
+	chk.Stderr()
+	chk.Log(
+		"W:package header not found in: '" + goFile + "'",
+	)
+	chk.Stdout()
+}
+
+func Test_Usage_WarningMultipleSeparators(t *testing.T) {
+	chk := sztestlog.CaptureAll(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	goFile := chk.CreateTmpFileAs(dir, "file.go",
+		[]byte(""+
+			"This line is pre usage\n"+
+			"\n"+
+			"/*\n"+
+			"# Usage\n"+
+			"/*\n"+
+			"# Usage\n"+
+			"/*\n"+
+			"",
+		),
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-u", goFile,
+	)
+
+	msg := strings.Join([]string{
+		"This line will be the first replaced.",
+		"And this line will be second and last replaced.",
+	},
+		"\n",
+	)
+	chk.SetStdinData(msg)
+
+	main()
+
+	//nolint:gosec // Ok.
+	updatedBytes, err := os.ReadFile(goFile)
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(string(updatedBytes), "\n"),
+		[]string{
+			"This line is pre usage",
+			"",
+			"/*",
+			"# Usage",
+			"",
+			"/*",
+			"# Usage",
+			"This line will be the first replaced.",
+			"And this line will be second and last replaced.",
+			"*/",
+		},
+	)
+	chk.Stderr()
+	chk.Log(
+		"W:multiple Usage delimiters.",
+		"W:package header not found in: '"+goFile+"'",
+	)
+	chk.Stdout()
 }

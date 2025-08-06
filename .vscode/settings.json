@@ -121,6 +121,8 @@
         "structcheck", // Deprecated
         "stylecheck",
         "szargs",
+        "szlog",
+        "sztestlog",
         "tagalign",
         "tagliatelle",
         "tenv",
@@ -136,6 +138,7 @@
         "usestdlibvars",       
         "varcheck", // Deprecated
         "varnamelen",
+        "warnf",
         "wastedassign",
         // "whitespace",
         "wrapcheck",

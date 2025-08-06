@@ -160,6 +160,10 @@ func main() {
 		fmt.Println(usage) //nolint:forbidigo  // Ok.
 	}
 
+	if err == nil && buildUsage != "" {
+		err = usageUpdate(buildUsage)
+	}
+
 	if err == nil {
 		filesToProcess, err = getFilesToProcess(filesToProcess)
 	}
