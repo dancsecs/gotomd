@@ -24,6 +24,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/dancsecs/szlog"
 )
 
 //nolint:forbidigo // Ok.
@@ -93,7 +95,7 @@ func writeFile(fPath string, data string) error {
 	return err //nolint:wrapcheck // Caller will wrap error.
 }
 
-//nolint:cyclop,forbidigo // Ok.
+//nolint:cyclop // Ok.
 func getFilesToProcess(rawFilesToProcess []string) ([]string, error) {
 	var (
 		err            error
@@ -110,9 +112,7 @@ func getFilesToProcess(rawFilesToProcess []string) ([]string, error) {
 	addFileToProcess := func(newFileToProcess string) {
 		filesToProcess = append(filesToProcess, newFileToProcess)
 
-		if verbose {
-			fmt.Println("filesToProcess: ", newFileToProcess)
-		}
+		szlog.Info("filesToProcess: ", newFileToProcess)
 	}
 
 	for i, mi := 0, len(rawFilesToProcess); i < mi && err == nil; i++ {

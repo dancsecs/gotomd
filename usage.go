@@ -19,10 +19,10 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
-	"regexp"
 	"strings"
 	"unicode"
 
@@ -42,18 +42,14 @@ func updatePackageLine(current, i int, lines []string) int {
 }
 
 func updateUsageLine(
-	current int, usageName string, i int, lines []string,
-) (int, string) {
+	current int, i int, lines []string,
+) int {
 	newUsageLine := -1
 	numLines := len(lines)
 
-	re := regexp.MustCompile(`^\# Usage: (.*)$`)
-
 	if lines[i] == "/*" && (numLines-i) > 1 {
-		matches := re.FindStringSubmatch(lines[i+1])
-		if len(matches) == 2 { //nolint:mnd // Length if found.
+		if strings.HasPrefix(lines[i+1], "# Usage: ") {
 			newUsageLine = i
-			usageName = matches[1]
 
 			for newUsageLine > 0 && lines[newUsageLine-1] == "" {
 				newUsageLine--
@@ -69,28 +65,25 @@ func updateUsageLine(
 		current = newUsageLine // We have n new usage section.
 	}
 
-	return current, usageName
+	return current
 }
 
-func findDelimiters(lines []string) (int, int, string) {
+func findDelimiters(lines []string) (int, int) {
 	packageLine := -1
 	usageLine := -1
-	usageName := ""
 
 	for i := range lines {
 		packageLine = updatePackageLine(packageLine, i, lines)
-		usageLine, usageName = updateUsageLine(usageLine, usageName, i, lines)
+		usageLine = updateUsageLine(usageLine, i, lines)
 	}
 
-	return packageLine, usageLine, usageName
+	return packageLine, usageLine
 }
 
-func parseOldFile(
-	usagePackageFile string,
-) ([]string, int, string, int, error) {
+func parseOldFile(usagePackageFile string) ([]string, int, int, error) {
 	oldFileData, err := os.ReadFile(usagePackageFile) //nolint:gosec // Ok.
 	if err != nil {
-		return nil, -1, "", -1, err //nolint:wrapcheck // Ok.
+		return nil, -1, -1, err //nolint:wrapcheck // Ok.
 	}
 
 	oldLines := []string(nil)
@@ -115,7 +108,7 @@ func parseOldFile(
 		}
 	}
 
-	packageLine, usageLine, usageName := findDelimiters(oldLines)
+	packageLine, usageLine := findDelimiters(oldLines)
 
 	if usageLine == -1 {
 		szlog.Warnf("no previous usage found in: '%s'", usagePackageFile)
@@ -125,7 +118,7 @@ func parseOldFile(
 		szlog.Warnf("package header not found in: '%s'", usagePackageFile)
 	}
 
-	return oldLines, usageLine, usageName, packageLine, nil
+	return oldLines, usageLine, packageLine, nil
 }
 
 func preUsageLines(usageLine, packageLine int, lines []string) []string {
@@ -138,10 +131,16 @@ func preUsageLines(usageLine, packageLine int, lines []string) []string {
 		mi = packageLine
 	}
 
-	return lines[:mi]
+	newLines := make([]string, mi)
+
+	for i := range mi {
+		newLines[i] = lines[i]
+	}
+
+	return newLines
 }
 
-func parseNewUsage(isFirst bool, usageName string, lines []string) []string {
+func parseNewUsage(isFirst bool, lines []string) []string {
 	newLines := make([]string, 0, len(lines)+4) //nolint:mnd // Extra lines.
 
 	if !isFirst {
@@ -151,7 +150,6 @@ func parseNewUsage(isFirst bool, usageName string, lines []string) []string {
 	// Add new lines
 	newLines = append(newLines,
 		"/*",
-		"# Usage: "+usageName,
 	)
 	newLines = append(newLines, lines...)
 	newLines = append(newLines, "*/")
@@ -166,11 +164,10 @@ func usageUpdate(usgPkgFile string) error {
 		newLines       []string
 		packageLine    int
 		usageLine      int
-		usageName      string
 		err            error
 	)
 
-	oldLines, usageLine, usageName, packageLine, err = parseOldFile(usgPkgFile)
+	oldLines, usageLine, packageLine, err = parseOldFile(usgPkgFile)
 
 	if err == nil {
 		newLines = preUsageLines(usageLine, packageLine, oldLines)
@@ -180,11 +177,11 @@ func usageUpdate(usgPkgFile string) error {
 	}
 
 	if err == nil {
+		usageStdinData = bytes.TrimRight(usageStdinData, "\n")
 		newLines = append(
 			newLines,
 			parseNewUsage(
 				len(newLines) == 0, // Is First line.
-				usageName,
 				strings.Split(string(usageStdinData), "\n"),
 			)...,
 		)
@@ -193,6 +190,12 @@ func usageUpdate(usgPkgFile string) error {
 			for i, mi := packageLine, len(oldLines); i < mi; i++ {
 				newLines = append(newLines, oldLines[i])
 			}
+		}
+	}
+
+	for i, l := range newLines {
+		if strings.HasPrefix(l, "    ") {
+			newLines[i] = "\t" + l[4:]
 		}
 	}
 

@@ -20,10 +20,11 @@ package main
 
 import (
 	"bytes"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/dancsecs/szlog"
 )
 
 func replaceMDInPlace(rPath string) error {
@@ -48,9 +49,7 @@ func replaceMDInPlace(rPath string) error {
 
 	fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
 
-	if verbose {
-		log.Printf("Expanding %s <inPlace> to: %s", rPath, wPath)
-	}
+	szlog.Infof("Expanding %s <inPlace> to: %s", rPath, wPath)
 
 	if err == nil {
 		fileData := string(bytes.TrimRight(fileBytes, "\n"))

@@ -33,6 +33,7 @@
         "copyloopvar",
         "cyclop",
         "deadcode", // Deprecated
+        "debugf",
         // "decorder",
         "depguard",
         "dogsled",        
@@ -82,6 +83,7 @@
         "importas",
         "inamedparam",
         "ineffassign",
+        "infof",
         "interfacebloat",
         "interfacer", // Deprecated
         "intrange",
@@ -130,7 +132,8 @@
         "testifylint",
         "testpackage",
         "thelper",        
-        "tparallel",       
+        "tparallel", 
+        "tracef",      
         "typecheck",
         "unconvert",
         "unparam",

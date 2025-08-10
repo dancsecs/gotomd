@@ -23,11 +23,14 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
 )
 
 func setupTest(
-	chk *sztest.Chk, tCleanOnly, tReplace, tForceOverwrite, tVerbose bool,
+	chk *sztest.Chk,
+	tCleanOnly, tReplace, tForceOverwrite bool,
+	tVerbose szlog.LogLevel,
 ) {
 	chk.T().Helper()
 
@@ -36,12 +39,13 @@ func setupTest(
 	origCleanOnly := cleanOnly
 	origReplace := replace
 	origForceOverwrite := forceOverwrite
-	origVerbose := verbose
+	origLogLevel := szlog.Level()
 
 	cleanOnly = tCleanOnly
 	replace = tReplace
 	forceOverwrite = tForceOverwrite
-	verbose = tVerbose
+
+	szlog.SetLevel(tVerbose)
 
 	if chk.NoErr(err) {
 		outputDir = chk.CreateTmpDir()
@@ -50,7 +54,8 @@ func setupTest(
 			cleanOnly = origCleanOnly
 			replace = origReplace
 			forceOverwrite = origForceOverwrite
-			verbose = origVerbose
+
+			szlog.SetLevel(origLogLevel)
 
 			return os.Chdir(origCWD)
 		})

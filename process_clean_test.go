@@ -25,12 +25,14 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 type cleanGlobals struct {
 	forceOverwrite bool
-	verbose        bool
+	logLevel       szlog.LogLevel
 }
 
 func getCleanedFiles() (string, []string, []string, error) {
@@ -78,7 +80,7 @@ func setupCleanGlobals(
 	chk *sztest.Chk, override cleanGlobals,
 ) {
 	chk.T().Helper()
-	setupTest(chk, true, false, override.forceOverwrite, override.verbose)
+	setupTest(chk, true, false, override.forceOverwrite, override.logLevel)
 }
 
 // +-------------------------------------------------------+
@@ -104,10 +106,13 @@ func setupCleanGlobals(
 // +------------+-----------+------------------+-----------+.
 
 func Test_ProcessClean_NoTargetNoForceNoVerbose(t *testing.T) {
-	chk := sztest.CaptureLog(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: false, verbose: false})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: false, logLevel: szlog.LevelNone},
+	)
 	chk.NoErr(setupCleanDirs(false))
 
 	chk.NoErr(cleanMD(example1Path + "README.md"))
@@ -120,10 +125,13 @@ func Test_ProcessClean_NoTargetNoForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_NoTargetForceNoVerbose(t *testing.T) {
-	chk := sztest.CaptureLog(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: true, verbose: false})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: true, logLevel: szlog.LevelNone},
+	)
 	chk.NoErr(setupCleanDirs(false))
 
 	chk.NoErr(cleanMD(example1Path + "README.md"))
@@ -136,10 +144,13 @@ func Test_ProcessClean_NoTargetForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_NoTargetNoForceVerbose(t *testing.T) {
-	chk := sztest.CaptureLog(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: false, verbose: true})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: false, logLevel: szlog.LevelAll},
+	)
 	chk.NoErr(setupCleanDirs(false))
 
 	chk.NoErr(cleanMD(example1Path + "README.md"))
@@ -148,14 +159,17 @@ func Test_ProcessClean_NoTargetNoForceVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	chk.Log("Cleaning " + example1Path + "README.md to: " + tPath)
+	chk.Log("I:Cleaning " + example1Path + "README.md to: " + tPath)
 }
 
 func Test_ProcessClean_NoTargetForceVerbose(t *testing.T) {
-	chk := sztest.CaptureLog(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: true, verbose: true})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: true, logLevel: szlog.LevelAll},
+	)
 	chk.NoErr(setupCleanDirs(false))
 
 	chk.NoErr(cleanMD(example1Path + "README.md"))
@@ -164,14 +178,17 @@ func Test_ProcessClean_NoTargetForceVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	chk.Log("Cleaning " + example1Path + "README.md to: " + tPath)
+	chk.Log("I:Cleaning " + example1Path + "README.md to: " + tPath)
 }
 
 func Test_ProcessClean_CancelOverwriteNoForceNoVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: false, verbose: false})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: false, logLevel: szlog.LevelNone},
+	)
 	chk.NoErr(setupCleanDirs(true))
 
 	chk.SetStdinData("N\n")
@@ -188,25 +205,29 @@ func Test_ProcessClean_CancelOverwriteNoForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_CancelOverwriteForceNoVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: true, verbose: false})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: true, logLevel: szlog.LevelNone},
+	)
 	chk.NoErr(setupCleanDirs(true))
 
 	// Run command expecting the overwrite to be cancelled.
 	chk.NoErr(cleanMD(example1Path + "README.md"))
 
-	chk.Stdout()
-
 	chk.Log()
 }
 
 func Test_ProcessClean_CancelOverwriteNoForceVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: false, verbose: true})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: false, logLevel: szlog.LevelAll},
+	)
 	chk.NoErr(setupCleanDirs(true))
 
 	chk.SetStdinData("N\n")
@@ -219,30 +240,34 @@ func Test_ProcessClean_CancelOverwriteNoForceVerbose(t *testing.T) {
 		"overwrite cancelled",
 	)
 
-	chk.Log("Cleaning " + example1Path + "README.md to: " + tFile)
+	chk.Log("I:Cleaning " + example1Path + "README.md to: " + tFile)
 }
 
 func Test_ProcessClean_CancelOverwriteForceVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: true, verbose: true})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: true, logLevel: szlog.LevelAll},
+	)
 	chk.NoErr(setupCleanDirs(true))
 
 	// Run command expecting the overwrite to be cancelled.
 	chk.NoErr(cleanMD(example1Path + "README.md"))
 
-	chk.Stdout()
-
 	tFile := filepath.Join(outputDir, ".README.gtm.md")
-	chk.Log("Cleaning " + example1Path + "README.md to: " + tFile)
+	chk.Log("I:Cleaning " + example1Path + "README.md to: " + tFile)
 }
 
 func Test_ProcessClean_OverwriteNoForceNoVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: false, verbose: false})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: false, logLevel: szlog.LevelNone},
+	)
 	chk.NoErr(setupCleanDirs(true))
 
 	chk.SetStdinData("Y\n")
@@ -261,10 +286,13 @@ func Test_ProcessClean_OverwriteNoForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_OverwriteForceNoVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: true, verbose: false})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: true, logLevel: szlog.LevelNone},
+	)
 	chk.NoErr(setupCleanDirs(true))
 
 	// Run command expecting the overwrite to be cancelled.
@@ -274,16 +302,17 @@ func Test_ProcessClean_OverwriteForceNoVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	chk.Stdout()
-
 	chk.Log()
 }
 
 func Test_ProcessClean_OverwriteNoForceVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: false, verbose: true})
+	setupCleanGlobals(
+		chk,
+		cleanGlobals{forceOverwrite: false, logLevel: szlog.LevelAll},
+	)
 	chk.NoErr(setupCleanDirs(true))
 
 	chk.SetStdinData("Y\n")
@@ -298,14 +327,16 @@ func Test_ProcessClean_OverwriteNoForceVerbose(t *testing.T) {
 	tFile := filepath.Join(outputDir, ".README.gtm.md")
 	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)?\\s")
 
-	chk.Log("Cleaning " + example1Path + "README.md to: " + tFile)
+	chk.Log("I:Cleaning " + example1Path + "README.md to: " + tFile)
 }
 
 func Test_ProcessClean_OverwriteForceVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
-	setupCleanGlobals(chk, cleanGlobals{forceOverwrite: true, verbose: true})
+	setupCleanGlobals(
+		chk, cleanGlobals{forceOverwrite: true, logLevel: szlog.LevelAll},
+	)
 	chk.NoErr(setupCleanDirs(true))
 
 	// Run command expecting the overwrite to be cancelled.
@@ -315,8 +346,6 @@ func Test_ProcessClean_OverwriteForceVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	chk.Stdout()
-
 	tFile := filepath.Join(outputDir, ".README.gtm.md")
-	chk.Log("Cleaning " + example1Path + "README.md to: " + tFile)
+	chk.Log("I:Cleaning " + example1Path + "README.md to: " + tFile)
 }

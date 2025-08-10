@@ -25,19 +25,21 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 type inPlaceGlobals struct {
 	forceOverwrite bool
-	verbose        bool
+	logLevel       szlog.LogLevel
 }
 
 func setupInPlaceGlobals(
 	chk *sztest.Chk, override inPlaceGlobals,
 ) {
 	chk.T().Helper()
-	setupTest(chk, true, false, override.forceOverwrite, override.verbose)
+	setupTest(chk, true, false, override.forceOverwrite, override.logLevel)
 }
 
 func setupInPlaceDirs(makeTarget bool) error {
@@ -93,7 +95,7 @@ func Test_ProcessInPlace_NoTargetNoForceNoVerbose(t *testing.T) {
 	defer chk.Release()
 
 	setupInPlaceGlobals(
-		chk, inPlaceGlobals{forceOverwrite: false, verbose: false},
+		chk, inPlaceGlobals{forceOverwrite: false, logLevel: szlog.LevelNone},
 	)
 	chk.NoErr(setupInPlaceDirs(false))
 
@@ -113,7 +115,7 @@ func Test_ProcessInPlace_NoTargetForceNoVerbose(t *testing.T) {
 	defer chk.Release()
 
 	setupInPlaceGlobals(
-		chk, inPlaceGlobals{forceOverwrite: true, verbose: false},
+		chk, inPlaceGlobals{forceOverwrite: true, logLevel: szlog.LevelNone},
 	)
 	chk.NoErr(setupInPlaceDirs(false))
 
@@ -129,11 +131,11 @@ func Test_ProcessInPlace_NoTargetForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessInPlace_NoTargetNoForceVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
-		chk, inPlaceGlobals{forceOverwrite: false, verbose: true},
+		chk, inPlaceGlobals{forceOverwrite: false, logLevel: szlog.LevelAll},
 	)
 	chk.NoErr(setupInPlaceDirs(false))
 
@@ -144,19 +146,17 @@ func Test_ProcessInPlace_NoTargetNoForceVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	chk.Log(
-		"Expanding "+example1Path+"README_SHORT.md <inPlace> to: "+tFile,
-		"getInfo(\"package\")",
+		"I:Expanding "+example1Path+"README_SHORT.md <inPlace> to: "+tFile,
+		"I:getInfo(\"package\")",
 	)
-
-	chk.Stdout()
 }
 
 func Test_ProcessInPlace_NoTargetForceVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
-		chk, inPlaceGlobals{forceOverwrite: true, verbose: true},
+		chk, inPlaceGlobals{forceOverwrite: true, logLevel: szlog.LevelAll},
 	)
 	chk.NoErr(setupInPlaceDirs(false))
 
@@ -167,19 +167,17 @@ func Test_ProcessInPlace_NoTargetForceVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	chk.Log(
-		"Expanding "+example1Path+"README_SHORT.md <inPlace> to: "+tFile,
-		"getInfo(\"package\")",
+		"I:Expanding "+example1Path+"README_SHORT.md <inPlace> to: "+tFile,
+		"I:getInfo(\"package\")",
 	)
-
-	chk.Stdout()
 }
 
 func Test_ProcessInPlace_CancelOverwriteForceNoVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
-		chk, inPlaceGlobals{forceOverwrite: true, verbose: false},
+		chk, inPlaceGlobals{forceOverwrite: true, logLevel: szlog.LevelNone},
 	)
 	chk.NoErr(setupInPlaceDirs(true))
 
@@ -192,16 +190,14 @@ func Test_ProcessInPlace_CancelOverwriteForceNoVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	chk.Log()
-
-	chk.Stdout()
 }
 
 func Test_ProcessInPlace_CancelOverwriteForceVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
-		chk, inPlaceGlobals{forceOverwrite: true, verbose: true},
+		chk, inPlaceGlobals{forceOverwrite: true, logLevel: szlog.LevelAll},
 	)
 	chk.NoErr(setupInPlaceDirs(true))
 
@@ -214,19 +210,17 @@ func Test_ProcessInPlace_CancelOverwriteForceVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	chk.Log(
-		"Expanding "+example1Path+"README_SHORT.md <inPlace> to: "+tFile,
-		"getInfo(\"package\")",
+		"I:Expanding "+example1Path+"README_SHORT.md <inPlace> to: "+tFile,
+		"I:getInfo(\"package\")",
 	)
-
-	chk.Stdout()
 }
 
 func Test_ProcessInPlace_OverwriteForceNoVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
-		chk, inPlaceGlobals{forceOverwrite: true, verbose: false},
+		chk, inPlaceGlobals{forceOverwrite: true, logLevel: szlog.LevelNone},
 	)
 	chk.NoErr(setupInPlaceDirs(true))
 
@@ -239,16 +233,14 @@ func Test_ProcessInPlace_OverwriteForceNoVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	chk.Log()
-
-	chk.Stdout()
 }
 
 func Test_ProcessInPlace_OverwriteForceVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
-		chk, inPlaceGlobals{forceOverwrite: true, verbose: true},
+		chk, inPlaceGlobals{forceOverwrite: true, logLevel: szlog.LevelAll},
 	)
 	chk.NoErr(setupInPlaceDirs(true))
 
@@ -261,9 +253,7 @@ func Test_ProcessInPlace_OverwriteForceVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	chk.Log(
-		"Expanding "+example1Path+"README_SHORT.md <inPlace> to: "+tFile,
-		"getInfo(\"package\")",
+		"I:Expanding "+example1Path+"README_SHORT.md <inPlace> to: "+tFile,
+		"I:getInfo(\"package\")",
 	)
-
-	chk.Stdout()
 }

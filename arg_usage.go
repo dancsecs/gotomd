@@ -23,6 +23,7 @@ import (
 	"os"
 
 	"github.com/dancsecs/szargs"
+	"github.com/dancsecs/szlog"
 )
 
 const defaultPermissions = 0o0644
@@ -32,7 +33,6 @@ var (
 	cleanOnly      = false
 	forceOverwrite = false
 	replace        = false
-	verbose        = false
 	szColorize     = false
 	outputDir      = "."
 	buildUsage     = ""
@@ -51,10 +51,14 @@ func processArgs() ([]string, string, error) {
 
 	args = szargs.New("Golang to 'github' markdown.", os.Args)
 
-	verbose = args.Count(
+	verboseCount := args.Count(
 		"[-v | --verbose ...]",
 		"Provide more information when processing.",
-	) > 0
+	)
+
+	for range verboseCount {
+		szlog.IncLevel()
+	}
 
 	cleanOnly = args.Is(
 		"[-c | --clean]",

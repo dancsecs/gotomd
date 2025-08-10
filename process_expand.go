@@ -20,10 +20,11 @@ package main
 
 import (
 	"bytes"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/dancsecs/szlog"
 )
 
 func expandMD(rPath string) error {
@@ -49,9 +50,7 @@ func expandMD(rPath string) error {
 	) + ".md"
 	wPath = filepath.Join(wDir, wFile)
 
-	if verbose {
-		log.Printf("Expanding %s to: %s", rPath, wPath)
-	}
+	szlog.Infof("Expanding %s to: %s", rPath, wPath)
 
 	fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
 

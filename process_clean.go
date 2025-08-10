@@ -20,10 +20,11 @@ package main
 
 import (
 	"bytes"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/dancsecs/szlog"
 )
 
 func cleanMD(rPath string) error {
@@ -46,9 +47,7 @@ func cleanMD(rPath string) error {
 	wFile = "." + strings.TrimSuffix(rFile, ".md") + ".gtm.md"
 	wPath = filepath.Join(wDir, wFile)
 
-	if verbose {
-		log.Printf("Cleaning %s to: %s", rPath, wPath)
-	}
+	szlog.Infof("Cleaning %s to: %s", rPath, wPath)
 
 	fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
 

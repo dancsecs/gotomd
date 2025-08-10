@@ -21,7 +21,9 @@ package main
 import (
 	"testing"
 
+	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 func Test_Markdown_CleanMarkDownDocument(t *testing.T) {
@@ -87,7 +89,7 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 }
 
 func Test_Markdown_Expand(t *testing.T) {
-	chk := sztest.CaptureLog(t)
+	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
 	defer chk.Release()
 
 	docInfo, err := getInfo("./example1", "TimesTwo")
@@ -107,8 +109,8 @@ func Test_Markdown_Expand(t *testing.T) {
 	)
 
 	chk.Log(
-		"Loading Package info for: ./example1",
-		`getInfo("TimesTwo")`,
+		"I:Loading Package info for: ./example1",
+		`I:getInfo("TimesTwo")`,
 	)
 }
 

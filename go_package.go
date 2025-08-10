@@ -23,10 +23,11 @@ import (
 	"go/doc"
 	"go/parser"
 	"go/token"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/dancsecs/szlog"
 )
 
 const pkgLabel = "package"
@@ -177,9 +178,7 @@ func (pi *packageInfo) getInfoType(docType *doc.Type) (*docInfo, error) {
 
 // GetInfo looks up the documentation information for a declaration.
 func (pi *packageInfo) getInfo(name string) (*docInfo, error) {
-	if verbose {
-		log.Printf("getInfo(%q)\n", name)
-	}
+	szlog.Infof("getInfo(%q)\n", name)
 
 	if name == pkgLabel {
 		// Return Package information.
@@ -264,9 +263,7 @@ func (pi *packageInfo) snipFile(
 }
 
 func createPackageInfo(dir string) (*packageInfo, error) {
-	if verbose {
-		log.Print("Loading Package info for: ", dir)
-	}
+	szlog.Info("Loading Package info for: ", dir)
 
 	pkgInfo := new(packageInfo)
 	pkgInfo.fSet = token.NewFileSet()

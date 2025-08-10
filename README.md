@@ -97,45 +97,58 @@ and a blank line following will be inserted into the output file.  If the
 action is not "replace in place" then an addition **DO NOT MODIFY**
 warning is included.
 
----
+# Usage: gotomd
 
-gotomd
 Golang to 'github' markdown.
 
-Usage: gotomd [-v | --verbose ...] [-c | --clean] [-r | --replace]
-    [-l | --license] [-h | --help] [-f | --force] [-z | --colorize]
-    [-o | --output dir] [-p | --permission perm] [path ...]
+    gotomd [-v | --verbose ...] [-c | --clean] [-r | --replace]
+           [-l | --license] [-h | --help] [-f | --force] [-z | --colorize]
+           [-o | --output <dir>] [-u | --usage <filename>]
+           [-p | --permission <perm>] [path ...]
 
-  - [-v | --verbose ...]</br>
-    Provide more information when processing.
+    [-v | --verbose ...]
+        Provide more information when processing.
 
-  - [-c | --clean]</br>
-    Reverse operation and remove generated markdown (Cannot be used with the
-    [-r | --replace] option).
+    [-c | --clean]
+        Reverse operation and remove generated markdown
 
-  - [-r | --replace]</br>
-    Replace the *.MD in place (Cannot be used with the [-c | --clean] option).
+        (Cannot be used with the [-r | --replace] option).
 
-  - [-l | --license]</br>
-    Display license before program exits.
+    [-r | --replace]
+        Replace the *.MD in place
 
-  - [-h | --help]</br>
-    Display program usage information.
+        (Cannot be used with the [-c | --clean] option).
 
-  - [-f | --force]</br>
-    Do not confirm overwrite of destination.
+    [-l | --license]
+        Display license before program exits.
 
-  - [-z | --colorize]</br>
-    Colorize go test output.
+    [-h | --help]
+        Display program usage information.
 
-  - [-o | --output dir]</br>
-    Direct all output to the specified directory.
+    [-f | --force]
+        Do not confirm overwrite of destination.
 
-  - [-p | --permission perm]</br>
-    Permissions to use when creating new file (can only set RW bits).
+    [-z | --colorize]
+        Colorize go test output.
 
-  - [path ...]</br>
-    A specific gotomd file template with the extension '*.gtm.md' or a directory
-    which will be searched for all matching template '*.gtm.md' files.   It
-    defaults to the current directory: '.'
+    [-o | --output <dir>]
+        Direct all output to the specified directory.
+
+    [-u | --usage <filename>]
+        Replace the usage section in the given Go source file using
+        content from standard input.  The section is identified as the
+        text between the first occurrence of '^\n/*\n# Usage$' and the
+        following package declaration.  This allows keeping command-line
+        usage output (e.g., from --help) synchronized with the package
+        documentation.
+
+    [-p | --permission <perm>]
+        Permissions to use when creating new file.
+
+        (can only set RW bits)
+
+    [path ...]
+        A specific gotomd file template with the extension '*.gtm.md' or a
+        directory which will be searched for all matching template
+        '*.gtm.md' files.  It defaults to the current directory: '.'
 <!--- gotomd::End::doc::./package -->
