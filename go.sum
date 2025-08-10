@@ -1,5 +1,7 @@
 github.com/dancsecs/szargs v0.0.9 h1:ypVk+fbdLpwe7B+N14U5LIWxNzHf0b5HuV9cIWUDVUY=
 github.com/dancsecs/szargs v0.0.9/go.mod h1:6mRYMumhvm2of/nuIZgmZSM4yZg4a6H4jy/GDRfvM3Q=
+github.com/dancsecs/szargs v0.0.10 h1:j0NgZfW2GszLEBbf9+npag8i8vToQMDbfUCx7UMa2M8=
+github.com/dancsecs/szargs v0.0.10/go.mod h1:6mRYMumhvm2of/nuIZgmZSM4yZg4a6H4jy/GDRfvM3Q=
 github.com/dancsecs/szlog v0.0.0 h1:QbYo1NLP4KX1gFDXuet8BB3vsO0RGLxpT0Dz8f898Ns=
 github.com/dancsecs/szlog v0.0.0/go.mod h1:v2jqe60Pi1WRP6i1nUH/6+5QFoWKXOz2pQp2oIejSuw=
 github.com/dancsecs/sztest v0.1.2 h1:aFk4zUFxzJxX5k54ZCBXvslXg7lNtm5paeVOk/FQitA=
