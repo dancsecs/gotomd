@@ -40,74 +40,73 @@ const (
 
 //nolint:goCheckNoGlobals // Ok for test.
 var usage = []string{
-	"programName",
+	"# Usage: programName",
+	"",
 	"Golang to 'github' markdown.",
 	"",
-	"Usage: programName [-v | --verbose ...] " +
-		"[-c | --clean] [-r | --replace]",
-	"\\s   [-l | --license] [-h | --help] " +
-		"[-f | --force] [-z | --colorize] ",
-	"\\s   [-o | --output <dir>] [-u | --usage <filename>]",
-	"\\s   [-p | --permission <perm>] [path ...]",
+	"\\s   programName [-v | --verbose ...] [-c | --clean] [-r | --replace]",
+	"\\s               [-l | --license] [-h | --help] [-f | --force]",
+	"\\s               [-z | --colorize] [-o | --output <dir>]",
+	"\\s               [-u | --usage <filename>] [-p | --permission <perm>]",
+	"\\s               [path ...]",
 	"",
-	"\\s - [-v | --verbose ...]</br>",
-	"\\s   Provide more information when processing.",
-	"",
-	"",
-	"\\s - [-c | --clean]</br>",
-	"\\s   Reverse operation and remove generated markdown",
-	"",
-	"\\s   (Cannot be used with the [-r | --replace] option).",
+	"\\s   [-v | --verbose ...]",
+	"\\s       Provide more information when processing.",
 	"",
 	"",
-	"\\s - [-r | --replace]</br>",
-	"\\s   Replace the *.MD in place\n",
-	"\\s   (Cannot be used with the [-c | --clean] option).",
+	"\\s   [-c | --clean]",
+	"\\s       Reverse operation and remove generated markdown",
+	"",
+	"\\s       (Cannot be used with the [-r | --replace] option).",
 	"",
 	"",
-	"\\s - [-l | --license]</br>",
-	"\\s   Display license before program exits.",
+	"\\s   [-r | --replace]",
+	"\\s       Replace the *.MD in place\n",
+	"\\s       (Cannot be used with the [-c | --clean] option).",
 	"",
 	"",
-	"\\s - [-h | --help]</br>",
-	"\\s   Display program usage information.",
+	"\\s   [-l | --license]",
+	"\\s       Display license before program exits.",
 	"",
 	"",
-	"\\s - [-f | --force]</br>",
-	"\\s   Do not confirm overwrite of destination.",
+	"\\s   [-h | --help]",
+	"\\s       Display program usage information.",
 	"",
 	"",
-	"\\s - [-z | --colorize]</br>",
-	"\\s   Colorize go test output.",
+	"\\s   [-f | --force]",
+	"\\s       Do not confirm overwrite of destination.",
 	"",
 	"",
-	"\\s - [-o | --output <dir>]</br>",
-	"\\s   Direct all output to the specified directory.",
+	"\\s   [-z | --colorize]",
+	"\\s       Colorize go test output.",
 	"",
 	"",
-	"\\s - [-u | --usage <filename>]</br>",
-	"\\s   Replace the usage section in the given Go source file " +
-		"using content",
-	"\\s   from standard input.  The section is identified as the " +
-		"text between the",
-	"\\s   first occurrence of '^\\n/*\\n# Usage$' and the following package",
-	"\\s   declaration.  This allows keeping command-line usage " +
-		"output (e.g., from",
-	"\\s   --help) synchronized with the package documentation.",
+	"\\s   [-o | --output <dir>]",
+	"\\s       Direct all output to the specified directory.",
 	"",
 	"",
-	"\\s - [-p | --permission <perm>]</br>",
-	"\\s   Permissions to use when creating new file.",
+	"\\s   [-u | --usage <filename>]",
+	"\\s       Replace the usage section in the given Go source file using",
+	"\\s       content from standard input.  The section is identified as the",
+	"\\s       text between the first occurrence of '^\\n/*\\n# Usage$'" +
+		" and the",
+	"\\s       following package declaration.  This allows keeping " +
+		"command-line",
+	"\\s       usage output (e.g., from --help) synchronized with the package",
+	"\\s       documentation.",
 	"",
-	"\\s   (can only set RW bits)",
+	"",
+	"\\s   [-p | --permission <perm>]",
+	"\\s       Permissions to use when creating new file.",
+	"",
+	"\\s       (can only set RW bits)",
 	"",
 	"",
-	"\\s - [path ...]</br>",
-	"\\s   A specific gotomd file template with the extension '*.gtm.md'" +
+	"\\s   [path ...]",
+	"\\s       A specific gotomd file template with the extension '*.gtm.md'" +
 		" or a",
-	"\\s   directory which will be searched for all matching template " +
-		"'*.gtm.md'",
-	"\\s   files.  It defaults to the current directory: '.'",
+	"\\s       directory which will be searched for all matching template",
+	"\\s       '*.gtm.md' files.  It defaults to the current directory: '.'",
 }
 
 func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
@@ -586,7 +585,7 @@ func Test_Usage_WarningEmptyFile(t *testing.T) {
 		strings.Split(string(updatedBytes), "\n"),
 		[]string{
 			"/*",
-			"# Usage",
+			"# Usage: ",
 			"This line will be the first replaced.",
 			"And this line will be second and last replaced.",
 			"*/",
@@ -632,7 +631,7 @@ func Test_Usage_WarningBlankFile(t *testing.T) {
 		strings.Split(string(updatedBytes), "\n"),
 		[]string{
 			"/*",
-			"# Usage",
+			"# Usage: ",
 			"This line will be the first replaced.",
 			"And this line will be second and last replaced.",
 			"*/",
@@ -678,7 +677,7 @@ func Test_Usage_WarningJustPackage(t *testing.T) {
 		strings.Split(string(updatedBytes), "\n"),
 		[]string{
 			"/*",
-			"# Usage",
+			"# Usage: ",
 			"This line will be the first replaced.",
 			"And this line will be second and last replaced.",
 			"*/",
@@ -736,7 +735,7 @@ func Test_Usage_WarningJustPackageDuplicated(t *testing.T) {
 			"*/",
 			"",
 			"/*",
-			"# Usage",
+			"# Usage: ",
 			"This line will be the first replaced.",
 			"And this line will be second and last replaced.",
 			"*/",
@@ -762,7 +761,7 @@ func Test_Usage_WarningJustUsageWithBlankPrefix(t *testing.T) {
 		[]byte(""+
 			"\n"+
 			"/*\n"+
-			"# Usage\n"+
+			"# Usage: abc\n"+
 			"/*\n"+
 			"",
 		),
@@ -791,7 +790,7 @@ func Test_Usage_WarningJustUsageWithBlankPrefix(t *testing.T) {
 		strings.Split(string(updatedBytes), "\n"),
 		[]string{
 			"/*",
-			"# Usage",
+			"# Usage: abc",
 			"This line will be the first replaced.",
 			"And this line will be second and last replaced.",
 			"*/",
@@ -813,7 +812,7 @@ func Test_Usage_WarningJustUsageWithNoBlankPrefix(t *testing.T) {
 	goFile := chk.CreateTmpFileAs(dir, "file.go",
 		[]byte(""+
 			"/*\n"+
-			"# Usage\n"+
+			"# Usage: abc\n"+
 			"/*\n"+
 			"",
 		),
@@ -842,7 +841,7 @@ func Test_Usage_WarningJustUsageWithNoBlankPrefix(t *testing.T) {
 		strings.Split(string(updatedBytes), "\n"),
 		[]string{
 			"/*",
-			"# Usage",
+			"# Usage: abc",
 			"This line will be the first replaced.",
 			"And this line will be second and last replaced.",
 			"*/",
@@ -866,7 +865,7 @@ func Test_Usage_WarningPreUsageWithBlankPrefix(t *testing.T) {
 			"This line is pre usage\n"+
 			"\n"+
 			"/*\n"+
-			"# Usage\n"+
+			"# Usage: abc\n"+
 			"/*\n"+
 			"",
 		),
@@ -897,7 +896,7 @@ func Test_Usage_WarningPreUsageWithBlankPrefix(t *testing.T) {
 			"This line is pre usage",
 			"",
 			"/*",
-			"# Usage",
+			"# Usage: abc",
 			"This line will be the first replaced.",
 			"And this line will be second and last replaced.",
 			"*/",
@@ -920,7 +919,7 @@ func Test_Usage_WarningPreUsageWithNoBlankPrefix(t *testing.T) {
 		[]byte(""+
 			"This line is pre usage\n"+
 			"/*\n"+
-			"# Usage\n"+
+			"# Usage: abc\n"+
 			"/*\n"+
 			"",
 		),
@@ -951,7 +950,7 @@ func Test_Usage_WarningPreUsageWithNoBlankPrefix(t *testing.T) {
 			"This line is pre usage",
 			"",
 			"/*",
-			"# Usage",
+			"# Usage: abc",
 			"This line will be the first replaced.",
 			"And this line will be second and last replaced.",
 			"*/",
@@ -975,9 +974,9 @@ func Test_Usage_WarningMultipleSeparators(t *testing.T) {
 			"This line is pre usage\n"+
 			"\n"+
 			"/*\n"+
-			"# Usage\n"+
+			"# Usage: abc\n"+
 			"/*\n"+
-			"# Usage\n"+
+			"# Usage: def\n"+
 			"/*\n"+
 			"",
 		),
@@ -1008,10 +1007,10 @@ func Test_Usage_WarningMultipleSeparators(t *testing.T) {
 			"This line is pre usage",
 			"",
 			"/*",
-			"# Usage",
+			"# Usage: abc",
 			"",
 			"/*",
-			"# Usage",
+			"# Usage: def",
 			"This line will be the first replaced.",
 			"And this line will be second and last replaced.",
 			"*/",

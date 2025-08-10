@@ -35,6 +35,7 @@ var (
 	verbose        = false
 	szColorize     = false
 	outputDir      = "."
+	buildUsage     = ""
 	defaultPerm    = defaultPermissions
 	showLicense    = false
 	showHelp       = false
@@ -57,13 +58,13 @@ func processArgs() ([]string, string, error) {
 
 	cleanOnly = args.Is(
 		"[-c | --clean]",
-		"Reverse operation and remove generated markdown "+
+		"Reverse operation and remove generated markdown\n"+
 			"(Cannot be used with the [-r | --replace] option).",
 	)
 
 	replace = args.Is(
 		"[-r | --replace]",
-		"Replace the *.MD in place "+
+		"Replace the *.MD in place\n"+
 			"(Cannot be used with the [-c | --clean] option).",
 	)
 
@@ -88,17 +89,27 @@ func processArgs() ([]string, string, error) {
 	)
 
 	outputDir, found = args.ValueString(
-		"[-o | --output dir]",
+		"[-o | --output <dir>]",
 		"Direct all output to the specified directory.",
 	)
 	if !found {
 		outputDir = "."
 	}
 
+	buildUsage, _ = args.ValueString(
+		"[-u | --usage <filename>]",
+		"Replace the usage section in the given Go source file using "+
+			"content from standard input.  The section is identified as "+
+			"the text between the first occurrence of '^\\n/*\\n# Usage$' "+
+			"and the following package declaration.  This allows keeping "+
+			"command-line usage output (e.g., from --help) synchronized "+
+			"with the package documentation.",
+	)
+
 	defaultPerm, found = args.ValueInt(
-		"[-p | --permission perm]",
-		"Permissions to use when creating new file"+
-			" (can only set RW bits).",
+		"[-p | --permission <perm>]",
+		"Permissions to use when creating new file.\n"+
+			"(can only set RW bits)",
 	)
 
 	if !found {
@@ -123,7 +134,7 @@ func processArgs() ([]string, string, error) {
 	}
 
 	if !args.HasNext() {
-		setDefault = showLicense || showHelp
+		setDefault = showLicense || showHelp || buildUsage != ""
 
 		args.PushArg(".") // Default to current directory if no args given.
 	}
@@ -134,7 +145,7 @@ func processArgs() ([]string, string, error) {
 			"[path ...]",
 			"A specific gotomd file template with the extension '*.gtm.md' "+
 				"or a directory which will be searched for all matching "+
-				"template '*.gtm.md' files.   It defaults to the current "+
+				"template '*.gtm.md' files.  It defaults to the current "+
 				"directory: '.'",
 		))
 	}

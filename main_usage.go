@@ -16,58 +16,70 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//nolint:lll // Ok.
 /*
+# Usage: gotomd
 
----
-
-gotomd
 Golang to 'github' markdown.
 
-Usage: gotomd [-v | --verbose ...] [-c | --clean] [-r | --replace]
-    [-l | --license] [-h | --help] [-f | --force] [-z | --colorize]
-    [-o | --output dir] [-p | --permission perm] [path ...]
+	gotomd [-v | --verbose ...] [-c | --clean] [-r | --replace]
+	       [-l | --license] [-h | --help] [-f | --force] [-z | --colorize]
+	       [-o | --output <dir>] [-u | --usage <filename>]
+	       [-p | --permission <perm>] [path ...]
 
-  - [-v | --verbose ...]</br>
-    Provide more information when processing.
-
-
-  - [-c | --clean]</br>
-    Reverse operation and remove generated markdown (Cannot be used with the
-    [-r | --replace] option).
+	[-v | --verbose ...]
+	    Provide more information when processing.
 
 
-  - [-r | --replace]</br>
-    Replace the *.MD in place (Cannot be used with the [-c | --clean] option).
+	[-c | --clean]
+	    Reverse operation and remove generated markdown
+
+	    (Cannot be used with the [-r | --replace] option).
 
 
-  - [-l | --license]</br>
-    Display license before program exits.
+	[-r | --replace]
+	    Replace the *.MD in place
+
+	    (Cannot be used with the [-c | --clean] option).
 
 
-  - [-h | --help]</br>
-    Display program usage information.
+	[-l | --license]
+	    Display license before program exits.
 
 
-  - [-f | --force]</br>
-    Do not confirm overwrite of destination.
+	[-h | --help]
+	    Display program usage information.
 
 
-  - [-z | --colorize]</br>
-    Colorize go test output.
+	[-f | --force]
+	    Do not confirm overwrite of destination.
 
 
-  - [-o | --output dir]</br>
-    Direct all output to the specified directory.
+	[-z | --colorize]
+	    Colorize go test output.
 
 
-  - [-p | --permission perm]</br>
-    Permissions to use when creating new file (can only set RW bits).
+	[-o | --output <dir>]
+	    Direct all output to the specified directory.
 
 
-  - [path ...]</br>
-    A specific gotomd file template with the extension '*.gtm.md' or a directory
-    which will be searched for all matching template '*.gtm.md' files.   It
-    defaults to the current directory: '.'
+	[-u | --usage <filename>]
+	    Replace the usage section in the given Go source file using
+	    content from standard input.  The section is identified as the
+	    text between the first occurrence of '^\n/*\n# Usage$' and the
+	    following package declaration.  This allows keeping command-line
+	    usage output (e.g., from --help) synchronized with the package
+	    documentation.
+
+
+	[-p | --permission <perm>]
+	    Permissions to use when creating new file.
+
+	    (can only set RW bits)
+
+
+	[path ...]
+	    A specific gotomd file template with the extension '*.gtm.md' or a
+	    directory which will be searched for all matching template
+	    '*.gtm.md' files.  It defaults to the current directory: '.'
 */
 package main
