@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 	"strings"
 	"unicode"
 
@@ -40,13 +41,20 @@ func updatePackageLine(current, i int, lines []string) int {
 	return current
 }
 
-func updateUsageLine(current, i int, lines []string) int {
+func updateUsageLine(
+	current int, usageName string, i int, lines []string,
+) (int, string) {
 	newUsageLine := -1
 	numLines := len(lines)
 
+	re := regexp.MustCompile(`^\# Usage: (.*)$`)
+
 	if lines[i] == "/*" && (numLines-i) > 1 {
-		if lines[i+1] == "# Usage" {
+		matches := re.FindStringSubmatch(lines[i+1])
+		if len(matches) == 2 { //nolint:mnd // Length if found.
 			newUsageLine = i
+			usageName = matches[1]
+
 			for newUsageLine > 0 && lines[newUsageLine-1] == "" {
 				newUsageLine--
 			}
@@ -61,25 +69,28 @@ func updateUsageLine(current, i int, lines []string) int {
 		current = newUsageLine // We have n new usage section.
 	}
 
-	return current
+	return current, usageName
 }
 
-func findDelimiters(lines []string) (int, int) {
+func findDelimiters(lines []string) (int, int, string) {
 	packageLine := -1
 	usageLine := -1
+	usageName := ""
 
 	for i := range lines {
 		packageLine = updatePackageLine(packageLine, i, lines)
-		usageLine = updateUsageLine(usageLine, i, lines)
+		usageLine, usageName = updateUsageLine(usageLine, usageName, i, lines)
 	}
 
-	return packageLine, usageLine
+	return packageLine, usageLine, usageName
 }
 
-func parseOldFile(usagePackageFile string) ([]string, int, int, error) {
+func parseOldFile(
+	usagePackageFile string,
+) ([]string, int, string, int, error) {
 	oldFileData, err := os.ReadFile(usagePackageFile) //nolint:gosec // Ok.
 	if err != nil {
-		return nil, -1, -1, err //nolint:wrapcheck // Ok.
+		return nil, -1, "", -1, err //nolint:wrapcheck // Ok.
 	}
 
 	oldLines := []string(nil)
@@ -104,7 +115,7 @@ func parseOldFile(usagePackageFile string) ([]string, int, int, error) {
 		}
 	}
 
-	packageLine, usageLine := findDelimiters(oldLines)
+	packageLine, usageLine, usageName := findDelimiters(oldLines)
 
 	if usageLine == -1 {
 		szlog.Warnf("no previous usage found in: '%s'", usagePackageFile)
@@ -114,7 +125,7 @@ func parseOldFile(usagePackageFile string) ([]string, int, int, error) {
 		szlog.Warnf("package header not found in: '%s'", usagePackageFile)
 	}
 
-	return oldLines, usageLine, packageLine, nil
+	return oldLines, usageLine, usageName, packageLine, nil
 }
 
 func preUsageLines(usageLine, packageLine int, lines []string) []string {
@@ -130,7 +141,7 @@ func preUsageLines(usageLine, packageLine int, lines []string) []string {
 	return lines[:mi]
 }
 
-func parseNewUsage(isFirst bool, lines []string) []string {
+func parseNewUsage(isFirst bool, usageName string, lines []string) []string {
 	newLines := make([]string, 0, len(lines)+4) //nolint:mnd // Extra lines.
 
 	if !isFirst {
@@ -140,7 +151,7 @@ func parseNewUsage(isFirst bool, lines []string) []string {
 	// Add new lines
 	newLines = append(newLines,
 		"/*",
-		"# Usage",
+		"# Usage: "+usageName,
 	)
 	newLines = append(newLines, lines...)
 	newLines = append(newLines, "*/")
@@ -155,10 +166,11 @@ func usageUpdate(usgPkgFile string) error {
 		newLines       []string
 		packageLine    int
 		usageLine      int
+		usageName      string
 		err            error
 	)
 
-	oldLines, usageLine, packageLine, err = parseOldFile(usgPkgFile)
+	oldLines, usageLine, usageName, packageLine, err = parseOldFile(usgPkgFile)
 
 	if err == nil {
 		newLines = preUsageLines(usageLine, packageLine, oldLines)
@@ -172,6 +184,7 @@ func usageUpdate(usgPkgFile string) error {
 			newLines,
 			parseNewUsage(
 				len(newLines) == 0, // Is First line.
+				usageName,
 				strings.Split(string(usageStdinData), "\n"),
 			)...,
 		)
