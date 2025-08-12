@@ -17,77 +17,115 @@
 */
 
 /*
-The gotomd utility provides for the maintenance of github README.MD style
-pages by permitting go files, go documentation and go test output to be
-included by reference into the github README.md file directly from the Go
-code permitting program documentation to be maintained in one place (the Go
-code.)
+Package gotomd maintains GitHub-style README.md files by embedding Go
+documentation, source code, test output, and command output directly
+from the Go codebase. This ensures that program documentation is kept
+in one place—the Go code itself—while keeping the README automatically
+up to date.
 
-It can use a template file (```.*.gtm.md```) or can maintain a ```*.md``` file
-in place.
+## How it works
 
-Directives are placed into the ```.*.gtm.md``` file (or directly into the
-```*.md``` document if the replace in place option is given.  These directives
-are embedded into HTML style comments.
+gotomd processes a Markdown file in one of two ways:
+
+ 1. **Template mode** — You maintain a separate template file named `*.gtm.md`.
+ 2. **In-place mode** — You insert directives directly into an existing
+    `*.md` file, and gotomd replaces them in place.
+
+Directives are written inside HTML-style comments:
 
 ```html
-<!--- gotomd::ACTION::PARAMETERS -->
+<!---
+gotomd::ACTION::PARAMETERS
+-->
 ```
 
-where ACTION can be one of the following:
+When processing the file, gotomd replaces each directive with the
+corresponding generated content, enclosed in matching "Bgn" and "End"
+markers.
 
-- gotomd::doc::./relativeDirectory/goObject
+## Actions
 
-	Run the go doc command on the object listed from the directory
-	specified.  The PARAMETER is formatted with the relative directory up
-	to the last directory separator before the end of the string and the
-	desired object.  A special object package returns the package
-	comments.
+Each directive's ACTION determines what is included:
 
-- gotomd::dcls::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+```html
+<!---
+gotomd::doc::./relativeDirectory/goObject
+-->
+```
+Runs go doc on the specified object from the given directory.
 
-	Pull out the declaration for the object and include as a single-line
-	regardless of how declared in the go code.  The Parameter is a list of
-	go functions, methods and constants (more object coming) to be included
-	in a go code block. No comments are included.
+The parameter format is: ./path/to/package/ObjectName
 
-- gotomd::dcln::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+A special object name package includes the package-level comments.
 
-	Pull the declaration and include exactly as declared in the go
-	source including leading comments.
+```html
+<!---
+gotomd::dcls::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+-->
+```
 
-- gotomd::dcl::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+Inserts each listed declaration as a single line, regardless of
+how it is declared in the source. No comments are included.
 
-	Pull the declaration and include exactly as declared in the go
-	source.  No Comments are included.
+Example: functions, methods, constants.
 
-- gotomd::tst::goTest::./relativeDirectory/testName
+```html
+<!---
+gotomd::dcln::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+-->
+```
 
-	Run go test with the tests listed (or package) to run all tests and
-	included the output.
+Inserts each listed declaration exactly as in the source, including
+any leading comments.
 
-- gotomd::file::./relativeDirectory/fName
+```html
+<!---
+gotomd::dcl::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+-->
+```
 
-	Include the specified file in a code block.
+Inserts each listed declaration exactly as in the source, but without
+comments.
 
-- gotomd::run::./relativeDirectory [args ...]
+```html
+<!---
+gotomd::tst::goTest::./relativeDirectory/testName
+-->
+```
 
-	Have go run the package (assumes main) in the specified directory passing
-	the arguments as listed.
+Runs go test in the given directory, targeting the specified test(s)
+or package, and includes the output.
 
-When expanded in the target file the content will be framed by similar
-comments prefixed with 'Bgn' and 'End' as:
+```html
+<!---
+gotomd::file::./relativeDirectory/fName
+-->
+```
 
-const sztestBgnPrefix = sztestPrefix + "Bgn::"
-const sztestEndPrefix = sztestPrefix + "End::"
+Inserts the contents of the specified file into a fenced code block.
 
-# A header prefixed with
+```html
+<!---
+gotomd::run::./relativeDirectory [args ...]
+-->
+```
 
-const szAutoPrefix = sztestPrefix + "Auto::"
+Runs go run on the package in the given directory (assumes main)
+with the provided arguments, including the output.
 
-and a blank line following will be inserted into the output file.  If the
-action is not "replace in place" then an addition **DO NOT MODIFY**
-warning is included.
+## Output Markers
+
+Generated content is wrapped between markers in the target file:
+
+	const sztestBgnPrefix = sztestPrefix + "Bgn::"
+	const sztestEndPrefix = sztestPrefix + "End::"
+
+Additionally, an auto-generated section header is prefixed with:
+
+	const szAutoPrefix = sztestPrefix + "Auto::"
+
+This header is followed by a blank line. If operating in template mode
+(not in-place), a DO NOT MODIFY warning is also inserted.
 */
 package main
 

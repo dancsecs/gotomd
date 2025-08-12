@@ -43,7 +43,12 @@ const (
 var usage = []string{
 	"# Usage: programName",
 	"",
-	"Golang to 'github' markdown.",
+	"Synchronize GitHub README.md files with Go source code,",
+	"documentation, tests, and command output. gotomd processes",
+	"Markdown templates or existing README files, replacing special",
+	"directives with content generated directly from your Go",
+	"codebase. This ensures your documentation is always accurate",
+	"and in sync with the source.",
 	"",
 	"\\s   programName [-v | --verbose ...] [-c | --clean] [-r | --replace]",
 	"\\s               [-l | --license] [-h | --help] [-f | --force]",
@@ -52,7 +57,9 @@ var usage = []string{
 	"\\s               [path ...]",
 	"",
 	"\\s   [-v | --verbose ...]",
-	"\\s       Provide more information when processing.",
+	"\\s       Show detailed processing information.",
+	"",
+	"\\s       Additional 'v's increase verbosity.",
 	"",
 	"",
 	"\\s   [-c | --clean]",
@@ -89,7 +96,7 @@ var usage = []string{
 	"\\s   [-u | --usage <filename>]",
 	"\\s       Replace the usage section in the given Go source file using",
 	"\\s       content from standard input.  The section is identified as the",
-	"\\s       text between the first occurrence of '^\\n/*\\n# Usage$'" +
+	"\\s       text between the first occurrence of '^\\n/*\\n# Usage .*$'" +
 		" and the",
 	"\\s       following package declaration.  This allows keeping " +
 		"command-line",

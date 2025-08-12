@@ -49,11 +49,21 @@ func processArgs() ([]string, string, error) {
 		found bool
 	)
 
-	args = szargs.New("Golang to 'github' markdown.", os.Args)
+	args = szargs.New(
+		"Synchronize GitHub README.md files with Go source code,\n"+
+			"documentation, tests, and command output. gotomd processes\n"+
+			"Markdown templates or existing README files, replacing special\n"+
+			"directives with content generated directly from your Go\n"+
+			"codebase. This ensures your documentation is always accurate\n"+
+			"and in sync with the source."+
+			"",
+		os.Args,
+	)
 
 	verboseCount := args.Count(
 		"[-v | --verbose ...]",
-		"Provide more information when processing.",
+		"Show detailed processing information.\n"+
+			"Additional 'v's increase verbosity.",
 	)
 
 	for range verboseCount {
@@ -104,7 +114,7 @@ func processArgs() ([]string, string, error) {
 		"[-u | --usage <filename>]",
 		"Replace the usage section in the given Go source file using "+
 			"content from standard input.  The section is identified as "+
-			"the text between the first occurrence of '^\\n/*\\n# Usage$' "+
+			"the text between the first occurrence of '^\\n/*\\n# Usage .*$' "+
 			"and the following package declaration.  This allows keeping "+
 			"command-line usage output (e.g., from --help) synchronized "+
 			"with the package documentation.",

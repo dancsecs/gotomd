@@ -19,7 +19,12 @@
 /*
 # Usage: gotomd
 
-Golang to 'github' markdown.
+Synchronize GitHub README.md files with Go source code,
+documentation, tests, and command output. gotomd processes
+Markdown templates or existing README files, replacing special
+directives with content generated directly from your Go
+codebase. This ensures your documentation is always accurate
+and in sync with the source.
 
 	gotomd [-v | --verbose ...] [-c | --clean] [-r | --replace]
 	       [-l | --license] [-h | --help] [-f | --force] [-z | --colorize]
@@ -27,7 +32,9 @@ Golang to 'github' markdown.
 	       [-p | --permission <perm>] [path ...]
 
 	[-v | --verbose ...]
-	    Provide more information when processing.
+	    Show detailed processing information.
+
+	    Additional 'v's increase verbosity.
 
 
 	[-c | --clean]
@@ -65,7 +72,7 @@ Golang to 'github' markdown.
 	[-u | --usage <filename>]
 	    Replace the usage section in the given Go source file using
 	    content from standard input.  The section is identified as the
-	    text between the first occurrence of '^\n/*\n# Usage$' and the
+	    text between the first occurrence of '^\n/*\n# Usage .*$' and the
 	    following package declaration.  This allows keeping command-line
 	    usage output (e.g., from --help) synchronized with the package
 	    documentation.
