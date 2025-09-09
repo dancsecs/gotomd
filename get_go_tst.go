@@ -29,10 +29,19 @@ import (
 )
 
 const (
-	tabSpaces      = "    "
-	hardSpace      = "&#xA0;&#x34F;&#xA0;&#x34F;"
+	tabSpaces = "    "
+	// Using a no break space \u00A0 with a "Combining Grapheme Joiner" \u034F
+	// which has no visible display but prevents GitHub's LaTeX from merging
+	// consecutive spaces.  Two in a row is the same width as a fixed LaTeX
+	// font character.
+	hardSpace = "&#xA0;&#x34F;&#xA0;&#x34F;" //
+	// Using a no break space \u00A0 with a "Combining Low Line" \u0332 to
+	// simulate an underscore which GitHub LaTeX only permits in math mode.
+	// Two in a row is the same width as a fixed LaTeX font character.
 	hardUnderscore = "&#xA0;&#x332;&#xA0;&#x332;"
-	hardPercent    = "&#xFE6A;"
+	// Using a "SMALL PERCENT SIGN" \uFE6A in place of a regular percent sign
+	// GitHub markdown processes normal percent signs.
+	hardPercent = "&#xFE6A;"
 )
 
 // "--- PASS: Test_PASS_Example1 (0.0s)".
@@ -108,8 +117,12 @@ func runTest(dir, tests string) (string, string, error) {
 			res = squashTestTime.ReplaceAllString(res, `${1} (0.0s)`)
 			res = squashAllTestTime.ReplaceAllString(res, `FAIL ${1} 0.0s`)
 			res = squashCached.ReplaceAllString(res, `${1}${2}`)
-			res = strings.ReplaceAll(res, "--- PASS: ", "‒‒‒ PASS:  ")
-			res = strings.ReplaceAll(res, "--- FAIL: ", "‒‒‒ FAIL:  ")
+			// Replacing hyphens with an 'FIGURE DASH' u2012 as a regular
+			// hyphen in LaTeX is too short (compared to a = used in the
+			// corresponding '=== RUN' test bracket.)
+			const dashes = "\u2012\u2012\u2012"
+			res = strings.ReplaceAll(res, "--- PASS: ", dashes+" PASS:  ")
+			res = strings.ReplaceAll(res, "--- FAIL: ", dashes+" FAIL:  ")
 			res = strings.ReplaceAll(res, "\t", tabSpaces)
 			res = strings.ReplaceAll(res, "%", hardPercent)
 			res = strings.ReplaceAll(res, " ", hardSpace)
@@ -123,9 +136,9 @@ func runTest(dir, tests string) (string, string, error) {
 					latexRes += "\n"
 				}
 
-				latexRes += "$\\small{\\texttt{\\color{default}{" +
+				latexRes += "$\\small{\\texttt{" +
 					line +
-					"}}}$\n<br>"
+					"}}$\n<br>"
 			}
 
 			res = latexRes

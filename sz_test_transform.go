@@ -42,20 +42,20 @@ const (
 )
 
 const (
-	internalTestMarkDelOn  = `\color{red}`
-	internalTestMarkDelOff = `\color{default}`
-	internalTestMarkInsOn  = `\color{green}`
-	internalTestMarkInsOff = `\color{default}`
-	internalTestMarkChgOn  = `\color{darkturquoise}`
-	internalTestMarkChgOff = `\color{default}`
-	internalTestMarkSepOn  = `\color{yellow}`
-	internalTestMarkSepOff = `\color{default}`
-	internalTestMarkWntOn  = `\color{cyan}`
-	internalTestMarkWntOff = `\color{default}`
-	internalTestMarkGotOn  = `\color{magenta}`
-	internalTestMarkGotOff = `\color{default}`
-	internalTestMarkMsgOn  = `\emph{`
-	internalTestMarkMsgOff = `}`
+	internalTestMarkDelOn  = `{\color{red}{`
+	internalTestMarkDelOff = `}}`
+	internalTestMarkInsOn  = `{\color{green}{`
+	internalTestMarkInsOff = `}}`
+	internalTestMarkChgOn  = `{\color{darkturquoise}{`
+	internalTestMarkChgOff = `}}`
+	internalTestMarkSepOn  = `{\color{yellow}{`
+	internalTestMarkSepOff = `}}`
+	internalTestMarkWntOn  = `{\color{cyan}{`
+	internalTestMarkWntOff = `}}`
+	internalTestMarkGotOn  = `{\color{magenta}{`
+	internalTestMarkGotOff = `}}`
+	internalTestMarkMsgOn  = `{\emph{`
+	internalTestMarkMsgOff = `}}`
 )
 
 //nolint:goCheckNoGlobals // Ok.

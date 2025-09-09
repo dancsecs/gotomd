@@ -80,15 +80,15 @@ and run a specific test
 go test -v -cover -run Test_PASS_Example1 .
 ```
 
-$\small{\texttt{\color{default}{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1}}}$
+$\small{\texttt{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1}}$
 <br>
-$\small{\texttt{\color{default}{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;PASS:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}}$
+$\small{\texttt{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;PASS:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}$
 <br>
-$\small{\texttt{\color{default}{PASS}}}$
+$\small{\texttt{PASS}}$
 <br>
-$\small{\texttt{\color{default}{coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}}$
+$\small{\texttt{coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}$
 <br>
-$\small{\texttt{\color{default}{ok&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/example1&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}}$
+$\small{\texttt{ok&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/example1&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}$
 <br>
 <!--- gotomd::End::tst::./Test_PASS_Example1 -->
 
@@ -99,45 +99,45 @@ or run all tests in a package:
 go test -v -cover .
 ```
 
-$\small{\texttt{\color{default}{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1}}}$
+$\small{\texttt{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1}}$
 <br>
-$\small{\texttt{\color{default}{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;PASS:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}}$
+$\small{\texttt{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;PASS:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}$
 <br>
-$\small{\texttt{\color{default}{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;FAIL&#xA0;&#x332;&#xA0;&#x332;Example1}}}$
+$\small{\texttt{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;FAIL&#xA0;&#x332;&#xA0;&#x332;Example1}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:29:&#xA0;&#x34F;&#xA0;&#x34F;unexpected&#xA0;&#x34F;&#xA0;&#x34F;int:}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:29:&#xA0;&#x34F;&#xA0;&#x34F;unexpected&#xA0;&#x34F;&#xA0;&#x34F;int:}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\emph{2+2=5&#xA0;&#x34F;&#xA0;&#x34F;(is&#xA0;&#x34F;&#xA0;&#x34F;true&#xA0;&#x34F;&#xA0;&#x34F;for&#xA0;&#x34F;&#xA0;&#x34F;big&#xA0;&#x34F;&#xA0;&#x34F;values&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;two)}:}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;{\emph{2+2=5&#xA0;&#x34F;&#xA0;&#x34F;(is&#xA0;&#x34F;&#xA0;&#x34F;true&#xA0;&#x34F;&#xA0;&#x34F;for&#xA0;&#x34F;&#xA0;&#x34F;big&#xA0;&#x34F;&#xA0;&#x34F;values&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;two)}}:}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{magenta}GOT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}\color{darkturquoise}4\color{default}}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;{\color{magenta}{GOT:&#xA0;&#x34F;&#xA0;&#x34F;}}{\color{darkturquoise}{4}}}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{cyan}WNT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}\color{darkturquoise}5\color{default}}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;{\color{cyan}{WNT:&#xA0;&#x34F;&#xA0;&#x34F;}}{\color{darkturquoise}{5}}}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:30:&#xA0;&#x34F;&#xA0;&#x34F;unexpected&#xA0;&#x34F;&#xA0;&#x34F;string:}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:30:&#xA0;&#x34F;&#xA0;&#x34F;unexpected&#xA0;&#x34F;&#xA0;&#x34F;string:}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{magenta}GOT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}\color{green}New&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;Got\color{default}&#xA0;&#x34F;&#xA0;&#x34F;Similar&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;(\color{darkturquoise}1\color{default})&#xA0;&#x34F;&#xA0;&#x34F;both}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;{\color{magenta}{GOT:&#xA0;&#x34F;&#xA0;&#x34F;}}{\color{green}{New&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;Got}}&#xA0;&#x34F;&#xA0;&#x34F;Similar&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;({\color{darkturquoise}{1}})&#xA0;&#x34F;&#xA0;&#x34F;both}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{cyan}WNT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}&#xA0;&#x34F;&#xA0;&#x34F;Similar&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;(\color{darkturquoise}2\color{default})&#xA0;&#x34F;&#xA0;&#x34F;both\color{red},&#xA0;&#x34F;&#xA0;&#x34F;new&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;Wnt\color{default}}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;{\color{cyan}{WNT:&#xA0;&#x34F;&#xA0;&#x34F;}}&#xA0;&#x34F;&#xA0;&#x34F;Similar&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;({\color{darkturquoise}{2}})&#xA0;&#x34F;&#xA0;&#x34F;both{\color{red}{,&#xA0;&#x34F;&#xA0;&#x34F;new&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;Wnt}}}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:36:&#xA0;&#x34F;&#xA0;&#x34F;Unexpected&#xA0;&#x34F;&#xA0;&#x34F;stdout&#xA0;&#x34F;&#xA0;&#x34F;Entry:&#xA0;&#x34F;&#xA0;&#x34F;got&#xA0;&#x34F;&#xA0;&#x34F;(1&#xA0;&#x34F;&#xA0;&#x34F;lines)&#xA0;&#x34F;&#xA0;&#x34F;-&#xA0;&#x34F;&#xA0;&#x34F;want&#xA0;&#x34F;&#xA0;&#x34F;(1&#xA0;&#x34F;&#xA0;&#x34F;lines)}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:36:&#xA0;&#x34F;&#xA0;&#x34F;Unexpected&#xA0;&#x34F;&#xA0;&#x34F;stdout&#xA0;&#x34F;&#xA0;&#x34F;Entry:&#xA0;&#x34F;&#xA0;&#x34F;got&#xA0;&#x34F;&#xA0;&#x34F;(1&#xA0;&#x34F;&#xA0;&#x34F;lines)&#xA0;&#x34F;&#xA0;&#x34F;-&#xA0;&#x34F;&#xA0;&#x34F;want&#xA0;&#x34F;&#xA0;&#x34F;(1&#xA0;&#x34F;&#xA0;&#x34F;lines)}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{darkturquoise}0\color{default}:\color{darkturquoise}0\color{default}&#xA0;&#x34F;&#xA0;&#x34F;This&#xA0;&#x34F;&#xA0;&#x34F;output&#xA0;&#x34F;&#xA0;&#x34F;line&#xA0;&#x34F;&#xA0;&#x34F;\color{red}is\color{default}\color{yellow}/\color{default}\color{green}will&#xA0;&#x34F;&#xA0;&#x34F;be\color{default}&#xA0;&#x34F;&#xA0;&#x34F;different}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;{\color{darkturquoise}{0}}:{\color{darkturquoise}{0}}&#xA0;&#x34F;&#xA0;&#x34F;This&#xA0;&#x34F;&#xA0;&#x34F;output&#xA0;&#x34F;&#xA0;&#x34F;line&#xA0;&#x34F;&#xA0;&#x34F;{\color{red}{is}}{\color{yellow}{/}}{\color{green}{will&#xA0;&#x34F;&#xA0;&#x34F;be}}&#xA0;&#x34F;&#xA0;&#x34F;different}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:40:&#xA0;&#x34F;&#xA0;&#x34F;unexpected&#xA0;&#x34F;&#xA0;&#x34F;string:}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:40:&#xA0;&#x34F;&#xA0;&#x34F;unexpected&#xA0;&#x34F;&#xA0;&#x34F;string:}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{magenta}GOT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}\color{darkturquoise}Total\color{default}:&#xA0;&#x34F;&#xA0;&#x34F;6}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;{\color{magenta}{GOT:&#xA0;&#x34F;&#xA0;&#x34F;}}{\color{darkturquoise}{Total}}:&#xA0;&#x34F;&#xA0;&#x34F;6}}$
 <br>
-$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{cyan}WNT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}\color{darkturquoise}Sum\color{default}:&#xA0;&#x34F;&#xA0;&#x34F;6}}}$
+$\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;{\color{cyan}{WNT:&#xA0;&#x34F;&#xA0;&#x34F;}}{\color{darkturquoise}{Sum}}:&#xA0;&#x34F;&#xA0;&#x34F;6}}$
 <br>
-$\small{\texttt{\color{default}{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;FAIL:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;FAIL&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}}$
+$\small{\texttt{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;FAIL:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;FAIL&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}$
 <br>
-$\small{\texttt{\color{default}{FAIL}}}$
+$\small{\texttt{FAIL}}$
 <br>
-$\small{\texttt{\color{default}{coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}}$
+$\small{\texttt{coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}$
 <br>
-$\small{\texttt{\color{default}{FAIL&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/example1&#xA0;&#x34F;&#xA0;&#x34F;0.0s}}}$
+$\small{\texttt{FAIL&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/example1&#xA0;&#x34F;&#xA0;&#x34F;0.0s}}$
 <br>
-$\small{\texttt{\color{default}{FAIL}}}$
+$\small{\texttt{FAIL}}$
 <br>
 <!--- gotomd::End::tst::./package -->
 

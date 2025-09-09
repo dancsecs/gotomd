@@ -87,11 +87,12 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 	chk.AddSub("{{msgOff}}", internalTestMarkMsgOff)
 	chk.AddSub("{{sepOn}}", internalTestMarkSepOn)
 	chk.AddSub("{{sepOff}}", internalTestMarkSepOff)
-	chk.AddSub("{{latexOn}}", `$\small{\texttt{\color{default}{`)
-	chk.AddSub("{{latexOff}}", `}}}$`)
+	chk.AddSub("{{latexOn}}", `$\small{\texttt{`)
+	chk.AddSub("{{latexOff}}", `}}$`)
 	chk.AddSub(`\t\d+\.\d+s`, "\t0.0s")
 	chk.AddSub(` `, hardSpace)
 	chk.AddSub(`_`, hardUnderscore)
+	chk.AddSub(`---`, "\u2012\u2012\u2012") // Replace dash with "FIGURE DASH".
 
 	//nolint:lll // Ok.
 	chk.Stdout("" +
@@ -101,7 +102,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 		chk.TrimAll(`
     {{latexOn}}=== RUN   Test_PASS_Example1{{latexOff}}
     <br>
-    {{latexOn}}‒‒‒ PASS:  Test_PASS_Example1 (0.0s){{latexOff}}
+    {{latexOn}}--- PASS:  Test_PASS_Example1 (0.0s){{latexOff}}
     <br>
     {{latexOn}}=== RUN   Test_FAIL_Example1{{latexOff}}
     <br>
@@ -129,7 +130,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}        {{wntOn}}WNT: {{wntOff}}{{chgOn}}Sum{{chgOff}}: 6{{latexOff}}
     <br>
-    {{latexOn}}‒‒‒ FAIL:  Test_FAIL_Example1 (0.0s){{latexOff}}
+    {{latexOn}}--- FAIL:  Test_FAIL_Example1 (0.0s){{latexOff}}
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
@@ -147,7 +148,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 		chk.TrimAll(`
     {{latexOn}}=== RUN   Test_PASS_Example2{{latexOff}}
     <br>
-    {{latexOn}}‒‒‒ PASS:  Test_PASS_Example2 (0.0s){{latexOff}}
+    {{latexOn}}--- PASS:  Test_PASS_Example2 (0.0s){{latexOff}}
     <br>
     {{latexOn}}=== RUN   Test_FAIL_Example2{{latexOff}}
     <br>
@@ -175,7 +176,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}        {{wntOn}}WNT: {{wntOff}}{{chgOn}}Sum{{chgOff}}: 6{{latexOff}}
     <br>
-    {{latexOn}}‒‒‒ FAIL:  Test_FAIL_Example2 (0.0s){{latexOff}}
+    {{latexOn}}--- FAIL:  Test_FAIL_Example2 (0.0s){{latexOff}}
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
