@@ -49,6 +49,8 @@ func processArgs() ([]string, string, error) {
 		found bool
 	)
 
+	cleanedArgs, err := szlog.AbsorbArgs(easterEgg(os.Args))
+
 	args = szargs.New(
 		"Synchronize GitHub README.md files with Go source code,\n"+
 			"documentation, tests, and command output. gotomd processes\n"+
@@ -57,18 +59,11 @@ func processArgs() ([]string, string, error) {
 			"codebase. This ensures your documentation is always accurate\n"+
 			"and in sync with the source."+
 			"",
-		os.Args,
+		cleanedArgs,
 	)
 
-	verboseCount := args.Count(
-		"[-v | --verbose ...]",
-		"Show detailed processing information.\n"+
-			"Additional 'v's increase verbosity.",
-	)
-
-	for range verboseCount {
-		szlog.IncLevel()
-	}
+	szlog.ArgUsageInfo(args.RegisterUsage)
+	args.PushErr(err)
 
 	cleanOnly = args.Is(
 		"[-c | --clean]",
@@ -177,4 +172,20 @@ func processArgs() ([]string, string, error) {
 	}
 
 	return filesToProcess, args.Usage(), nil
+}
+
+func easterEgg(args []string) []string {
+	cleanedArgs := make([]string, 0, len(args))
+
+	for _, arg := range args {
+		if arg == "--Reem" {
+			fmt.Print(dedication) //nolint:forbidigo // Ok.
+
+			continue
+		}
+
+		cleanedArgs = append(cleanedArgs, arg)
+	}
+
+	return cleanedArgs
 }

@@ -21,11 +21,11 @@ package main
 import (
 	"testing"
 
-	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 func Test_ArgUsage_SampleNoArgsDefaultsToCWD(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -40,7 +40,7 @@ func Test_ArgUsage_SampleNoArgsDefaultsToCWD(t *testing.T) {
 }
 
 func Test_ArgUsage_SampleInvalidFile(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	fPath := chk.CreateTmpFile(nil)
@@ -56,7 +56,7 @@ func Test_ArgUsage_SampleInvalidFile(t *testing.T) {
 }
 
 func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	fPath := chk.CreateTmpFile(nil)
@@ -73,7 +73,7 @@ func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
 }
 
 func Test_ArgUsage_InvalidCleanAndReplace(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	fPath := chk.CreateTmpFile(nil)
@@ -91,7 +91,7 @@ func Test_ArgUsage_InvalidCleanAndReplace(t *testing.T) {
 }
 
 func Test_ArgUsage_InvalidOutDirectory(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	fPath := chk.CreateTmpFile(nil)
@@ -106,4 +106,32 @@ func Test_ArgUsage_InvalidOutDirectory(t *testing.T) {
 		ErrInvalidOutputDir.Error()+": "+
 			"'DIRECTORY_DOES_NOT_EXIST'",
 	)
+}
+
+func TestArgUsage_Dedication(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	chk.SetArgs(
+		"noProgName",
+		"-o", "DIRECTORY_DOES_NOT_EXIST",
+		"--Reem",
+	)
+
+	chk.Panic(
+		main,
+		ErrInvalidOutputDir.Error()+": "+
+			"'DIRECTORY_DOES_NOT_EXIST'",
+	)
+
+	chk.Stdout(`
+*****************************************************************************
+**                                                                         **
+** This project is dedicated to Reem.                                      **
+** Your brilliance, courage, and quiet strength continue to inspire me.    **
+** Every line is written in gratitude for the light and hope you brought   **
+** into my life.                                                           **
+**                                                                         **
+*****************************************************************************
+`)
 }
