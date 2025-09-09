@@ -30,8 +30,8 @@ import (
 
 const (
 	tabSpaces      = "    "
-	hardSpace      = "&#xa0;"
-	hardUnderscore = "&#x332;"
+	hardSpace      = "&#xA0;&#x34F;&#xA0;&#x34F;"
+	hardUnderscore = "&#xA0;&#x332;&#xA0;&#x332;"
 	hardPercent    = "&#xFE6A;"
 )
 
@@ -108,6 +108,8 @@ func runTest(dir, tests string) (string, string, error) {
 			res = squashTestTime.ReplaceAllString(res, `${1} (0.0s)`)
 			res = squashAllTestTime.ReplaceAllString(res, `FAIL ${1} 0.0s`)
 			res = squashCached.ReplaceAllString(res, `${1}${2}`)
+			res = strings.ReplaceAll(res, "--- PASS: ", "‒‒‒ PASS:  ")
+			res = strings.ReplaceAll(res, "--- FAIL: ", "‒‒‒ FAIL:  ")
 			res = strings.ReplaceAll(res, "\t", tabSpaces)
 			res = strings.ReplaceAll(res, "%", hardPercent)
 			res = strings.ReplaceAll(res, " ", hardSpace)
@@ -121,7 +123,9 @@ func runTest(dir, tests string) (string, string, error) {
 					latexRes += "\n"
 				}
 
-				latexRes += "$\\small{\\texttt{" + line + "}}$\n<br>"
+				latexRes += "$\\small{\\texttt{\\color{default}{" +
+					line +
+					"}}}$\n<br>"
 			}
 
 			res = latexRes

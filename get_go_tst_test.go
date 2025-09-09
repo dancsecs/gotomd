@@ -23,11 +23,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 func Test_GetTest_GetGoTst(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cmd := "TEST_DIRECTORY_DOES_NOT_EXIST" + string(os.PathSeparator)
@@ -42,7 +42,7 @@ func Test_GetTest_GetGoTst(t *testing.T) {
 }
 
 func Test_GetTest_RunTestNotDirectory(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	f := chk.CreateTmpFile(nil)
@@ -56,7 +56,7 @@ func Test_GetTest_RunTestNotDirectory(t *testing.T) {
 
 //nolint:funlen // Ok.
 func Test_GetTest_RunTestColorize(t *testing.T) {
-	chk := sztest.CaptureStdout(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	szColorize = true
@@ -87,8 +87,8 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 	chk.AddSub("{{msgOff}}", internalTestMarkMsgOff)
 	chk.AddSub("{{sepOn}}", internalTestMarkSepOn)
 	chk.AddSub("{{sepOff}}", internalTestMarkSepOff)
-	chk.AddSub("{{latexOn}}", `$\small{\texttt{`)
-	chk.AddSub("{{latexOff}}", `}}$`)
+	chk.AddSub("{{latexOn}}", `$\small{\texttt{\color{default}{`)
+	chk.AddSub("{{latexOff}}", `}}}$`)
 	chk.AddSub(`\t\d+\.\d+s`, "\t0.0s")
 	chk.AddSub(` `, hardSpace)
 	chk.AddSub(`_`, hardUnderscore)
@@ -97,11 +97,11 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 	chk.Stdout("" +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+example1) + "\n" +
-		`
+				string(os.PathSeparator)+example1) + "\n\n" +
+		chk.TrimAll(`
     {{latexOn}}=== RUN   Test_PASS_Example1{{latexOff}}
     <br>
-    {{latexOn}}--- PASS: Test_PASS_Example1 (0.0s){{latexOff}}
+    {{latexOn}}‒‒‒ PASS:  Test_PASS_Example1 (0.0s){{latexOff}}
     <br>
     {{latexOn}}=== RUN   Test_FAIL_Example1{{latexOff}}
     <br>
@@ -129,7 +129,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}        {{wntOn}}WNT: {{wntOff}}{{chgOn}}Sum{{chgOff}}: 6{{latexOff}}
     <br>
-    {{latexOn}}--- FAIL: Test_FAIL_Example1 (0.0s){{latexOff}}
+    {{latexOn}}‒‒‒ FAIL:  Test_FAIL_Example1 (0.0s){{latexOff}}
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
@@ -140,14 +140,14 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     {{latexOn}}FAIL{{latexOff}}
     <br>
 
-    ` +
+    `) + "\n\n" +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+example2) + "\n" +
-		`
+				string(os.PathSeparator)+example2) + "\n\n" +
+		chk.TrimAll(`
     {{latexOn}}=== RUN   Test_PASS_Example2{{latexOff}}
     <br>
-    {{latexOn}}--- PASS: Test_PASS_Example2 (0.0s){{latexOff}}
+    {{latexOn}}‒‒‒ PASS:  Test_PASS_Example2 (0.0s){{latexOff}}
     <br>
     {{latexOn}}=== RUN   Test_FAIL_Example2{{latexOff}}
     <br>
@@ -175,7 +175,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}        {{wntOn}}WNT: {{wntOff}}{{chgOn}}Sum{{chgOff}}: 6{{latexOff}}
     <br>
-    {{latexOn}}--- FAIL: Test_FAIL_Example2 (0.0s){{latexOff}}
+    {{latexOn}}‒‒‒ FAIL:  Test_FAIL_Example2 (0.0s){{latexOff}}
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
@@ -185,12 +185,13 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
-  `)
+    
+  `))
 }
 
 //nolint:funlen // Ok.
 func Test_GetTest_RunTestNoColor(t *testing.T) {
-	chk := sztest.CaptureStdout(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	file1 := example1Path + pkgLabel
@@ -204,8 +205,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
 	chk.Stdout("" +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+example1) + "\n" +
-		`
+				string(os.PathSeparator)+example1) + "\n\n" + chk.TrimAll(`
     <pre>
     === RUN   Test_PASS_Example1
     --- PASS: Test_PASS_Example1 (0.0s)
@@ -228,12 +228,10 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     FAIL github.com/dancsecs/gotomd/example1 0.0s
     FAIL
     </pre>
-
-    ` +
+    `) + "\n\n" +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+example2) + "\n" +
-		`
+				string(os.PathSeparator)+example2) + "\n\n" + chk.TrimAll(`
     <pre>
     === RUN   Test_PASS_Example2
     --- PASS: Test_PASS_Example2 (0.0s)
@@ -256,11 +254,11 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     FAIL github.com/dancsecs/gotomd/example2 0.0s
     FAIL
     </pre>
-  `)
+  `))
 }
 
 func Test_GetTest_BuildTestCmds(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dirs := []string{}

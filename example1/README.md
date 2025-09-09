@@ -80,15 +80,15 @@ and run a specific test
 go test -v -cover -run Test_PASS_Example1 .
 ```
 
-$\small{\texttt{===&#xa0;RUN&#xa0;&#xa0;&#xa0;Test&#x332;PASS&#x332;Example1}}$
+$\small{\texttt{\color{default}{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1}}}$
 <br>
-$\small{\texttt{---&#xa0;PASS:&#xa0;Test&#x332;PASS&#x332;Example1&#xa0;(0.0s)}}$
+$\small{\texttt{\color{default}{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;PASS:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}}$
 <br>
-$\small{\texttt{PASS}}$
+$\small{\texttt{\color{default}{PASS}}}$
 <br>
-$\small{\texttt{coverage:&#xa0;100.0&#xFE6A;&#xa0;of&#xa0;statements}}$
+$\small{\texttt{\color{default}{coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}}$
 <br>
-$\small{\texttt{ok&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;github.com/dancsecs/gotomd/example1&#xa0;&#xa0;&#xa0;&#xa0;coverage:&#xa0;100.0&#xFE6A;&#xa0;of&#xa0;statements}}$
+$\small{\texttt{\color{default}{ok&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/example1&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}}$
 <br>
 <!--- gotomd::End::tst::./Test_PASS_Example1 -->
 
@@ -99,45 +99,45 @@ or run all tests in a package:
 go test -v -cover .
 ```
 
-$\small{\texttt{===&#xa0;RUN&#xa0;&#xa0;&#xa0;Test&#x332;PASS&#x332;Example1}}$
+$\small{\texttt{\color{default}{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1}}}$
 <br>
-$\small{\texttt{---&#xa0;PASS:&#xa0;Test&#x332;PASS&#x332;Example1&#xa0;(0.0s)}}$
+$\small{\texttt{\color{default}{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;PASS:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}}$
 <br>
-$\small{\texttt{===&#xa0;RUN&#xa0;&#xa0;&#xa0;Test&#x332;FAIL&#x332;Example1}}$
+$\small{\texttt{\color{default}{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;FAIL&#xA0;&#x332;&#xA0;&#x332;Example1}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;example1&#x332;test.go:29:&#xa0;unexpected&#xa0;int:}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:29:&#xA0;&#x34F;&#xA0;&#x34F;unexpected&#xA0;&#x34F;&#xA0;&#x34F;int:}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\emph{2+2=5&#xa0;(is&#xa0;true&#xa0;for&#xa0;big&#xa0;values&#xa0;of&#xa0;two)}:}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\emph{2+2=5&#xA0;&#x34F;&#xA0;&#x34F;(is&#xA0;&#x34F;&#xA0;&#x34F;true&#xA0;&#x34F;&#xA0;&#x34F;for&#xA0;&#x34F;&#xA0;&#x34F;big&#xA0;&#x34F;&#xA0;&#x34F;values&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;two)}:}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{magenta}GOT:&#xa0;\color{default}\color{darkturquoise}4\color{default}}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{magenta}GOT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}\color{darkturquoise}4\color{default}}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{cyan}WNT:&#xa0;\color{default}\color{darkturquoise}5\color{default}}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{cyan}WNT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}\color{darkturquoise}5\color{default}}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;example1&#x332;test.go:30:&#xa0;unexpected&#xa0;string:}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:30:&#xA0;&#x34F;&#xA0;&#x34F;unexpected&#xA0;&#x34F;&#xA0;&#x34F;string:}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{magenta}GOT:&#xa0;\color{default}\color{green}New&#xa0;in&#xa0;Got\color{default}&#xa0;Similar&#xa0;in&#xa0;(\color{darkturquoise}1\color{default})&#xa0;both}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{magenta}GOT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}\color{green}New&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;Got\color{default}&#xA0;&#x34F;&#xA0;&#x34F;Similar&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;(\color{darkturquoise}1\color{default})&#xA0;&#x34F;&#xA0;&#x34F;both}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{cyan}WNT:&#xa0;\color{default}&#xa0;Similar&#xa0;in&#xa0;(\color{darkturquoise}2\color{default})&#xa0;both\color{red},&#xa0;new&#xa0;in&#xa0;Wnt\color{default}}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{cyan}WNT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}&#xA0;&#x34F;&#xA0;&#x34F;Similar&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;(\color{darkturquoise}2\color{default})&#xA0;&#x34F;&#xA0;&#x34F;both\color{red},&#xA0;&#x34F;&#xA0;&#x34F;new&#xA0;&#x34F;&#xA0;&#x34F;in&#xA0;&#x34F;&#xA0;&#x34F;Wnt\color{default}}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;example1&#x332;test.go:36:&#xa0;Unexpected&#xa0;stdout&#xa0;Entry:&#xa0;got&#xa0;(1&#xa0;lines)&#xa0;-&#xa0;want&#xa0;(1&#xa0;lines)}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:36:&#xA0;&#x34F;&#xA0;&#x34F;Unexpected&#xA0;&#x34F;&#xA0;&#x34F;stdout&#xA0;&#x34F;&#xA0;&#x34F;Entry:&#xA0;&#x34F;&#xA0;&#x34F;got&#xA0;&#x34F;&#xA0;&#x34F;(1&#xA0;&#x34F;&#xA0;&#x34F;lines)&#xA0;&#x34F;&#xA0;&#x34F;-&#xA0;&#x34F;&#xA0;&#x34F;want&#xA0;&#x34F;&#xA0;&#x34F;(1&#xA0;&#x34F;&#xA0;&#x34F;lines)}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{darkturquoise}0\color{default}:\color{darkturquoise}0\color{default}&#xa0;This&#xa0;output&#xa0;line&#xa0;\color{red}is\color{default}\color{yellow}/\color{default}\color{green}will&#xa0;be\color{default}&#xa0;different}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{darkturquoise}0\color{default}:\color{darkturquoise}0\color{default}&#xA0;&#x34F;&#xA0;&#x34F;This&#xA0;&#x34F;&#xA0;&#x34F;output&#xA0;&#x34F;&#xA0;&#x34F;line&#xA0;&#x34F;&#xA0;&#x34F;\color{red}is\color{default}\color{yellow}/\color{default}\color{green}will&#xA0;&#x34F;&#xA0;&#x34F;be\color{default}&#xA0;&#x34F;&#xA0;&#x34F;different}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;example1&#x332;test.go:40:&#xa0;unexpected&#xa0;string:}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:40:&#xA0;&#x34F;&#xA0;&#x34F;unexpected&#xA0;&#x34F;&#xA0;&#x34F;string:}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{magenta}GOT:&#xa0;\color{default}\color{darkturquoise}Total\color{default}:&#xa0;6}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{magenta}GOT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}\color{darkturquoise}Total\color{default}:&#xA0;&#x34F;&#xA0;&#x34F;6}}}$
 <br>
-$\small{\texttt{&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;\color{cyan}WNT:&#xa0;\color{default}\color{darkturquoise}Sum\color{default}:&#xa0;6}}$
+$\small{\texttt{\color{default}{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;\color{cyan}WNT:&#xA0;&#x34F;&#xA0;&#x34F;\color{default}\color{darkturquoise}Sum\color{default}:&#xA0;&#x34F;&#xA0;&#x34F;6}}}$
 <br>
-$\small{\texttt{---&#xa0;FAIL:&#xa0;Test&#x332;FAIL&#x332;Example1&#xa0;(0.0s)}}$
+$\small{\texttt{\color{default}{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;FAIL:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;FAIL&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}}$
 <br>
-$\small{\texttt{FAIL}}$
+$\small{\texttt{\color{default}{FAIL}}}$
 <br>
-$\small{\texttt{coverage:&#xa0;100.0&#xFE6A;&#xa0;of&#xa0;statements}}$
+$\small{\texttt{\color{default}{coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}}$
 <br>
-$\small{\texttt{FAIL&#xa0;github.com/dancsecs/gotomd/example1&#xa0;0.0s}}$
+$\small{\texttt{\color{default}{FAIL&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/example1&#xA0;&#x34F;&#xA0;&#x34F;0.0s}}}$
 <br>
-$\small{\texttt{FAIL}}$
+$\small{\texttt{\color{default}{FAIL}}}$
 <br>
 <!--- gotomd::End::tst::./package -->
 
