@@ -192,6 +192,9 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 		"I:getInfo(\"TimesTwo\")",
 		"I:getInfo(\"TimesTwo\")",
 		"I:getInfo(\"TimesThree\")",
+		"I:getInfo(\"ConstantGroup1\")",
+		"I:getInfo(\"ConstantGroup1\")",
+		"I:getInfo(\"ConstantGroupA\")",
 	)
 }
 
@@ -270,6 +273,9 @@ func Test_Example1ReplaceTargetCancel(t *testing.T) {
 		"I:getInfo(\"TimesTwo\")",
 		"I:getInfo(\"TimesTwo\")",
 		"I:getInfo(\"TimesThree\")",
+		"I:getInfo(\"ConstantGroup1\")",
+		"I:getInfo(\"ConstantGroup1\")",
+		"I:getInfo(\"ConstantGroupA\")",
 	)
 }
 
@@ -448,6 +454,9 @@ func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
 		"I:getInfo(\"TimesTwo\")",
 		"I:getInfo(\"TimesTwo\")",
 		"I:getInfo(\"TimesThree\")",
+		"I:getInfo(\"ConstantGroup1\")",
+		"I:getInfo(\"ConstantGroup1\")",
+		"I:getInfo(\"ConstantGroupA\")",
 	)
 }
 

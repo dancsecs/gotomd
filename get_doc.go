@@ -137,3 +137,30 @@ func getDocDeclNatural(cmd string) (string, error) {
 
 	return "", err
 }
+
+func getDocDeclConstantBlock(cmd string) (string, error) {
+	var (
+		dInfo *docInfo
+		res   string
+	)
+
+	dir, action, err := parseCmds(cmd)
+	if err == nil {
+		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
+			dInfo, err = getInfo(dir[i], action[i])
+			if err == nil {
+				if res != "" {
+					res += "\n\n"
+				}
+
+				res += dInfo.constantBlock() + "\n"
+			}
+		}
+	}
+
+	if err == nil {
+		return markGoCode(res), nil
+	}
+
+	return "", err
+}

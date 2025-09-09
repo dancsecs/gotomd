@@ -25,6 +25,7 @@ package main
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/dancsecs/sztestlog"
@@ -312,5 +313,93 @@ func Test_GetDoc_GetDoc_TwoItems(t *testing.T) {
 	chk.Log(
 		"I:getInfo(\"TimesTwo\")",
 		"I:getInfo(\"TimesThree\")",
+	)
+}
+
+func Test_GetDoc_GetDocConstantBlock_InvalidItem(t *testing.T) {
+	chk := sztestlog.CaptureLog(t)
+	defer chk.Release()
+
+	s, err := getDocDeclConstantBlock(example1Path + "unknownItem")
+	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
+	chk.Str(s, "")
+
+	chk.Log(
+		"I:getInfo(\"unknownItem\")",
+	)
+}
+
+func Test_GetDoc_GetDocConstantBlockOne(t *testing.T) {
+	chk := sztestlog.CaptureLog(t)
+	defer chk.Release()
+
+	chk.AddSub(
+		pkgLabel+` .*$`,
+		pkgLabel+" ."+string(os.PathSeparator)+example1,
+	)
+
+	s, err := getDocDeclConstantBlock(example1Path + "ConstantGroup1")
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(s, "\n"),
+		[]string{
+			"```go",
+			"// Here is a constant block.  " +
+				"All constants are reported as a group.",
+			"const (",
+			"    // ConstantGroup1 is a constant defined in a group.",
+			"    ConstantGroup1 = \"constant 1\"",
+			"",
+			"    // ConstantGroup2 is a constant defined in a group.",
+			"    ConstantGroup2 = \"constant 2\"",
+			")",
+			"```",
+		},
+	)
+
+	chk.Log(
+		"I:getInfo(\"ConstantGroup1\")",
+	)
+}
+
+func Test_GetDoc_GetDocConstantBlockTwo(t *testing.T) {
+	chk := sztestlog.CaptureLog(t)
+	defer chk.Release()
+
+	s, err := getDocDeclConstantBlock(
+		example1Path + "ConstantGroup1 ConstantGroupA",
+	)
+	chk.NoErr(err)
+	chk.StrSlice(
+		strings.Split(s, "\n"),
+		[]string{
+			"```go",
+			"// Here is a constant block.  " +
+				"All constants are reported as a group.",
+			"const (",
+			"    // ConstantGroup1 is a constant defined in a group.",
+			"    ConstantGroup1 = \"constant 1\"",
+			"",
+			"    // ConstantGroup2 is a constant defined in a group.",
+			"    ConstantGroup2 = \"constant 2\"",
+			")",
+			"",
+			"",
+			"// Here is a second constant block.  " +
+				"All constants are reported as a group.",
+			"const (",
+			"    // ConstantGroupA is a constant defined in a group.",
+			"    ConstantGroupA = \"constant A\"",
+			"",
+			"    // ConstantGroupB is a constant defined in a group.",
+			"    ConstantGroupB = \"constant B\"",
+			")",
+			"```",
+		},
+	)
+
+	chk.Log(
+		"I:getInfo(\"ConstantGroup1\")",
+		"I:getInfo(\"ConstantGroupA\")",
 	)
 }

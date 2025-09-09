@@ -78,3 +78,8 @@ func (di *docInfo) declGoLang() string {
 func (di *docInfo) docMarkdown() string {
 	return strings.Join(di.doc, "\n")
 }
+
+func (di *docInfo) constantBlock() string {
+	return di.naturalComments() + "\n" +
+		strings.Join(di.body, "\n")
+}

@@ -223,6 +223,15 @@ const (
     ConstantGroup2 = "constant 2"
 )
 
+// Here is a second constant block.  All constants are reported as a group.
+const (
+    // ConstantGroupA is a constant defined in a group.
+    ConstantGroupA = "constant A"
+
+    // ConstantGroupB is a constant defined in a group.
+    ConstantGroupB = "constant B"
+)
+
 // InterfaceType tests the documentation of interfaces.
 type InterfaceType interface {
     func(int) int
@@ -313,3 +322,43 @@ func TimesTwo(i int) int
 func TimesThree(i int) int
 ```
 <!--- gotomd::End::dcln::./TimesTwo TimesThree -->
+
+or a constant group:
+
+<!--- gotomd::Bgn::docConstGrp::./ConstantGroup1 -->
+```go
+// Here is a constant block.  All constants are reported as a group.
+const (
+    // ConstantGroup1 is a constant defined in a group.
+    ConstantGroup1 = "constant 1"
+
+    // ConstantGroup2 is a constant defined in a group.
+    ConstantGroup2 = "constant 2"
+)
+```
+<!--- gotomd::End::docConstGrp::./ConstantGroup1 -->
+
+or multiple constant groups:
+
+<!--- gotomd::Bgn::docConstGrp::./ConstantGroup1 ConstantGroupA -->
+```go
+// Here is a constant block.  All constants are reported as a group.
+const (
+    // ConstantGroup1 is a constant defined in a group.
+    ConstantGroup1 = "constant 1"
+
+    // ConstantGroup2 is a constant defined in a group.
+    ConstantGroup2 = "constant 2"
+)
+
+
+// Here is a second constant block.  All constants are reported as a group.
+const (
+    // ConstantGroupA is a constant defined in a group.
+    ConstantGroupA = "constant A"
+
+    // ConstantGroupB is a constant defined in a group.
+    ConstantGroupB = "constant B"
+)
+```
+<!--- gotomd::End::docConstGrp::./ConstantGroup1 ConstantGroupA -->

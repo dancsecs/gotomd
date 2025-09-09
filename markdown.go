@@ -80,6 +80,7 @@ var action = new(commandAction)
 //nolint:goCheckNoInits // Ok.
 func init() {
 	action.add("doc::", getDoc)
+	action.add("docConstGrp::", getDocDeclConstantBlock)
 	action.add("dcl::", getDocDecl)
 	action.add("dcln::", getDocDeclNatural)
 	action.add("dcls::", getDocDeclSingle)

@@ -60,6 +60,13 @@ A special object name package includes the package-level comments.
 
 ```html
 <!---
+gotomd::docConstGrp::./relativeDirectory/goConstName ListOfConstNames
+-->
+```
+Runs go doc on the specified constant block(s) from the given directory.
+
+```html
+<!---
 gotomd::dcls::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
 -->
 ```

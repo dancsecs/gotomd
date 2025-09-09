@@ -72,6 +72,15 @@ const (
 	ConstantGroup2 = "constant 2"
 )
 
+// Here is a second constant block.  All constants are reported as a group.
+const (
+	// ConstantGroupA is a constant defined in a group.
+	ConstantGroupA = "constant A"
+
+	// ConstantGroupB is a constant defined in a group.
+	ConstantGroupB = "constant B"
+)
+
 // InterfaceType tests the documentation of interfaces.
 type InterfaceType interface {
 	func(int) int
