@@ -22,11 +22,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 func Test_GetRun_GetGoRun(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	_, err := getGoRun("")
@@ -47,7 +47,7 @@ func Test_GetRun_GetGoRun(t *testing.T) {
 }
 
 func Test_GetRun_RunTestNotDirectory(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	f := chk.CreateTmpFile(nil)
@@ -60,7 +60,7 @@ func Test_GetRun_RunTestNotDirectory(t *testing.T) {
 }
 
 func Test_GetRun_RunTestNoPackage(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	_, _, err := runGo(".", "")
@@ -68,7 +68,7 @@ func Test_GetRun_RunTestNoPackage(t *testing.T) {
 }
 
 func Test_GetRun_RunExampleNoPackage(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	out, err := getGoRun("./example3/main.go -v")

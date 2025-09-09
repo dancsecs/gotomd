@@ -91,7 +91,7 @@ func getExpandFiles() (string, []string, []string, error) {
 }
 
 func Test_ProcessExpand_NoTargetNoForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	// Clear packages from other runs.
@@ -112,7 +112,7 @@ func Test_ProcessExpand_NoTargetNoForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessExpand_NoTargetForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
@@ -130,7 +130,7 @@ func Test_ProcessExpand_NoTargetForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessExpand_NoTargetNoForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
@@ -152,7 +152,7 @@ func Test_ProcessExpand_NoTargetNoForceVerbose(t *testing.T) {
 }
 
 func Test_ProcessExpand_NoTargetForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
@@ -174,7 +174,7 @@ func Test_ProcessExpand_NoTargetForceVerbose(t *testing.T) {
 }
 
 func Test_ProcessExpand_CancelOverwriteTargetForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
@@ -194,7 +194,7 @@ func Test_ProcessExpand_CancelOverwriteTargetForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessExpand_CancelOverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
@@ -217,7 +217,7 @@ func Test_ProcessExpand_CancelOverwriteForceVerbose(t *testing.T) {
 }
 
 func Test_ProcessExpand_OverwriteTargetForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
@@ -237,7 +237,7 @@ func Test_ProcessExpand_OverwriteTargetForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessExpand_OverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupExpandGlobals(

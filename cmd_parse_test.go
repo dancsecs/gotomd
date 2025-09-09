@@ -22,11 +22,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 func Test_CmdParse_ParseCmd(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cmd := ""
@@ -77,7 +77,7 @@ func Test_CmdParse_ParseCmd(t *testing.T) {
 }
 
 func Test_CmdParse_ParseCmds1(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cmd := ""
@@ -127,7 +127,7 @@ func Test_CmdParse_ParseCmds1(t *testing.T) {
 }
 
 func Test_CmdParse_ParseCmds2(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	file1 := example1Path + "action"

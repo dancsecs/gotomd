@@ -21,13 +21,11 @@ package main
 import (
 	"testing"
 
-	"github.com/dancsecs/szlog"
-	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
 )
 
 func Test_Markdown_CleanMarkDownDocument(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cleanDoc, err := cleanMarkDownDocument(
@@ -44,7 +42,7 @@ func Test_Markdown_CleanMarkDownDocument(t *testing.T) {
 }
 
 func Test_Markdown_CleanMarkDownDocumentMissingBlankAfterAuto(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	cleanDoc, err := cleanMarkDownDocument(
@@ -59,7 +57,7 @@ func Test_Markdown_CleanMarkDownDocumentMissingBlankAfterAuto(t *testing.T) {
 }
 
 func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	updatedDoc, err := updateMarkDownDocument("",
@@ -74,7 +72,7 @@ func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
 }
 
 func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	updatedDoc, err := updateMarkDownDocument("",
@@ -89,7 +87,7 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 }
 
 func Test_Markdown_Expand(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	docInfo, err := getInfo("./example1", "TimesTwo")
@@ -115,7 +113,7 @@ func Test_Markdown_Expand(t *testing.T) {
 }
 
 func Test_Markdown_Search(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	chk.Int(action.search("a"), -1)

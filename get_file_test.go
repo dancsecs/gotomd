@@ -22,11 +22,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 func Test_GetFile_GetGoFileInvalid(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	tstDir := "TEST_DIRECTORY_DOES_NOT_EXIST" + string(os.PathSeparator)
@@ -41,7 +41,7 @@ func Test_GetFile_GetGoFileInvalid(t *testing.T) {
 }
 
 func Test_GetFile_GetGoFile(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	d, err := getGoFile(example1Path + "crumb.go")
@@ -56,7 +56,7 @@ func Test_GetFile_GetGoFile(t *testing.T) {
 }
 
 func Test_GetFile_GetGoFile2(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	file1 := example1Path + "crumb.go"

@@ -106,7 +106,7 @@ func setupCleanGlobals(
 // +------------+-----------+------------------+-----------+.
 
 func Test_ProcessClean_NoTargetNoForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -125,7 +125,7 @@ func Test_ProcessClean_NoTargetNoForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_NoTargetForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -144,7 +144,7 @@ func Test_ProcessClean_NoTargetForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_NoTargetNoForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -163,7 +163,7 @@ func Test_ProcessClean_NoTargetNoForceVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_NoTargetForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -182,7 +182,7 @@ func Test_ProcessClean_NoTargetForceVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_CancelOverwriteNoForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -205,7 +205,7 @@ func Test_ProcessClean_CancelOverwriteNoForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_CancelOverwriteForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -221,7 +221,7 @@ func Test_ProcessClean_CancelOverwriteForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_CancelOverwriteNoForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -244,7 +244,7 @@ func Test_ProcessClean_CancelOverwriteNoForceVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_CancelOverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -261,7 +261,7 @@ func Test_ProcessClean_CancelOverwriteForceVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_OverwriteNoForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -280,13 +280,13 @@ func Test_ProcessClean_OverwriteNoForceNoVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	tFile := filepath.Join(outputDir, ".README.gtm.md")
-	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)?\\s")
+	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)? ")
 
 	chk.Log()
 }
 
 func Test_ProcessClean_OverwriteForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -306,7 +306,7 @@ func Test_ProcessClean_OverwriteForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessClean_OverwriteNoForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	setupCleanGlobals(
@@ -325,13 +325,13 @@ func Test_ProcessClean_OverwriteNoForceVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	tFile := filepath.Join(outputDir, ".README.gtm.md")
-	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)?\\s")
+	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)? ")
 
 	chk.Log("I:Cleaning " + example1Path + "README.md to: " + tFile)
 }
 
 func Test_ProcessClean_OverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupCleanGlobals(

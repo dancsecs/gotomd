@@ -21,11 +21,11 @@ package main
 import (
 	"testing"
 
-	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 func Test_DocInfo_OneLine(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dInfo := new(docInfo)
@@ -34,7 +34,7 @@ func Test_DocInfo_OneLine(t *testing.T) {
 }
 
 func Test_DocInfo_NaturalComments(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dInfo := new(docInfo)

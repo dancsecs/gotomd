@@ -24,8 +24,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dancsecs/szlog"
-	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -50,75 +48,92 @@ var usage = []string{
 	"codebase. This ensures your documentation is always accurate",
 	"and in sync with the source.",
 	"",
-	"\\s   programName [-v | --verbose ...] [-c | --clean] [-r | --replace]",
-	"\\s               [-l | --license] [-h | --help] [-f | --force]",
-	"\\s               [-z | --colorize] [-o | --output <dir>]",
-	"\\s               [-u | --usage <filename>] [-p | --permission <perm>]",
-	"\\s               [path ...]",
+	"    programName [-v | --verbose ...] [--quiet] " +
+		"[--log <level | (levels)>]",
+	"                [--language <lang>] [--long-labels] [-c | --clean]",
+	"                [-r | --replace] [-l | --license] [-h | --help]",
+	"                [-f | --force] [-z | --colorize] [-o | --output <dir>]",
+	"                [-u | --usage <filename>] [-p | --permission <perm>]",
+	"                [path ...]",
 	"",
-	"\\s   [-v | --verbose ...]",
-	"\\s       Show detailed processing information.",
-	"",
-	"\\s       Additional 'v's increase verbosity.",
-	"",
-	"",
-	"\\s   [-c | --clean]",
-	"\\s       Reverse operation and remove generated markdown",
-	"",
-	"\\s       (Cannot be used with the [-r | --replace] option).",
+	"    [-v | --verbose ...]",
+	"        Increase the verbose level for each v provided.",
 	"",
 	"",
-	"\\s   [-r | --replace]",
-	"\\s       Replace the *.MD in place\n",
-	"\\s       (Cannot be used with the [-c | --clean] option).",
+	"    [--quiet]",
+	"        Sets the verbose level to -1 squashing all (non-logged) output.",
 	"",
 	"",
-	"\\s   [-l | --license]",
-	"\\s       Display license before program exits.",
+	"    [--log <level | (levels)>]",
+	"        Set the level to log (or a custom combination of levels).",
 	"",
 	"",
-	"\\s   [-h | --help]",
-	"\\s       Display program usage information.",
+	"    [--language <lang>]",
+	"        Sets the local language used for formatting.",
 	"",
 	"",
-	"\\s   [-f | --force]",
-	"\\s       Do not confirm overwrite of destination.",
+	"    [--long-labels]",
+	"        Use long labels in log output.",
 	"",
 	"",
-	"\\s   [-z | --colorize]",
-	"\\s       Colorize go test output.",
+	"    [-c | --clean]",
+	"        Reverse operation and remove generated markdown",
+	"",
+	"        (Cannot be used with the [-r | --replace] option).",
 	"",
 	"",
-	"\\s   [-o | --output <dir>]",
-	"\\s       Direct all output to the specified directory.",
+	"    [-r | --replace]",
+	"        Replace the *.MD in place\n",
+	"        (Cannot be used with the [-c | --clean] option).",
 	"",
 	"",
-	"\\s   [-u | --usage <filename>]",
-	"\\s       Replace the usage section in the given Go source file using",
-	"\\s       content from standard input.  The section is identified as the",
-	"\\s       text between the first occurrence of '^\\n/*\\n# Usage .*$'" +
+	"    [-l | --license]",
+	"        Display license before program exits.",
+	"",
+	"",
+	"    [-h | --help]",
+	"        Display program usage information.",
+	"",
+	"",
+	"    [-f | --force]",
+	"        Do not confirm overwrite of destination.",
+	"",
+	"",
+	"    [-z | --colorize]",
+	"        Colorize go test output.",
+	"",
+	"",
+	"    [-o | --output <dir>]",
+	"        Direct all output to the specified directory.",
+	"",
+	"",
+	"    [-u | --usage <filename>]",
+	"        Replace the usage section in the given Go source file using",
+	"        content from standard input.  The section is identified as the",
+	"        text between the first occurrence of '^\\n/*\\n# Usage .*$'" +
 		" and the",
-	"\\s       following package declaration.  This allows keeping " +
+	"        following package declaration.  This allows keeping " +
 		"command-line",
-	"\\s       usage output (e.g., from --help) synchronized with the package",
-	"\\s       documentation.",
+	"        usage output (e.g., from --help) synchronized with the package",
+	"        documentation.",
 	"",
 	"",
-	"\\s   [-p | --permission <perm>]",
-	"\\s       Permissions to use when creating new file.",
+	"    [-p | --permission <perm>]",
+	"        Permissions to use when creating new file.",
 	"",
-	"\\s       (can only set RW bits)",
+	"        (can only set RW bits)",
 	"",
 	"",
-	"\\s   [path ...]",
-	"\\s       A specific gotomd file template with the extension '*.gtm.md'" +
+	"    [path ...]",
+	"        A specific gotomd file template with the extension '*.gtm.md'" +
 		" or a",
-	"\\s       directory which will be searched for all matching template",
-	"\\s       '*.gtm.md' files.  It defaults to the current directory: '.'",
+	"        directory which will be searched for all matching template",
+	"        '*.gtm.md' files.  It defaults to the current directory: '.'",
+	"",
 }
 
 func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -137,6 +152,9 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv",
+		"--log",
+		"all",
 		"-z",
 		dir,
 	)
@@ -153,7 +171,7 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	chk.Stdout(
-		"Confirm overwrite of " + tName + " (Y to overwrite)?\\s",
+		"Confirm overwrite of " + tName + " (Y to overwrite)? ",
 	)
 
 	chk.Log(
@@ -180,7 +198,7 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 ////////////
 
 func Test_Example1ReplaceNoTarget(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -207,7 +225,7 @@ func Test_Example1ReplaceNoTarget(t *testing.T) {
 }
 
 func Test_Example1ReplaceTargetCancel(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -218,6 +236,9 @@ func Test_Example1ReplaceTargetCancel(t *testing.T) {
 	fName := filepath.Join(dir, "README.md")
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv",
+		"--log",
+		"all",
 		"-r",
 		fName,
 	)
@@ -253,7 +274,7 @@ func Test_Example1ReplaceTargetCancel(t *testing.T) {
 }
 
 func Test_Example1ReplaceTargetOverwrite(t *testing.T) {
-	chk := sztest.CaptureStdout(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -288,11 +309,11 @@ func Test_Example1ReplaceTargetOverwrite(t *testing.T) {
 			": no such file or directory",
 	)
 
-	chk.Stdout("Confirm overwrite of " + fName + " (Y to overwrite)?\\s")
+	chk.Stdout("Confirm overwrite of " + fName + " (Y to overwrite)? ")
 }
 
 func Test_Example1ReplaceTargetOverwriteDir(t *testing.T) {
-	chk := sztest.CaptureStdout(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -325,12 +346,12 @@ func Test_Example1ReplaceTargetOverwriteDir(t *testing.T) {
 	)
 
 	chk.Stdout(
-		"Confirm overwrite of " + dir + "/README.md (Y to overwrite)?\\s",
+		"Confirm overwrite of " + dir + "/README.md (Y to overwrite)? ",
 	)
 }
 
 func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
-	chk := sztest.CaptureStdout(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -370,12 +391,12 @@ func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
 	)
 
 	chk.Stdout(
-		"Confirm overwrite of " + dir + "/README.md (Y to overwrite)?\\s",
+		"Confirm overwrite of " + dir + "/README.md (Y to overwrite)? ",
 	)
 }
 
 func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -385,6 +406,9 @@ func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv",
+		"--log",
+		"all",
 		"-r",
 		"-z",
 		dir,
@@ -403,7 +427,7 @@ func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
 
 	pName := filepath.Join(dir, "README.md")
 	chk.Stdout(
-		"Confirm overwrite of " + pName + " (Y to overwrite)?\\s",
+		"Confirm overwrite of " + pName + " (Y to overwrite)? ",
 	)
 
 	chk.Log(
@@ -468,7 +492,7 @@ func getTestFiles(dir, fName string) ([]string, []string, error) {
 }
 
 func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
-	chk := sztestlog.CaptureAll(t)
+	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -478,6 +502,8 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"--log",
+		"all",
 		"-l",
 		"-h",
 		"-c",
@@ -494,8 +520,7 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 
 	pName := filepath.Join(dir, "README.md")
 	chk.Stdout(
-		license+strings.Join(usage, "\n"),
-		"",
+		license + strings.Join(usage, "\n"),
 	)
 
 	rFile := filepath.Join(dir, "README.md")
@@ -508,12 +533,14 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 }
 
 func Test_JustHelp(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	chk.SetArgs(
 		"programName",
-		"-v",
+		"-vvvvvv",
+		"--log",
+		"all",
 		"-l",
 		"-h",
 	)
@@ -529,7 +556,7 @@ func Test_JustHelp(t *testing.T) {
 }
 
 func Test_Usage_DoesNotExist(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -550,7 +577,7 @@ func Test_Usage_DoesNotExist(t *testing.T) {
 }
 
 func Test_Usage_WarningEmptyFile(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -563,6 +590,9 @@ func Test_Usage_WarningEmptyFile(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv",
+		"--log",
+		"all",
 		"-u", goFile,
 	)
 
@@ -596,7 +626,7 @@ func Test_Usage_WarningEmptyFile(t *testing.T) {
 }
 
 func Test_Usage_WarningBlankFile(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -610,6 +640,9 @@ func Test_Usage_WarningBlankFile(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv",
+		"--log",
+		"all",
 		"-u", goFile,
 	)
 
@@ -642,7 +675,7 @@ func Test_Usage_WarningBlankFile(t *testing.T) {
 }
 
 func Test_Usage_WarningJustPackage(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -656,6 +689,9 @@ func Test_Usage_WarningJustPackage(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv",
+		"--log",
+		"all",
 		"-u", goFile,
 	)
 
@@ -689,7 +725,7 @@ func Test_Usage_WarningJustPackage(t *testing.T) {
 }
 
 func Test_Usage_WarningJustPackageDuplicated(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -706,6 +742,7 @@ func Test_Usage_WarningJustPackageDuplicated(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv", "--log", "all",
 		"-u", goFile,
 	)
 
@@ -744,7 +781,7 @@ func Test_Usage_WarningJustPackageDuplicated(t *testing.T) {
 }
 
 func Test_Usage_WarningJustUsageWithBlankPrefix(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -761,6 +798,7 @@ func Test_Usage_WarningJustUsageWithBlankPrefix(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv", "--log", "all", // Setup szlog for maximum output.
 		"-u", goFile,
 	)
 
@@ -795,7 +833,7 @@ func Test_Usage_WarningJustUsageWithBlankPrefix(t *testing.T) {
 }
 
 func Test_Usage_WarningJustUsageWithNoBlankPrefix(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -811,6 +849,7 @@ func Test_Usage_WarningJustUsageWithNoBlankPrefix(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv", "--log", "all",
 		"-u", goFile,
 	)
 
@@ -845,7 +884,7 @@ func Test_Usage_WarningJustUsageWithNoBlankPrefix(t *testing.T) {
 }
 
 func Test_Usage_WarningPreUsageWithBlankPrefix(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -863,6 +902,7 @@ func Test_Usage_WarningPreUsageWithBlankPrefix(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv", "--log", "all",
 		"-u", goFile,
 	)
 
@@ -899,7 +939,7 @@ func Test_Usage_WarningPreUsageWithBlankPrefix(t *testing.T) {
 }
 
 func Test_Usage_WarningPreUsageWithNoBlankPrefix(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -916,6 +956,7 @@ func Test_Usage_WarningPreUsageWithNoBlankPrefix(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv", "--log", "all",
 		"-u", goFile,
 	)
 
@@ -951,7 +992,7 @@ func Test_Usage_WarningPreUsageWithNoBlankPrefix(t *testing.T) {
 }
 
 func Test_Usage_WarningMultipleSeparators(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -971,6 +1012,7 @@ func Test_Usage_WarningMultipleSeparators(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
+		"-vvvvvv", "--log", "all",
 		"-u", goFile,
 	)
 
@@ -1011,7 +1053,7 @@ func Test_Usage_WarningMultipleSeparators(t *testing.T) {
 }
 
 func Test_Usage_AllGood(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()

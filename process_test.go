@@ -25,6 +25,7 @@ import (
 
 	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 func setupTest(
@@ -89,7 +90,7 @@ func setupTest(
 //  }
 
 func Test_Process_ConfirmOverwrite(t *testing.T) {
-	chk := sztest.CaptureStdout(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	data := "The data."

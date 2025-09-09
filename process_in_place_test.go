@@ -91,7 +91,7 @@ func getInPlaceFiles() (string, []string, []string, error) {
 }
 
 func Test_ProcessInPlace_NoTargetNoForceNoVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
@@ -111,7 +111,7 @@ func Test_ProcessInPlace_NoTargetNoForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessInPlace_NoTargetForceNoVerbose(t *testing.T) {
-	chk := sztest.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
@@ -131,7 +131,7 @@ func Test_ProcessInPlace_NoTargetForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessInPlace_NoTargetNoForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
@@ -152,7 +152,7 @@ func Test_ProcessInPlace_NoTargetNoForceVerbose(t *testing.T) {
 }
 
 func Test_ProcessInPlace_NoTargetForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
@@ -173,7 +173,7 @@ func Test_ProcessInPlace_NoTargetForceVerbose(t *testing.T) {
 }
 
 func Test_ProcessInPlace_CancelOverwriteForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
@@ -193,7 +193,7 @@ func Test_ProcessInPlace_CancelOverwriteForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessInPlace_CancelOverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
@@ -216,7 +216,7 @@ func Test_ProcessInPlace_CancelOverwriteForceVerbose(t *testing.T) {
 }
 
 func Test_ProcessInPlace_OverwriteForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupInPlaceGlobals(
@@ -236,7 +236,7 @@ func Test_ProcessInPlace_OverwriteForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessInPlace_OverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t, szlog.LevelAll)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	setupInPlaceGlobals(

@@ -21,7 +21,7 @@ package main
 import (
 	"testing"
 
-	"github.com/dancsecs/sztest"
+	"github.com/dancsecs/sztestlog"
 )
 
 type docInfoTest struct {
@@ -33,24 +33,32 @@ type docInfoTest struct {
 }
 
 func Test_GoPackage_GetInfo_InvalidDirectory(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	_, err := getInfo("INVALID_DIRECTORY", "TimesTwo")
 	chk.Err(err, "open INVALID_DIRECTORY: no such file or directory")
+
+	chk.Log(
+		"I:Loading Package info for: INVALID_DIRECTORY",
+	)
 }
 
 func Test_GoPackage_GetInfo_InvalidObject(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	_, err := getInfo("./example1", "DOES_NOT_EXIST")
 	chk.Err(err, ErrUnknownObject.Error()+": DOES_NOT_EXIST")
+
+	chk.Log(
+		"I:getInfo(\"DOES_NOT_EXIST\")",
+	)
 }
 
 //nolint:funlen,lll // Ok.
 func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
-	chk := sztest.CaptureNothing(t)
+	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
 	docInfoTests := []docInfoTest{
@@ -185,4 +193,14 @@ func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
 		chk.StrSlice(dInfo.doc, tst.doc, "DOC For action: ", tst.action)
 		chk.Str(dInfo.oneLine(), tst.oneLine, "OneLine For action: ", tst.action)
 	}
+
+	chk.Log(
+		"I:getInfo(\"TimesTwo\")",
+		"I:getInfo(\"TimesThree\")",
+		"I:getInfo(\"ConstDeclSingleCmtSingle\")",
+		"I:getInfo(\"ConstDeclMultiCmtSingle\")",
+		"I:getInfo(\"ConstDeclConstrCmtSingle\")",
+		"I:getInfo(\"ConstDeclConstrCmtMulti\")",
+		"I:getInfo(\"StructureType.GetF1\")",
+	)
 }
