@@ -164,7 +164,8 @@ and in sync with the source.
         Sets the verbose level to -1 squashing all (non-logged) output.
 
     [--log <level | (levels)>]
-        Set the level to log (or a custom combination of levels).
+        Set the level to log (or a custom combination of levels).  Valid
+        levels are: None, FATAL, ERROR, WARN, INFO, DEBUG,TRACE, ALL.
 
     [--language <lang>]
         Sets the local language used for formatting.

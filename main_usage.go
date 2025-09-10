@@ -41,7 +41,8 @@ and in sync with the source.
 
 
 	[--log <level | (levels)>]
-	    Set the level to log (or a custom combination of levels).
+	    Set the level to log (or a custom combination of levels).  Valid
+	    levels are: None, FATAL, ERROR, WARN, INFO, DEBUG,TRACE, ALL.
 
 
 	[--language <lang>]
