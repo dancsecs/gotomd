@@ -19,9 +19,6 @@ linters-settings:
 
 linters:
   enable-all: true
-  disable:
-    - execinquery # Deprecated
-    - gomnd # Deprecated
 
 issues:
   exclude-use-default: false
