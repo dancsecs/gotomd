@@ -37,7 +37,10 @@ func Test_GoPackage_GetInfo_InvalidDirectory(t *testing.T) {
 	defer chk.Release()
 
 	_, err := getInfo("INVALID_DIRECTORY", "TimesTwo")
-	chk.Err(err, "open INVALID_DIRECTORY: no such file or directory")
+	chk.Err(
+		err,
+		ErrInvalidPackage.Error(),
+	)
 
 	chk.Log(
 		"I:Loading Package info for: INVALID_DIRECTORY",

@@ -50,6 +50,7 @@
         "exhaustivestruct", // Deprecated
         "exhaustruct",
         "exportloopref",
+        "Fset",
         "forbidigo",
         "forcetypeassert",
         "funlen",

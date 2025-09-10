@@ -21,13 +21,13 @@ package main
 import (
 	"fmt"
 	"go/doc"
-	"go/parser"
 	"go/token"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/dancsecs/szlog"
+	"golang.org/x/tools/go/packages"
 )
 
 const pkgLabel = "package"
@@ -41,17 +41,17 @@ type packageInfo struct {
 }
 
 //nolint:goCheckNoGlobals // Ok.
-var packages = make(map[string]*packageInfo)
+var packageCache = make(map[string]*packageInfo)
 
 func clearPackageCache() {
-	keys := make([]string, 0, len(packages))
+	keys := make([]string, 0, len(packageCache))
 
-	for k := range packages {
+	for k := range packageCache {
 		keys = append(keys, k)
 	}
 
 	for _, k := range keys {
-		delete(packages, k)
+		delete(packageCache, k)
 	}
 }
 
@@ -271,25 +271,48 @@ func (pi *packageInfo) snipFile(
 }
 
 func createPackageInfo(dir string) (*packageInfo, error) {
-	szlog.Info("Loading Package info for: ", dir)
-
-	pkgInfo := new(packageInfo)
-	pkgInfo.fSet = token.NewFileSet()
-
-	fileSet, err := parser.ParseDir(pkgInfo.fSet, dir, nil,
-		parser.ParseComments|parser.AllErrors,
+	var (
+		docPkg        *doc.Package
+		packagesToDoc []*packages.Package
+		err           error
 	)
 
-	if err == nil {
-		for n, a := range fileSet { // Process the first non _test package.
-			if !strings.HasSuffix(n, "_test") {
-				pkgInfo.docPkg = doc.New(
-					a, n, doc.PreserveAST|doc.AllDecls|doc.AllMethods,
-				)
+	szlog.Info("Loading Package info for: ", dir)
 
-				return pkgInfo, nil
-			}
-		}
+	cfg := new(packages.Config)
+	cfg.Mode = packages.NeedName |
+		packages.NeedFiles |
+		packages.NeedCompiledGoFiles |
+		packages.NeedSyntax |
+		packages.NeedTypes
+
+	cfg.Fset = token.NewFileSet()
+	cfg.Tests = false // Exclude test packages
+
+	packagesToDoc, err = packages.Load(cfg, dir)
+
+	if err == nil && len(packagesToDoc[0].Errors) > 0 {
+		err = ErrInvalidPackage
+	}
+
+	if err == nil {
+		// Use doc.NewFromFiles with the FileSet and parsed AST files.
+		docPkg, err = doc.NewFromFiles(
+			packagesToDoc[0].Fset,
+			packagesToDoc[0].Syntax,
+			packagesToDoc[0].Name,
+			doc.PreserveAST|doc.AllDecls|doc.AllMethods,
+		)
+	}
+
+	if err == nil {
+		return &packageInfo{
+			fSet:      packagesToDoc[0].Fset,
+			docPkg:    docPkg,
+			functions: nil,
+			constants: nil,
+			types:     nil,
+		}, nil
 	}
 
 	return nil, err //nolint:wrapcheck // Caller will wrap error.
@@ -306,12 +329,12 @@ func getInfo(dir, name string) (*docInfo, error) {
 	cwd, err := os.Getwd()
 	if err == nil {
 		pDir := filepath.Join(cwd, dir)
-		pkgInfo, ok = packages[pDir]
+		pkgInfo, ok = packageCache[pDir]
 
 		if !ok {
 			pkgInfo, err = createPackageInfo(dir)
 			if err == nil {
-				packages[pDir] = pkgInfo
+				packageCache[pDir] = pkgInfo
 			}
 		}
 	}

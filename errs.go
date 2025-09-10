@@ -17,4 +17,5 @@ var (
 	ErrInvalidDefPerm      = errors.New("invalid default perm")
 	ErrInvalidOptionsRC    = errors.New("invalid option mix replace and clean")
 	ErrInvalidOutputDir    = errors.New("invalid output directory")
+	ErrInvalidPackage      = errors.New("invalid package")
 )
