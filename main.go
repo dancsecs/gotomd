@@ -167,7 +167,6 @@ func processFiles(filesToProcess []string) error {
 
 		switch {
 		case cleanOnly:
-			//   err = cleanMD(filesToProcess[i])
 			err = cleanMD(filesToProcess[i])
 		case replace:
 			err = replaceMDInPlace(filesToProcess[i])
