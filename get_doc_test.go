@@ -344,14 +344,14 @@ func Test_GetDoc_GetDocConstantBlockOne(t *testing.T) {
 		strings.Split(s, "\n"),
 		[]string{
 			"```go",
-			"// Here is a constant block.  " +
+			"// Here is a typed constant block.  " +
 				"All constants are reported as a group.",
 			"const (",
 			"    // ConstantGroup1 is a constant defined in a group.",
-			"    ConstantGroup1 = \"constant 1\"",
+			"    ConstantGroup1 ConstGroupType = iota",
 			"",
 			"    // ConstantGroup2 is a constant defined in a group.",
-			"    ConstantGroup2 = \"constant 2\"",
+			"    ConstantGroup2",
 			")",
 			"```",
 		},
@@ -366,22 +366,22 @@ func Test_GetDoc_GetDocConstantBlockTwo(t *testing.T) {
 	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
 
-	s, err := getDocDeclConstantBlock(
-		example1Path + "ConstantGroup1 ConstantGroupA",
+	s, err := getDocDeclConstantBlock(example1Path +
+		"ConstantGroup1 ConstantGroupA",
 	)
 	chk.NoErr(err)
 	chk.StrSlice(
 		strings.Split(s, "\n"),
 		[]string{
 			"```go",
-			"// Here is a constant block.  " +
+			"// Here is a typed constant block.  " +
 				"All constants are reported as a group.",
 			"const (",
 			"    // ConstantGroup1 is a constant defined in a group.",
-			"    ConstantGroup1 = \"constant 1\"",
+			"    ConstantGroup1 ConstGroupType = iota",
 			"",
 			"    // ConstantGroup2 is a constant defined in a group.",
-			"    ConstantGroup2 = \"constant 2\"",
+			"    ConstantGroup2",
 			")",
 			"",
 			"",

@@ -91,6 +91,14 @@ func (pi *packageInfo) findConst(name string) *doc.Value {
 				addConst(n, c)
 			}
 		}
+
+		for _, t := range pi.docPkg.Types {
+			for _, c := range t.Consts {
+				for _, n := range c.Names {
+					addConst(n, c)
+				}
+			}
+		}
 	}
 
 	return pi.constants[name]

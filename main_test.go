@@ -132,6 +132,7 @@ var usage = []string{
 	"",
 }
 
+//nolint:funlen  // Ok.
 func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()

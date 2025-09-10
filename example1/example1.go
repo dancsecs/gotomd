@@ -63,13 +63,16 @@ is defined on multiple
 	      lines
 `
 
-// Here is a constant block.  All constants are reported as a group.
+// ConstGroupType set the type of the constant.
+type ConstGroupType int
+
+// Here is a typed constant block.  All constants are reported as a group.
 const (
 	// ConstantGroup1 is a constant defined in a group.
-	ConstantGroup1 = "constant 1"
+	ConstantGroup1 ConstGroupType = iota
 
 	// ConstantGroup2 is a constant defined in a group.
-	ConstantGroup2 = "constant 2"
+	ConstantGroup2
 )
 
 // Here is a second constant block.  All constants are reported as a group.
