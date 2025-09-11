@@ -79,7 +79,7 @@ func confirmOverwrite(fPath string, data string) (bool, error) {
 	}
 
 	if err == nil && strings.TrimRight(string(oldData), "\n") == data {
-		szlog.Say0("No change: ", fPath)
+		szlog.Say0("No change: ", fPath, "\n")
 
 		return false, nil
 	}
