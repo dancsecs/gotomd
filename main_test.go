@@ -19,6 +19,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -133,7 +134,6 @@ var usage = []string{
 	"",
 }
 
-//nolint:funlen  // Ok.
 func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	chk := sztestlog.CaptureLogAndStdout(t)
 	defer chk.Release()
@@ -172,9 +172,7 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	chk.Stdout(
-		"Confirm overwrite of " + tName + " (Y to overwrite)? ",
-	)
+	chk.Stdout(fmt.Sprintf(confirmMsg, tName))
 
 	chk.Log(
 		"I:filesToProcess: "+rName,
@@ -254,8 +252,9 @@ func Test_Example1ReplaceTargetCancel(t *testing.T) {
 	main()
 
 	chk.Stdout(
-		"Confirm overwrite of " + fName + " (Y to overwrite)? " +
-			"overwrite cancelled")
+		fmt.Sprintf(confirmMsg, fName) +
+			confirmCancelled[:len(confirmCancelled)-1],
+	)
 
 	chk.Log(
 		"I:filesToProcess: "+fName,
@@ -317,7 +316,9 @@ func Test_Example1ReplaceTargetOverwrite(t *testing.T) {
 			": no such file or directory",
 	)
 
-	chk.Stdout("Confirm overwrite of " + fName + " (Y to overwrite)? ")
+	chk.Stdout(
+		fmt.Sprintf(confirmMsg, fName),
+	)
 }
 
 func Test_Example1ReplaceTargetOverwriteDir(t *testing.T) {
@@ -354,7 +355,7 @@ func Test_Example1ReplaceTargetOverwriteDir(t *testing.T) {
 	)
 
 	chk.Stdout(
-		"Confirm overwrite of " + dir + "/README.md (Y to overwrite)? ",
+		fmt.Sprintf(confirmMsg, filepath.Join(dir, "README.md")),
 	)
 }
 
@@ -399,7 +400,7 @@ func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
 	)
 
 	chk.Stdout(
-		"Confirm overwrite of " + dir + "/README.md (Y to overwrite)? ",
+		fmt.Sprintf(confirmMsg, filepath.Join(dir, "README.md")),
 	)
 }
 
@@ -435,7 +436,7 @@ func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
 
 	pName := filepath.Join(dir, "README.md")
 	chk.Stdout(
-		"Confirm overwrite of " + pName + " (Y to overwrite)? ",
+		fmt.Sprintf(confirmMsg, pName),
 	)
 
 	chk.Log(

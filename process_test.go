@@ -19,6 +19,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -108,5 +109,29 @@ func Test_Process_ConfirmOverwrite(t *testing.T) {
 
 	chk.Stdout(
 		"No change: " + fPath,
+	)
+}
+
+func Test_Process_AskToOverwrite(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	chk.SetStdinData("invalid\nr\nN\n")
+
+	overwrite, err := askToOverwrite("file", "abc\n", "def")
+	chk.NoErr(err)
+	chk.False(overwrite)
+
+	chk.Stdout(
+		fmt.Sprintf(confirmMsg, "file")+
+			fmt.Sprintf(confirmUnknown[:len(confirmUnknown)-1], "invalid"),
+		fmt.Sprintf(confirmMsg, "file")+"--- Old_file",
+		"+++ New_file",
+		"@@ -1 +1 @@",
+		"-abc",
+		"+def",
+		"",
+		fmt.Sprintf(confirmMsg, "file")+
+			confirmCancelled[:len(confirmCancelled)-1],
 	)
 }

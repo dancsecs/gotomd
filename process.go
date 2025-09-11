@@ -28,12 +28,46 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
-//nolint:forbidigo // Ok.
-func confirmOverwrite(fPath string, data string) (bool, error) {
+// Overwrite messages.
+const (
+	confirmMsg = "Confirm overwrite of: %s\n" +
+		" (Y to overwrite; [N/n] to Cancel; [R/r] to review)? "
+	confirmCancelled = "Overwrite cancelled\n\n"
+	confirmUnknown   = "Unknown response: '%s'\n\n"
+)
+
+func askToOverwrite(fPath, oldData, newData string) (bool, error) {
 	var (
-		ok      bool
-		oldData []byte
+		ok  bool
+		err error
 	)
+
+	response := "R"
+	for err == nil && response == "R" {
+		szlog.Say0f(confirmMsg, fPath)
+
+		if _, err = fmt.Scanln(&response); err == nil {
+			switch response {
+			case "Y":
+				ok = true
+			case "N", "n":
+				szlog.Say0(confirmCancelled)
+			case "R", "r":
+				diffFile(filepath.Base(fPath), oldData, newData+"\n")
+
+				response = "R"
+			default:
+				szlog.Say0f(confirmUnknown, response)
+				response = "R" // Ask again.
+			}
+		}
+	}
+
+	return ok, err //nolint:wrapcheck // Caller will wrap error.
+}
+
+func confirmOverwrite(fPath string, data string) (bool, error) {
+	var oldData []byte
 
 	_, err := os.Stat(fPath)
 	if errors.Is(err, os.ErrNotExist) {
@@ -45,25 +79,12 @@ func confirmOverwrite(fPath string, data string) (bool, error) {
 	}
 
 	if err == nil && strings.TrimRight(string(oldData), "\n") == data {
-		fmt.Println("No change: " + fPath)
+		szlog.Say0("No change: ", fPath)
 
 		return false, nil
 	}
 
-	if err == nil {
-		fmt.Print("Confirm overwrite of ", fPath, " (Y to overwrite)? ")
-
-		var response string
-
-		if _, err = fmt.Scanln(&response); err == nil {
-			ok = response == "Y"
-			if !ok {
-				fmt.Println("overwrite cancelled")
-			}
-		}
-	}
-
-	return ok, err //nolint:wrapcheck // Caller will wrap error.
+	return askToOverwrite(fPath, string(oldData)+"\n", data+"\n")
 }
 
 func writeFile(fPath string, data string) error {

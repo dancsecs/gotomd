@@ -19,6 +19,7 @@
 package main
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -197,8 +198,9 @@ func Test_ProcessClean_CancelOverwriteNoForceNoVerbose(t *testing.T) {
 	chk.NoErr(cleanMD(example1Path + "README.md"))
 
 	tFile := filepath.Join(outputDir, ".README.gtm.md")
-	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)? " +
-		"overwrite cancelled",
+	chk.Stdout(
+		fmt.Sprintf(confirmMsg, tFile) +
+			confirmCancelled[:len(confirmCancelled)-1],
 	)
 
 	chk.Log()
@@ -236,8 +238,9 @@ func Test_ProcessClean_CancelOverwriteNoForceVerbose(t *testing.T) {
 	chk.NoErr(cleanMD(example1Path + "README.md"))
 
 	tFile := filepath.Join(outputDir, ".README.gtm.md")
-	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)? " +
-		"overwrite cancelled",
+	chk.Stdout(
+		fmt.Sprintf(confirmMsg, tFile) +
+			confirmCancelled[:len(confirmCancelled)-1],
 	)
 
 	chk.Log("I:Cleaning " + example1Path + "README.md to: " + tFile)
@@ -280,7 +283,7 @@ func Test_ProcessClean_OverwriteNoForceNoVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	tFile := filepath.Join(outputDir, ".README.gtm.md")
-	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)? ")
+	chk.Stdout(fmt.Sprintf(confirmMsg, tFile))
 
 	chk.Log()
 }
@@ -325,7 +328,7 @@ func Test_ProcessClean_OverwriteNoForceVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	tFile := filepath.Join(outputDir, ".README.gtm.md")
-	chk.Stdout("Confirm overwrite of " + tFile + " (Y to overwrite)? ")
+	chk.Stdout(fmt.Sprintf(confirmMsg, tFile))
 
 	chk.Log("I:Cleaning " + example1Path + "README.md to: " + tFile)
 }
