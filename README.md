@@ -142,6 +142,16 @@ Additionally, an auto-generated section header is prefixed with:
 This header is followed by a blank line. If operating in template mode
 (not in-place), a DO NOT MODIFY warning is also inserted.
 
+# Dedication
+
+This project is dedicated to Reem.
+Your brilliance, courage, and quiet strength continue to inspire me.
+Every line is written in gratitude for the light and hope you brought into my
+life.
+
+NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
+OpenAI.
+
 # Usage: gotomd
 
 Synchronize GitHub README.md files with Go source code,
