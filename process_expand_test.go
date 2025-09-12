@@ -32,14 +32,14 @@ import (
 
 type expandGlobals struct {
 	forceOverwrite bool
-	logLevel       szlog.LogLevel
+	verboseLevel   szlog.VerboseLevel
 }
 
 func setupExpandGlobals(
 	chk *sztest.Chk, override expandGlobals,
 ) {
 	chk.T().Helper()
-	setupTest(chk, true, false, override.forceOverwrite, override.logLevel)
+	setupTest(chk, true, false, override.forceOverwrite, override.verboseLevel)
 }
 
 func setupExpandDirs(makeTarget bool) error {
@@ -98,7 +98,7 @@ func Test_ProcessExpand_NoTargetNoForceNoVerbose(t *testing.T) {
 	packageCache = make(map[string]*packageInfo)
 
 	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: false, logLevel: szlog.LevelNone},
+		chk, expandGlobals{forceOverwrite: false, verboseLevel: 0},
 	)
 	chk.NoErr(setupExpandDirs(false))
 
@@ -116,7 +116,7 @@ func Test_ProcessExpand_NoTargetForceNoVerbose(t *testing.T) {
 	defer chk.Release()
 
 	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, logLevel: szlog.LevelNone},
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
 	chk.NoErr(setupExpandDirs(false))
 
@@ -130,12 +130,12 @@ func Test_ProcessExpand_NoTargetForceNoVerbose(t *testing.T) {
 }
 
 func Test_ProcessExpand_NoTargetNoForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
 		chk,
-		expandGlobals{forceOverwrite: false, logLevel: szlog.LevelAll},
+		expandGlobals{forceOverwrite: false, verboseLevel: 6},
 	)
 	chk.NoErr(setupExpandDirs(false))
 
@@ -145,19 +145,19 @@ func Test_ProcessExpand_NoTargetNoForceVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	chk.Log(
-		"I:Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
-		"I:getInfo(\"package\")",
+	chk.Stdout(
+		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
+		"getInfo(\"package\")",
 	)
 }
 
 func Test_ProcessExpand_NoTargetForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
 		chk,
-		expandGlobals{forceOverwrite: true, logLevel: szlog.LevelAll},
+		expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
 	chk.NoErr(setupExpandDirs(false))
 
@@ -167,18 +167,18 @@ func Test_ProcessExpand_NoTargetForceVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	chk.Log(
-		"I:Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
-		"I:getInfo(\"package\")",
+	chk.Stdout(
+		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
+		"getInfo(\"package\")",
 	)
 }
 
 func Test_ProcessExpand_CancelOverwriteTargetForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, logLevel: szlog.LevelNone},
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
 	chk.NoErr(setupExpandDirs(true))
 
@@ -189,16 +189,14 @@ func Test_ProcessExpand_CancelOverwriteTargetForceNoVerbose(t *testing.T) {
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
-
-	chk.Log()
 }
 
 func Test_ProcessExpand_CancelOverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, logLevel: szlog.LevelAll},
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
 	chk.NoErr(setupExpandDirs(true))
 
@@ -210,18 +208,18 @@ func Test_ProcessExpand_CancelOverwriteForceVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	chk.Log(
-		"I:Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
-		"I:getInfo(\"package\")",
+	chk.Stdout(
+		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
+		"getInfo(\"package\")",
 	)
 }
 
 func Test_ProcessExpand_OverwriteTargetForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, logLevel: szlog.LevelNone},
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
 	chk.NoErr(setupExpandDirs(true))
 
@@ -232,16 +230,14 @@ func Test_ProcessExpand_OverwriteTargetForceNoVerbose(t *testing.T) {
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
-
-	chk.Log()
 }
 
 func Test_ProcessExpand_OverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, logLevel: szlog.LevelAll},
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
 	chk.NoErr(setupExpandDirs(true))
 
@@ -253,8 +249,8 @@ func Test_ProcessExpand_OverwriteForceVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	chk.Log(
-		"I:Expanding "+example1Path+".README_SHORT.gtm.md to: "+wFile,
-		"I:getInfo(\"package\")",
+	chk.Stdout(
+		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+wFile,
+		"getInfo(\"package\")",
 	)
 }

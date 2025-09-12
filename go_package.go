@@ -186,7 +186,7 @@ func (pi *packageInfo) getInfoType(docType *doc.Type) (*docInfo, error) {
 
 // GetInfo looks up the documentation information for a declaration.
 func (pi *packageInfo) getInfo(name string) (*docInfo, error) {
-	szlog.Infof("getInfo(%q)\n", name)
+	szlog.Say1f("getInfo(%q)\n", name)
 
 	if name == pkgLabel {
 		// Return Package information.
@@ -277,7 +277,7 @@ func createPackageInfo(dir string) (*packageInfo, error) {
 		err           error
 	)
 
-	szlog.Info("Loading Package info for: ", dir)
+	szlog.Say1("Loading Package info for: ", dir, "\n")
 
 	cfg := new(packages.Config)
 	cfg.Mode = packages.NeedName |

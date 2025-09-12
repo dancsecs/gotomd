@@ -50,7 +50,7 @@ func expandMD(rPath string) error {
 	) + ".md"
 	wPath = filepath.Join(wDir, wFile)
 
-	szlog.Infof("Expanding %s to: %s", rPath, wPath)
+	szlog.Say1f("Expanding %s to: %s\n", rPath, wPath)
 
 	fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
 

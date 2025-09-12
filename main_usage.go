@@ -26,31 +26,13 @@ directives with content generated directly from your Go
 codebase. This ensures your documentation is always accurate
 and in sync with the source.
 
-	gotomd [-v | --verbose ...] [--quiet] [--log <level | (levels)>]
-	       [--language <lang>] [--long-labels] [-c | --clean]
-	       [-r | --replace] [-l | --license] [-h | --help] [-f | --force]
-	       [-z | --colorize] [-o | --output <dir>]
-	       [-u | --usage <filename>] [-p | --permission <perm>] [path ...]
+	gotomd [-v | --verbose ...] [-c | --clean] [-r | --replace]
+	       [-l | --license] [-h | --help] [-f | --force] [-z | --colorize]
+	       [-o | --output <dir>] [-u | --usage <filename>]
+	       [-p | --permission <perm>] [path ...]
 
 	[-v | --verbose ...]
 	    Increase the verbose level for each v provided.
-
-
-	[--quiet]
-	    Sets the verbose level to -1 squashing all (non-logged) output.
-
-
-	[--log <level | (levels)>]
-	    Set the level to log (or a custom combination of levels).  Valid
-	    levels are: None, FATAL, ERROR, WARN, INFO, DEBUG,TRACE, ALL.
-
-
-	[--language <lang>]
-	    Sets the local language used for formatting.
-
-
-	[--long-labels]
-	    Use long labels in log output.
 
 
 	[-c | --clean]

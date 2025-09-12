@@ -49,7 +49,7 @@ func replaceMDInPlace(rPath string) error {
 
 	fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
 
-	szlog.Infof("Expanding %s <inPlace> to: %s", rPath, wPath)
+	szlog.Say1f("Expanding %s <inPlace> to: %s\n", rPath, wPath)
 
 	if err == nil {
 		fileData := string(bytes.TrimRight(fileBytes, "\n"))

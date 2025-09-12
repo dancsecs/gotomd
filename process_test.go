@@ -32,7 +32,7 @@ import (
 func setupTest(
 	chk *sztest.Chk,
 	tCleanOnly, tReplace, tForceOverwrite bool,
-	tVerbose szlog.LogLevel,
+	tVerbose szlog.VerboseLevel,
 ) {
 	chk.T().Helper()
 
@@ -41,13 +41,13 @@ func setupTest(
 	origCleanOnly := cleanOnly
 	origReplace := replace
 	origForceOverwrite := forceOverwrite
-	origLogLevel := szlog.Level()
+	origVerboseLevel := szlog.Verbose()
 
 	cleanOnly = tCleanOnly
 	replace = tReplace
 	forceOverwrite = tForceOverwrite
 
-	szlog.SetLevel(tVerbose)
+	szlog.SetVerbose(tVerbose)
 
 	if chk.NoErr(err) {
 		outputDir = chk.CreateTmpDir()
@@ -57,7 +57,7 @@ func setupTest(
 			replace = origReplace
 			forceOverwrite = origForceOverwrite
 
-			szlog.SetLevel(origLogLevel)
+			szlog.SetVerbose(origVerboseLevel)
 
 			return os.Chdir(origCWD)
 		})

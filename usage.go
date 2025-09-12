@@ -32,7 +32,7 @@ import (
 func updatePackageLine(current, i int, lines []string) int {
 	if strings.HasPrefix(lines[i], "package ") {
 		if current != -1 {
-			szlog.Warn("multiple package delimiters.")
+			szlog.Say0("WARNING: multiple package delimiters.\n")
 		}
 
 		current = i // We have a new package section.
@@ -59,7 +59,7 @@ func updateUsageLine(
 
 	if newUsageLine != -1 {
 		if current != -1 {
-			szlog.Warn("multiple Usage delimiters.")
+			szlog.Say0("WARNING: multiple Usage delimiters.\n")
 		}
 
 		current = newUsageLine // We have n new usage section.
@@ -89,7 +89,7 @@ func parseOldFile(usagePackageFile string) ([]string, int, int, error) {
 	oldLines := []string(nil)
 
 	if len(oldFileData) < 1 {
-		szlog.Warnf("blank usage file: '%s'", usagePackageFile)
+		szlog.Say0f("WARNING: blank usage file: '%s'\n", usagePackageFile)
 	} else {
 		oldLines = strings.Split(
 			strings.TrimLeftFunc(
@@ -111,11 +111,15 @@ func parseOldFile(usagePackageFile string) ([]string, int, int, error) {
 	packageLine, usageLine := findDelimiters(oldLines)
 
 	if usageLine == -1 {
-		szlog.Warnf("no previous usage found in: '%s'", usagePackageFile)
+		szlog.Say0f(
+			"WARNING: no previous usage found in: '%s'\n", usagePackageFile,
+		)
 	}
 
 	if packageLine == -1 {
-		szlog.Warnf("package header not found in: '%s'", usagePackageFile)
+		szlog.Say0f(
+			"WARNING: package header not found in: '%s'\n", usagePackageFile,
+		)
 	}
 
 	return oldLines, usageLine, packageLine, nil

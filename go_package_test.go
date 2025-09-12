@@ -33,7 +33,7 @@ type docInfoTest struct {
 }
 
 func Test_GoPackage_GetInfo_InvalidDirectory(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	_, err := getInfo("INVALID_DIRECTORY", "TimesTwo")
@@ -42,26 +42,26 @@ func Test_GoPackage_GetInfo_InvalidDirectory(t *testing.T) {
 		ErrInvalidPackage.Error(),
 	)
 
-	chk.Log(
-		"I:Loading Package info for: INVALID_DIRECTORY",
+	chk.Stdout(
+		"Loading Package info for: INVALID_DIRECTORY",
 	)
 }
 
 func Test_GoPackage_GetInfo_InvalidObject(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	_, err := getInfo("./example1", "DOES_NOT_EXIST")
 	chk.Err(err, ErrUnknownObject.Error()+": DOES_NOT_EXIST")
 
-	chk.Log(
-		"I:getInfo(\"DOES_NOT_EXIST\")",
+	chk.Stdout(
+		"getInfo(\"DOES_NOT_EXIST\")",
 	)
 }
 
 //nolint:funlen,lll // Ok.
 func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	docInfoTests := []docInfoTest{
@@ -197,13 +197,13 @@ func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
 		chk.Str(dInfo.oneLine(), tst.oneLine, "OneLine For action: ", tst.action)
 	}
 
-	chk.Log(
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"ConstDeclSingleCmtSingle\")",
-		"I:getInfo(\"ConstDeclMultiCmtSingle\")",
-		"I:getInfo(\"ConstDeclConstrCmtSingle\")",
-		"I:getInfo(\"ConstDeclConstrCmtMulti\")",
-		"I:getInfo(\"StructureType.GetF1\")",
+	chk.Stdout(
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"ConstDeclSingleCmtSingle\")",
+		"getInfo(\"ConstDeclMultiCmtSingle\")",
+		"getInfo(\"ConstDeclConstrCmtSingle\")",
+		"getInfo(\"ConstDeclConstrCmtMulti\")",
+		"getInfo(\"StructureType.GetF1\")",
 	)
 }

@@ -133,7 +133,7 @@ func getFilesToProcess(rawFilesToProcess []string) ([]string, error) {
 	addFileToProcess := func(newFileToProcess string) {
 		filesToProcess = append(filesToProcess, newFileToProcess)
 
-		szlog.Info("filesToProcess: ", newFileToProcess)
+		szlog.Say1("filesToProcess: ", newFileToProcess, "\n")
 	}
 
 	for i, mi := 0, len(rawFilesToProcess); i < mi && err == nil; i++ {

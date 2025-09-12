@@ -71,7 +71,7 @@ func Test_GetDoc_GetGoDcl_NoItems(t *testing.T) {
 }
 
 func Test_GetDoc_GetGoDcl_Package(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	s, err := getDocDecl(example1Path + pkgLabel)
@@ -81,27 +81,27 @@ func Test_GetDoc_GetGoDcl_Package(t *testing.T) {
 		markGoCode(pkgLabel+" "+example1+"\n"),
 	)
 
-	chk.Log(
-		"I:Loading Package info for: ./example1",
-		"I:getInfo(\"package\")",
+	chk.Stdout(
+		"Loading Package info for: ./example1",
+		"getInfo(\"package\")",
 	)
 }
 
 func Test_GetDoc_GetGoDcl_InvalidItem(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	s, err := getDocDecl(example1Path + "unknownItem")
 	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
-	chk.Log(
-		"I:getInfo(\"unknownItem\")",
+	chk.Stdout(
+		"getInfo(\"unknownItem\")",
 	)
 }
 
 func Test_GetDoc_GetGoDcl_OneItem(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	chk.AddSub(
@@ -116,13 +116,13 @@ func Test_GetDoc_GetGoDcl_OneItem(t *testing.T) {
 		markGoCode("func TimesTwo(i int) int\n"),
 	)
 
-	chk.Log(
-		"I:getInfo(\"TimesTwo\")",
+	chk.Stdout(
+		"getInfo(\"TimesTwo\")",
 	)
 }
 
 func Test_GetDoc_GetGoDcl_TwoItems(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	chk.AddSub(
@@ -137,9 +137,9 @@ func Test_GetDoc_GetGoDcl_TwoItems(t *testing.T) {
 		markGoCode("func TimesTwo(i int) int\nfunc TimesThree(i int) int\n"),
 	)
 
-	chk.Log(
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
+	chk.Stdout(
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
 	)
 }
 
@@ -153,7 +153,7 @@ func Test_GetDoc_GetGoDclSingle_NoItems(t *testing.T) {
 }
 
 func Test_GetDoc_GetGoDclSingle_PackageNoItems(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	s, err := getDocDeclSingle(example1Path + pkgLabel)
@@ -163,26 +163,26 @@ func Test_GetDoc_GetGoDclSingle_PackageNoItems(t *testing.T) {
 		markGoCode(pkgLabel+" "+example1+"\n"),
 	)
 
-	chk.Log(
-		"I:getInfo(\"package\")",
+	chk.Stdout(
+		"getInfo(\"package\")",
 	)
 }
 
 func Test_GetDoc_GetGoDclSingle_InvalidItem(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	s, err := getDocDeclSingle(example1Path + "unknownItem")
 	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
-	chk.Log(
-		"I:getInfo(\"unknownItem\")",
+	chk.Stdout(
+		"getInfo(\"unknownItem\")",
 	)
 }
 
 func Test_GetDoc_GetGoDclSingle_OneItem(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	line, err := getDocDeclSingle(example1Path + "TimesTwo")
@@ -197,13 +197,13 @@ func Test_GetDoc_GetGoDclSingle_OneItem(t *testing.T) {
 		markGoCode("func TimesTwo(i int) int\n"),
 	)
 
-	chk.Log(
-		"I:getInfo(\"TimesTwo\")",
+	chk.Stdout(
+		"getInfo(\"TimesTwo\")",
 	)
 }
 
 func Test_GetDoc_GetGoDclSingle_TwoItems(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	chk.AddSub(
@@ -218,27 +218,27 @@ func Test_GetDoc_GetGoDclSingle_TwoItems(t *testing.T) {
 		markGoCode("func TimesTwo(i int) int\nfunc TimesThree(i int) int\n"),
 	)
 
-	chk.Log(
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
+	chk.Stdout(
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
 	)
 }
 
 func Test_GetDoc_GetGoDclNatural_InvalidItem(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	s, err := getDocDeclNatural(example1Path + "unknownItem")
 	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
-	chk.Log(
-		"I:getInfo(\"unknownItem\")",
+	chk.Stdout(
+		"getInfo(\"unknownItem\")",
 	)
 }
 
 func Test_GetDoc_GetGoDclNatural_OneItem(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	line, err := getDocDeclNatural(example1Path + "TimesTwo")
@@ -256,13 +256,13 @@ func Test_GetDoc_GetGoDclNatural_OneItem(t *testing.T) {
 		),
 	)
 
-	chk.Log(
-		"I:getInfo(\"TimesTwo\")",
+	chk.Stdout(
+		"getInfo(\"TimesTwo\")",
 	)
 }
 
 func Test_GetDoc_GetGoDclNatural_TwoItems(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	line, err := getDocDeclNatural(example1Path + "TimesTwo TimesThree")
@@ -283,14 +283,14 @@ func Test_GetDoc_GetGoDclNatural_TwoItems(t *testing.T) {
 		),
 	)
 
-	chk.Log(
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
+	chk.Stdout(
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
 	)
 }
 
 func Test_GetDoc_GetDoc_TwoItems(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	chk.AddSub(
@@ -310,27 +310,27 @@ func Test_GetDoc_GetDoc_TwoItems(t *testing.T) {
 			"TimesThree returns the value times three.",
 	)
 
-	chk.Log(
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
+	chk.Stdout(
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
 	)
 }
 
 func Test_GetDoc_GetDocConstantBlock_InvalidItem(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	s, err := getDocDeclConstantBlock(example1Path + "unknownItem")
 	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
-	chk.Log(
-		"I:getInfo(\"unknownItem\")",
+	chk.Stdout(
+		"getInfo(\"unknownItem\")",
 	)
 }
 
 func Test_GetDoc_GetDocConstantBlockOne(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	chk.AddSub(
@@ -357,13 +357,13 @@ func Test_GetDoc_GetDocConstantBlockOne(t *testing.T) {
 		},
 	)
 
-	chk.Log(
-		"I:getInfo(\"ConstantGroup1\")",
+	chk.Stdout(
+		"getInfo(\"ConstantGroup1\")",
 	)
 }
 
 func Test_GetDoc_GetDocConstantBlockTwo(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	s, err := getDocDeclConstantBlock(example1Path +
@@ -398,8 +398,8 @@ func Test_GetDoc_GetDocConstantBlockTwo(t *testing.T) {
 		},
 	)
 
-	chk.Log(
-		"I:getInfo(\"ConstantGroup1\")",
-		"I:getInfo(\"ConstantGroupA\")",
+	chk.Stdout(
+		"getInfo(\"ConstantGroup1\")",
+		"getInfo(\"ConstantGroupA\")",
 	)
 }

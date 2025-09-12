@@ -47,7 +47,7 @@ func cleanMD(rPath string) error {
 	wFile = "." + strings.TrimSuffix(rFile, ".md") + ".gtm.md"
 	wPath = filepath.Join(wDir, wFile)
 
-	szlog.Infof("Cleaning %s to: %s", rPath, wPath)
+	szlog.Say1f("Cleaning %s to: %s\n", rPath, wPath)
 
 	fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
 

@@ -39,17 +39,20 @@ var (
 	defaultPerm    = defaultPermissions
 	showLicense    = false
 	showHelp       = false
-	setDefault     = false
 )
 
 //nolint:cyclop,funlen // Ok for now.
 func processArgs() ([]string, string, error) {
 	var (
-		args  *szargs.Args
-		found bool
+		args       *szargs.Args
+		found      bool
+		setDefault bool
 	)
 
-	cleanedArgs, err := szlog.AbsorbArgs(easterEgg(os.Args))
+	cleanedArgs, err := szlog.AbsorbArgs(
+		easterEgg(os.Args),
+		szlog.EnableVerbose,
+	)
 
 	args = szargs.New(
 		"Synchronize GitHub README.md files with Go source code,\n"+

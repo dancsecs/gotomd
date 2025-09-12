@@ -87,7 +87,7 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 }
 
 func Test_Markdown_Expand(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	docInfo, err := getInfo("./example1", "TimesTwo")
@@ -106,9 +106,9 @@ func Test_Markdown_Expand(t *testing.T) {
 			"<!--- gotomd::End::doc::TimesTwo -->\n",
 	)
 
-	chk.Log(
-		"I:Loading Package info for: ./example1",
-		`I:getInfo("TimesTwo")`,
+	chk.Stdout(
+		"Loading Package info for: ./example1",
+		`getInfo("TimesTwo")`,
 	)
 }
 

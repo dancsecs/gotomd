@@ -49,33 +49,14 @@ var usage = []string{
 	"codebase. This ensures your documentation is always accurate",
 	"and in sync with the source.",
 	"",
-	"    programName [-v | --verbose ...] [--quiet] " +
-		"[--log <level | (levels)>]",
-	"                [--language <lang>] [--long-labels] [-c | --clean]",
-	"                [-r | --replace] [-l | --license] [-h | --help]",
-	"                [-f | --force] [-z | --colorize] [-o | --output <dir>]",
+	"    programName [-v | --verbose ...] [-c | --clean] [-r | --replace]",
+	"                [-l | --license] [-h | --help] [-f | --force]",
+	"                [-z | --colorize] [-o | --output <dir>]",
 	"                [-u | --usage <filename>] [-p | --permission <perm>]",
 	"                [path ...]",
 	"",
 	"    [-v | --verbose ...]",
 	"        Increase the verbose level for each v provided.",
-	"",
-	"",
-	"    [--quiet]",
-	"        Sets the verbose level to -1 squashing all (non-logged) output.",
-	"",
-	"",
-	"    [--log <level | (levels)>]",
-	"        Set the level to log (or a custom combination of levels).  Valid",
-	"        levels are: None, FATAL, ERROR, WARN, INFO, DEBUG,TRACE, ALL.",
-	"",
-	"",
-	"    [--language <lang>]",
-	"        Sets the local language used for formatting.",
-	"",
-	"",
-	"    [--long-labels]",
-	"        Use long labels in log output.",
 	"",
 	"",
 	"    [-c | --clean]",
@@ -135,7 +116,7 @@ var usage = []string{
 }
 
 func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -154,9 +135,7 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv",
-		"--log",
-		"all",
+		"-v",
 		"-z",
 		dir,
 	)
@@ -172,29 +151,28 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	chk.Stdout(fmt.Sprintf(confirmMsg, tName))
-
-	chk.Log(
-		"I:filesToProcess: "+rName,
-		"I:Expanding "+rName+" to: "+tName,
-		"I:Loading Package info for: .",
-		"I:getInfo(\"package\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"InterfaceType\")",
-		"I:getInfo(\"StructureType\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"ConstantGroup1\")",
-		"I:getInfo(\"ConstantGroup1\")",
-		"I:getInfo(\"ConstantGroupA\")",
+	chk.Stdout(
+		"filesToProcess: "+rName,
+		"Expanding "+rName+" to: "+tName,
+		"Loading Package info for: .",
+		"getInfo(\"package\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"InterfaceType\")",
+		"getInfo(\"StructureType\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"ConstantGroup1\")",
+		"getInfo(\"ConstantGroup1\")",
+		"getInfo(\"ConstantGroupA\")",
+		fmt.Sprintf(confirmMsg, tName),
 	)
 }
 
@@ -228,7 +206,7 @@ func Test_Example1ReplaceNoTarget(t *testing.T) {
 }
 
 func Test_Example1ReplaceTargetCancel(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -239,9 +217,7 @@ func Test_Example1ReplaceTargetCancel(t *testing.T) {
 	fName := filepath.Join(dir, "README.md")
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv",
-		"--log",
-		"all",
+		"-v",
 		"-r",
 		fName,
 	)
@@ -252,31 +228,28 @@ func Test_Example1ReplaceTargetCancel(t *testing.T) {
 	main()
 
 	chk.Stdout(
-		fmt.Sprintf(confirmMsg, fName) +
+		"filesToProcess: "+fName,
+		"Expanding "+fName+" <inPlace> to: "+fName,
+		"Loading Package info for: .",
+		"getInfo(\"package\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"InterfaceType\")",
+		"getInfo(\"StructureType\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"ConstantGroup1\")",
+		"getInfo(\"ConstantGroup1\")",
+		"getInfo(\"ConstantGroupA\")",
+		fmt.Sprintf(confirmMsg, fName)+
 			confirmCancelled[:len(confirmCancelled)-1],
-	)
-
-	chk.Log(
-		"I:filesToProcess: "+fName,
-		"I:Expanding "+fName+" <inPlace> to: "+fName,
-		"I:Loading Package info for: .",
-		"I:getInfo(\"package\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"InterfaceType\")",
-		"I:getInfo(\"StructureType\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"ConstantGroup1\")",
-		"I:getInfo(\"ConstantGroup1\")",
-		"I:getInfo(\"ConstantGroupA\")",
 	)
 }
 
@@ -405,7 +378,7 @@ func Test_Example1ReplaceTargetOverwriteDirFromClean(t *testing.T) {
 }
 
 func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStdout(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -415,9 +388,7 @@ func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv",
-		"--log",
-		"all",
+		"-v",
 		"-r",
 		"-z",
 		dir,
@@ -436,30 +407,27 @@ func Test_Example1ReplaceTargetOverwriteDirVerbose(t *testing.T) {
 
 	pName := filepath.Join(dir, "README.md")
 	chk.Stdout(
+		"filesToProcess: "+pName,
+		"Expanding "+pName+" <inPlace> to: "+pName,
+		"Loading Package info for: .",
+		"getInfo(\"package\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"InterfaceType\")",
+		"getInfo(\"StructureType\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesTwo\")",
+		"getInfo(\"TimesThree\")",
+		"getInfo(\"ConstantGroup1\")",
+		"getInfo(\"ConstantGroup1\")",
+		"getInfo(\"ConstantGroupA\")",
 		fmt.Sprintf(confirmMsg, pName),
-	)
-
-	chk.Log(
-		"I:filesToProcess: "+pName,
-		"I:Expanding "+pName+" <inPlace> to: "+pName,
-		"I:Loading Package info for: .",
-		"I:getInfo(\"package\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"InterfaceType\")",
-		"I:getInfo(\"StructureType\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesTwo\")",
-		"I:getInfo(\"TimesThree\")",
-		"I:getInfo(\"ConstantGroup1\")",
-		"I:getInfo(\"ConstantGroup1\")",
-		"I:getInfo(\"ConstantGroupA\")",
 	)
 }
 
@@ -504,7 +472,7 @@ func getTestFiles(dir, fName string) ([]string, []string, error) {
 }
 
 func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
-	chk := sztestlog.CaptureLogAndStderrAndStdout(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -514,8 +482,7 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"--log",
-		"all",
+		"-v",
 		"-l",
 		"-h",
 		"-c",
@@ -523,25 +490,21 @@ func Test_Example1CleanNoTargetAlternateOut(t *testing.T) {
 		filepath.Join(dir, "README.md"),
 	)
 
-	// Nor Run the main function with no -f arg requiring confirmation
+	// Now Run the main function with no -f arg requiring confirmation
 	main()
 
 	got, wnt, err := getTestFiles(altDir, ".README.gtm.md")
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
-	pName := filepath.Join(dir, "README.md")
-	chk.Stdout(
-		license + strings.Join(usage, "\n"),
-	)
-
 	rFile := filepath.Join(dir, "README.md")
 	wFile := filepath.Join(altDir, ".README.gtm.md")
-	chk.Log(
-		"I:filesToProcess: "+pName,
-		"I:Cleaning "+rFile+" to: "+wFile,
+
+	chk.Stdout(
+		license+strings.Join(usage, "\n"),
+		"filesToProcess: "+rFile,
+		"Cleaning "+rFile+" to: "+wFile,
 	)
-	chk.Stderr()
 }
 
 func Test_JustHelp(t *testing.T) {
@@ -550,9 +513,7 @@ func Test_JustHelp(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv",
-		"--log",
-		"all",
+		"-v",
 		"-l",
 		"-h",
 	)
@@ -568,7 +529,7 @@ func Test_JustHelp(t *testing.T) {
 }
 
 func Test_Usage_DoesNotExist(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -579,17 +540,17 @@ func Test_Usage_DoesNotExist(t *testing.T) {
 	)
 
 	chk.Panic(
-		main,
+		func() {
+			main()
+		},
 		"could not read file: "+
 			"open /tmp/Test_Usage_DoesNotExist/DOES_NOT_EXIST.go: "+
 			"no such file or directory",
 	)
-
-	chk.Log()
 }
 
 func Test_Usage_WarningEmptyFile(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -602,9 +563,7 @@ func Test_Usage_WarningEmptyFile(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv",
-		"--log",
-		"all",
+		"-v",
 		"-u", goFile,
 	)
 
@@ -630,15 +589,15 @@ func Test_Usage_WarningEmptyFile(t *testing.T) {
 			"*/",
 		},
 	)
-	chk.Log(
-		"W:blank usage file: '"+goFile+"'",
-		"W:no previous usage found in: '"+goFile+"'",
-		"W:package header not found in: '"+goFile+"'",
+	chk.Stdout(
+		"WARNING: blank usage file: '"+goFile+"'",
+		"WARNING: no previous usage found in: '"+goFile+"'",
+		"WARNING: package header not found in: '"+goFile+"'",
 	)
 }
 
 func Test_Usage_WarningBlankFile(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -652,9 +611,7 @@ func Test_Usage_WarningBlankFile(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv",
-		"--log",
-		"all",
+		"-v",
 		"-u", goFile,
 	)
 
@@ -680,14 +637,14 @@ func Test_Usage_WarningBlankFile(t *testing.T) {
 			"*/",
 		},
 	)
-	chk.Log(
-		"W:no previous usage found in: '"+goFile+"'",
-		"W:package header not found in: '"+goFile+"'",
+	chk.Stdout(
+		"WARNING: no previous usage found in: '"+goFile+"'",
+		"WARNING: package header not found in: '"+goFile+"'",
 	)
 }
 
 func Test_Usage_WarningJustPackage(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -701,9 +658,7 @@ func Test_Usage_WarningJustPackage(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv",
-		"--log",
-		"all",
+		"-v",
 		"-u", goFile,
 	)
 
@@ -731,13 +686,13 @@ func Test_Usage_WarningJustPackage(t *testing.T) {
 		},
 	)
 
-	chk.Log(
-		"W:no previous usage found in: '" + goFile + "'",
+	chk.Stdout(
+		"WARNING: no previous usage found in: '" + goFile + "'",
 	)
 }
 
 func Test_Usage_WarningJustPackageDuplicated(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -754,7 +709,7 @@ func Test_Usage_WarningJustPackageDuplicated(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv", "--log", "all",
+		"-v",
 		"-u", goFile,
 	)
 
@@ -786,14 +741,14 @@ func Test_Usage_WarningJustPackageDuplicated(t *testing.T) {
 			"",
 		},
 	)
-	chk.Log(
-		"W:multiple package delimiters.",
-		"W:no previous usage found in: '"+goFile+"'",
+	chk.Stdout(
+		"WARNING: multiple package delimiters.",
+		"WARNING: no previous usage found in: '"+goFile+"'",
 	)
 }
 
 func Test_Usage_WarningJustUsageWithBlankPrefix(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -810,7 +765,7 @@ func Test_Usage_WarningJustUsageWithBlankPrefix(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv", "--log", "all", // Setup szlog for maximum output.
+		"-v",
 		"-u", goFile,
 	)
 
@@ -839,13 +794,13 @@ func Test_Usage_WarningJustUsageWithBlankPrefix(t *testing.T) {
 		},
 	)
 
-	chk.Log(
-		"W:package header not found in: '" + goFile + "'",
+	chk.Stdout(
+		"WARNING: package header not found in: '" + goFile + "'",
 	)
 }
 
 func Test_Usage_WarningJustUsageWithNoBlankPrefix(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -861,7 +816,7 @@ func Test_Usage_WarningJustUsageWithNoBlankPrefix(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv", "--log", "all",
+		"-v",
 		"-u", goFile,
 	)
 
@@ -890,13 +845,13 @@ func Test_Usage_WarningJustUsageWithNoBlankPrefix(t *testing.T) {
 		},
 	)
 
-	chk.Log(
-		"W:package header not found in: '" + goFile + "'",
+	chk.Stdout(
+		"WARNING: package header not found in: '" + goFile + "'",
 	)
 }
 
 func Test_Usage_WarningPreUsageWithBlankPrefix(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -914,7 +869,7 @@ func Test_Usage_WarningPreUsageWithBlankPrefix(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv", "--log", "all",
+		"-v",
 		"-u", goFile,
 	)
 
@@ -945,13 +900,13 @@ func Test_Usage_WarningPreUsageWithBlankPrefix(t *testing.T) {
 		},
 	)
 
-	chk.Log(
-		"W:package header not found in: '" + goFile + "'",
+	chk.Stdout(
+		"WARNING: package header not found in: '" + goFile + "'",
 	)
 }
 
 func Test_Usage_WarningPreUsageWithNoBlankPrefix(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -968,7 +923,7 @@ func Test_Usage_WarningPreUsageWithNoBlankPrefix(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv", "--log", "all",
+		"-v",
 		"-u", goFile,
 	)
 
@@ -998,13 +953,13 @@ func Test_Usage_WarningPreUsageWithNoBlankPrefix(t *testing.T) {
 			"*/",
 		},
 	)
-	chk.Log(
-		"W:package header not found in: '" + goFile + "'",
+	chk.Stdout(
+		"WARNING: package header not found in: '" + goFile + "'",
 	)
 }
 
 func Test_Usage_WarningMultipleSeparators(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -1024,7 +979,7 @@ func Test_Usage_WarningMultipleSeparators(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-vvvvvv", "--log", "all",
+		"-v",
 		"-u", goFile,
 	)
 
@@ -1058,14 +1013,14 @@ func Test_Usage_WarningMultipleSeparators(t *testing.T) {
 		},
 	)
 
-	chk.Log(
-		"W:multiple Usage delimiters.",
-		"W:package header not found in: '"+goFile+"'",
+	chk.Stdout(
+		"WARNING: multiple Usage delimiters.",
+		"WARNING: package header not found in: '"+goFile+"'",
 	)
 }
 
 func Test_Usage_AllGood(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
@@ -1125,5 +1080,4 @@ func Test_Usage_AllGood(t *testing.T) {
 			"",
 		},
 	)
-	chk.Log()
 }
