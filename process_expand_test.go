@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ func setupExpandGlobals(
 	chk *sztest.Chk, override expandGlobals,
 ) {
 	chk.T().Helper()
-	setupTest(chk, true, false, override.forceOverwrite, override.verboseLevel)
+	setupTest(chk, override.forceOverwrite, override.verboseLevel)
 }
 
 func setupExpandDirs(makeTarget bool) error {

@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,38 +23,6 @@ import (
 
 	"github.com/dancsecs/sztestlog"
 )
-
-func Test_Markdown_CleanMarkDownDocument(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	cleanDoc, err := cleanMarkDownDocument(
-		sztestBgnPrefix + szDocPrefix + "action1 -->\n" +
-			sztestEndPrefix + szTstPrefix + "action2 -->\n",
-	)
-
-	chk.Err(
-		err,
-		ErrTagOutOfSequence.Error()+
-			": \"<!--- gotomd::End::tst::action2 -->\"",
-	)
-	chk.Str(cleanDoc, "")
-}
-
-func Test_Markdown_CleanMarkDownDocumentMissingBlankAfterAuto(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	cleanDoc, err := cleanMarkDownDocument(
-		szAutoPrefix + " -->\nThis is not a blank line.",
-	)
-
-	chk.Err(
-		err,
-		ErrMissingHeaderLine.Error(),
-	)
-	chk.Str(cleanDoc, "")
-}
 
 func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)

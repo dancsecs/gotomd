@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,20 +31,16 @@ import (
 
 func setupTest(
 	chk *sztest.Chk,
-	tCleanOnly, tReplace, tForceOverwrite bool,
+	tForceOverwrite bool,
 	tVerbose szlog.VerboseLevel,
 ) {
 	chk.T().Helper()
 
 	origOutputDir := outputDir
 	origCWD, err := os.Getwd()
-	origCleanOnly := cleanOnly
-	origReplace := replace
 	origForceOverwrite := forceOverwrite
 	origVerboseLevel := szlog.Verbose()
 
-	cleanOnly = tCleanOnly
-	replace = tReplace
 	forceOverwrite = tForceOverwrite
 
 	szlog.SetVerbose(tVerbose)
@@ -53,8 +49,6 @@ func setupTest(
 		outputDir = chk.CreateTmpDir()
 		chk.PushPostReleaseFunc(func() error {
 			outputDir = origOutputDir
-			cleanOnly = origCleanOnly
-			replace = origReplace
 			forceOverwrite = origForceOverwrite
 
 			szlog.SetVerbose(origVerboseLevel)
@@ -63,32 +57,6 @@ func setupTest(
 		})
 	}
 }
-
-// +-------------------------------------------------------+
-// | Option possibilities for type of test.                |
-// +------------+-----------+------------------+-----------+
-// | cleanOnly  |  replace  |  forceOverwrite  |  verbose  |
-// +------------+-----------+------------------+-----------+
-// |  false     |   false   |     false        |   false   |
-// |  false     |   true    |     false        |   false   |
-// |  true      |   false   |     false        |   false   |
-// +------------+-----------+------------------+-----------+
-// |  false     |   false   |     false        |   true    |
-// |  false     |   true    |     false        |   true    |
-// |  true      |   false   |     false        |   true    |
-// +------------+-----------+------------------+-----------+
-// |  false     |   false   |     true         |   false   |
-// |  false     |   true    |     true         |   false   |
-// |  true      |   false   |     true         |   false   |
-// +------------+-----------+------------------+-----------+
-// |  false     |   false   |     true         |   true    |
-// |  false     |   true    |     true         |   true    |
-// |  true      |   false   |     true         |   true    |
-// +------------+-----------+------------------+-----------+.
-
-//  func Test_Process_Stop(t *testing.T) {
-//  	t.Fatal("STOPPING")
-//  }
 
 func Test_Process_ConfirmOverwrite(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)

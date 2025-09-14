@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -116,19 +116,14 @@ func writeFile(fPath string, data string) error {
 	return err //nolint:wrapcheck // Caller will wrap error.
 }
 
-//nolint:cyclop // Ok.
 func getFilesToProcess(rawFilesToProcess []string) ([]string, error) {
 	var (
 		err            error
 		files          []os.DirEntry
 		stat           os.FileInfo
 		filesToProcess []string
-		filter         = ".md"
+		filter         = ".gtm.md"
 	)
-
-	if !cleanOnly && !replace {
-		filter = ".gtm" + filter
-	}
 
 	addFileToProcess := func(newFileToProcess string) {
 		filesToProcess = append(filesToProcess, newFileToProcess)

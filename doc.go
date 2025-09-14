@@ -1,30 +1,22 @@
-<!--- gotomd::Auto:: See github.com/dancsecs/gotomd **DO NOT MODIFY** -->
+/*
+   Golang To Github Markdown Utility: gotomd
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
-<!---
-    Golang To Github Markdown Utility: gotomd
-    Copyright (C) 2023-2025 Leslie Dancsecs
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
--->
-
-# Package goToMd
-
-<!--- gotomd::Bgn::doc::./package -->
-```go
-package main
-```
-
+/*
 Package gotomd maintains GitHub-style README.md files by embedding Go
 documentation, source code, test output, and command output directly
 from the Go codebase. This ensures that program documentation is kept
@@ -132,12 +124,12 @@ with the provided arguments, including the output.
 
 Generated content is wrapped between markers in the target file:
 
-    const sztestBgnPrefix = sztestPrefix + "Bgn::"
-    const sztestEndPrefix = sztestPrefix + "End::"
+	const sztestBgnPrefix = sztestPrefix + "Bgn::"
+	const sztestEndPrefix = sztestPrefix + "End::"
 
 Additionally, an auto-generated section header is prefixed with:
 
-    const szAutoPrefix = sztestPrefix + "Auto::"
+	const szAutoPrefix = sztestPrefix + "Auto::"
 
 This header is followed by a blank line. If operating in template mode
 (not in-place), a DO NOT MODIFY warning is also inserted.
@@ -151,37 +143,44 @@ directives with content generated directly from your Go
 codebase. This ensures your documentation is always accurate
 and in sync with the source.
 
-    gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
-           [-f | --force] [-z | --colorize] [-o | --output <dir>]
-           [-p | --permission <perm>] [path ...]
+	gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
+	       [-f | --force] [-z | --colorize] [-o | --output <dir>]
+	       [-p | --permission <perm>] [path ...]
 
-    [-v | --verbose ...]
-        Increase the verbose level for each v provided.
+	[-v | --verbose ...]
+	    Increase the verbose level for each v provided.
 
-    [-l | --license]
-        Display license before program exits.
 
-    [-h | --help]
-        Display program usage information.
+	[-l | --license]
+	    Display license before program exits.
 
-    [-f | --force]
-        Do not confirm overwrite of destination.
 
-    [-z | --colorize]
-        Colorize go test output.
+	[-h | --help]
+	    Display program usage information.
 
-    [-o | --output <dir>]
-        Direct all output to the specified directory.
 
-    [-p | --permission <perm>]
-        Permissions to use when creating new file.
+	[-f | --force]
+	    Do not confirm overwrite of destination.
 
-        (can only set RW bits)
 
-    [path ...]
-        A specific gotomd file template with the extension '*.gtm.md' or a
-        directory which will be searched for all matching template
-        '*.gtm.md' files.  It defaults to the current directory: '.'
+	[-z | --colorize]
+	    Colorize go test output.
+
+
+	[-o | --output <dir>]
+	    Direct all output to the specified directory.
+
+
+	[-p | --permission <perm>]
+	    Permissions to use when creating new file.
+
+	    (can only set RW bits)
+
+
+	[path ...]
+	    A specific gotomd file template with the extension '*.gtm.md' or a
+	    directory which will be searched for all matching template
+	    '*.gtm.md' files.  It defaults to the current directory: '.'
 
 # Dedication
 
@@ -192,4 +191,5 @@ life.
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
-<!--- gotomd::End::doc::./package -->
+*/
+package main

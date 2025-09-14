@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,24 +69,6 @@ func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
 	chk.Panic(
 		main,
 		ErrInvalidDefPerm.Error(),
-	)
-}
-
-func Test_ArgUsage_InvalidCleanAndReplace(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	fPath := chk.CreateTmpFile(nil)
-	chk.SetArgs(
-		"programName",
-		"-r",
-		"-c",
-		fPath,
-	)
-
-	chk.Panic(
-		main,
-		ErrInvalidOptionsRC.Error(),
 	)
 }
 

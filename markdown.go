@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ const (
 	sztestBgnPrefix = sztestPrefix + "Bgn::"
 	sztestEndPrefix = sztestPrefix + "End::"
 	szDocPrefix     = "doc::"
-	szTstPrefix     = "tst::"
 )
 
 type commandAction struct {
@@ -88,52 +87,6 @@ func init() {
 	action.add("run::", getGoRun)
 	action.add("tst::", getGoTst)
 	action.sort()
-}
-
-//nolint:cyclop // Ok.
-func cleanMarkDownDocument(fData string) (string, error) {
-	var (
-		err         error
-		skipBlank   = false
-		updatedFile string
-		skipTo      string
-	)
-
-	lines := strings.Split(fData+"\n", "\n")
-	for i, mi := 0, len(lines)-1; i < mi && err == nil; i++ {
-		line := strings.TrimRight(lines[i], " ")
-
-		switch {
-		case skipBlank:
-			if line != "" {
-				err = ErrMissingHeaderLine
-			}
-
-			skipBlank = false
-		case skipTo != "":
-			switch {
-			case strings.HasPrefix(line, skipTo):
-				skipTo = ""
-			case strings.HasPrefix(line, sztestEndPrefix):
-				err = fmt.Errorf("%w: %q", ErrTagOutOfSequence, line)
-			}
-		case strings.HasPrefix(line, sztestBgnPrefix):
-			skipTo = sztestEndPrefix + line[len(sztestBgnPrefix):]
-			// Add unexpanded line.
-			updatedFile += sztestPrefix + line[len(sztestEndPrefix):] + "\n"
-		case strings.HasPrefix(line, szAutoPrefix):
-			// Do not add auto generated line or next blank line to output.
-			skipBlank = true
-		default:
-			updatedFile += line + "\n"
-		}
-	}
-
-	if err != nil {
-		return "", err
-	}
-
-	return strings.TrimRight(updatedFile, "\n"), nil
 }
 
 func expand(prefix, cmd, content string) string {
@@ -197,9 +150,7 @@ func updateMarkDownDocument(dir, fData string) (string, error) {
 	}
 
 	updatedFile := szAutoPrefix + " See github.com/dancsecs/gotomd "
-	if !replace {
-		updatedFile += "**DO NOT MODIFY** "
-	}
+	updatedFile += "**DO NOT MODIFY** "
 
 	updatedFile += "-->\n\n"
 	lines := strings.Split(fData+"\n", "\n")

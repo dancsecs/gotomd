@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,12 +30,9 @@ const defaultPermissions = 0o0644
 
 //nolint:goCheckNoGlobals // Ok.
 var (
-	cleanOnly      = false
 	forceOverwrite = false
-	replace        = false
 	szColorize     = false
 	outputDir      = "."
-	buildUsage     = ""
 	defaultPerm    = defaultPermissions
 	showLicense    = false
 	showHelp       = false
@@ -68,18 +65,6 @@ func processArgs() ([]string, string, error) {
 	szlog.ArgUsageInfo(args.RegisterUsage)
 	args.PushErr(err)
 
-	cleanOnly = args.Is(
-		"[-c | --clean]",
-		"Reverse operation and remove generated markdown\n"+
-			"(Cannot be used with the [-r | --replace] option).",
-	)
-
-	replace = args.Is(
-		"[-r | --replace]",
-		"Replace the *.MD in place\n"+
-			"(Cannot be used with the [-c | --clean] option).",
-	)
-
 	showLicense = args.Is(
 		"[-l | --license]",
 		"Display license before program exits.",
@@ -108,16 +93,6 @@ func processArgs() ([]string, string, error) {
 		outputDir = "."
 	}
 
-	buildUsage, _ = args.ValueString(
-		"[-u | --usage <filename>]",
-		"Replace the usage section in the given Go source file using "+
-			"content from standard input.  The section is identified as "+
-			"the text between the first occurrence of '^\\n/*\\n# Usage .*$' "+
-			"and the following package declaration.  This allows keeping "+
-			"command-line usage output (e.g., from --help) synchronized "+
-			"with the package documentation.",
-	)
-
 	defaultPerm, found = args.ValueInt(
 		"[-p | --permission <perm>]",
 		"Permissions to use when creating new file.\n"+
@@ -132,10 +107,6 @@ func processArgs() ([]string, string, error) {
 		args.PushErr(ErrInvalidDefPerm)
 	}
 
-	if replace && cleanOnly {
-		args.PushErr(ErrInvalidOptionsRC)
-	}
-
 	if outputDir != "." {
 		s, err := os.Stat(outputDir)
 		if err != nil || !s.IsDir() {
@@ -146,7 +117,7 @@ func processArgs() ([]string, string, error) {
 	}
 
 	if !args.HasNext() {
-		setDefault = showLicense || showHelp || buildUsage != ""
+		setDefault = showLicense || showHelp
 
 		args.PushArg(".") // Default to current directory if no args given.
 	}
