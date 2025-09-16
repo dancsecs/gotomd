@@ -21,6 +21,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/dancsecs/gotomd/internal/files"
 )
 
 const license = `
@@ -80,11 +82,11 @@ func main() {
 	}
 
 	if err == nil {
-		filesToProcess, err = getFilesToProcess(filesToProcess)
+		err = files.Expand(filesToProcess)
 	}
 
 	if err == nil {
-		err = processFiles(filesToProcess)
+		err = processFiles(files.MdFiles())
 	}
 
 	if err != nil {

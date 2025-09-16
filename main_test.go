@@ -128,7 +128,7 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	chk.StrSlice(got, wnt)
 
 	chk.Stdout(
-		"filesToProcess: "+rName,
+		"File to process: '"+rName+"'",
 		"Expanding "+rName+" to: "+tName,
 		"Loading Package info for: .",
 		"getInfo(\"package\")",

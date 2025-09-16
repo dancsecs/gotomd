@@ -39,22 +39,6 @@ func Test_ArgUsage_SampleNoArgsDefaultsToCWD(t *testing.T) {
 	main()
 }
 
-func Test_ArgUsage_SampleInvalidFile(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	fPath := chk.CreateTmpFile(nil)
-	chk.SetArgs(
-		"programName",
-		fPath,
-	)
-
-	chk.Panic(
-		main,
-		ErrUnexpectedExtension.Error()+": expected - .gtm.md",
-	)
-}
-
 func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
