@@ -20,6 +20,8 @@ package main
 
 import (
 	"strings"
+
+	"github.com/dancsecs/gotomd/internal/gopkg"
 )
 
 func markGoCode(content string) string {
@@ -32,20 +34,20 @@ func markBashCode(content string) string {
 
 func getDoc(cmd string) (string, error) {
 	var (
-		dInfo *docInfo
+		dInfo *gopkg.DocInfo
 		res   string
 	)
 
 	dir, action, err := parseCmds(cmd)
 	for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-		dInfo, err = getInfo(dir[i], action[i])
+		dInfo, err = gopkg.Info(dir[i], action[i])
 		if err == nil {
 			if res != "" {
 				res += "\n\n"
 			}
 
-			res += dInfo.declGoLang() + "\n\n" +
-				dInfo.docMarkdown()
+			res += markGoCode(dInfo.Declaration()) + "\n\n" +
+				dInfo.Comment()
 		}
 	}
 
@@ -53,25 +55,25 @@ func getDoc(cmd string) (string, error) {
 		return res, nil
 	}
 
-	return "", err
+	return "", err //nolint:wrapcheck // Ok.
 }
 
 func getDocDecl(cmd string) (string, error) {
 	var (
-		dInfo *docInfo
+		dInfo *gopkg.DocInfo
 		res   string
 	)
 
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-			dInfo, err = getInfo(dir[i], action[i])
+			dInfo, err = gopkg.Info(dir[i], action[i])
 			if err == nil {
 				if res != "" {
 					res += "\n"
 				}
 
-				res += strings.Join(dInfo.header, "\n")
+				res += strings.Join(dInfo.Header(), "\n")
 			}
 		}
 	}
@@ -80,25 +82,25 @@ func getDocDecl(cmd string) (string, error) {
 		return markGoCode(res), nil
 	}
 
-	return "", err
+	return "", err //nolint:wrapcheck // Ok.
 }
 
 func getDocDeclSingle(cmd string) (string, error) {
 	var (
-		dInfo *docInfo
+		dInfo *gopkg.DocInfo
 		res   string
 	)
 
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-			dInfo, err = getInfo(dir[i], action[i])
+			dInfo, err = gopkg.Info(dir[i], action[i])
 			if err == nil {
 				if res != "" {
 					res += "\n"
 				}
 
-				res += dInfo.oneLine()
+				res += dInfo.OneLine()
 			}
 		}
 	}
@@ -107,26 +109,26 @@ func getDocDeclSingle(cmd string) (string, error) {
 		return markGoCode(res), nil
 	}
 
-	return "", err
+	return "", err //nolint:wrapcheck // Ok.
 }
 
 func getDocDeclNatural(cmd string) (string, error) {
 	var (
-		dInfo *docInfo
+		dInfo *gopkg.DocInfo
 		res   string
 	)
 
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-			dInfo, err = getInfo(dir[i], action[i])
+			dInfo, err = gopkg.Info(dir[i], action[i])
 			if err == nil {
 				if res != "" {
 					res += "\n\n"
 				}
 
-				res += dInfo.naturalComments() + "\n"
-				res += dInfo.oneLine()
+				res += dInfo.NaturalComment() + "\n"
+				res += dInfo.OneLine()
 			}
 		}
 	}
@@ -135,25 +137,25 @@ func getDocDeclNatural(cmd string) (string, error) {
 		return markGoCode(res), nil
 	}
 
-	return "", err
+	return "", err //nolint:wrapcheck // Ok.
 }
 
 func getDocDeclConstantBlock(cmd string) (string, error) {
 	var (
-		dInfo *docInfo
+		dInfo *gopkg.DocInfo
 		res   string
 	)
 
 	dir, action, err := parseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-			dInfo, err = getInfo(dir[i], action[i])
+			dInfo, err = gopkg.Info(dir[i], action[i])
 			if err == nil {
 				if res != "" {
 					res += "\n\n"
 				}
 
-				res += dInfo.constantBlock() + "\n"
+				res += dInfo.ConstantBlock() + "\n"
 			}
 		}
 	}
@@ -162,5 +164,5 @@ func getDocDeclConstantBlock(cmd string) (string, error) {
 		return markGoCode(res), nil
 	}
 
-	return "", err
+	return "", err //nolint:wrapcheck // Ok.
 }

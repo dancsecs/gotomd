@@ -28,8 +28,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/gopkg"
 	"github.com/dancsecs/sztestlog"
 )
+
+const pkgLabel = "package"
 
 func Test_GetDoc_MarkGoCode(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
@@ -82,7 +85,7 @@ func Test_GetDoc_GetGoDcl_Package(t *testing.T) {
 	)
 
 	chk.Stdout(
-		"Loading Package info for: ./example1",
+		"Loading package info for: ./example1",
 		"getInfo(\"package\")",
 	)
 }
@@ -92,7 +95,7 @@ func Test_GetDoc_GetGoDcl_InvalidItem(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDecl(example1Path + "unknownItem")
-	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
+	chk.Err(err, gopkg.ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
 	chk.Stdout(
@@ -173,7 +176,7 @@ func Test_GetDoc_GetGoDclSingle_InvalidItem(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDeclSingle(example1Path + "unknownItem")
-	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
+	chk.Err(err, gopkg.ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
 	chk.Stdout(
@@ -229,7 +232,7 @@ func Test_GetDoc_GetGoDclNatural_InvalidItem(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDeclNatural(example1Path + "unknownItem")
-	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
+	chk.Err(err, gopkg.ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
 	chk.Stdout(
@@ -321,7 +324,7 @@ func Test_GetDoc_GetDocConstantBlock_InvalidItem(t *testing.T) {
 	defer chk.Release()
 
 	s, err := getDocDeclConstantBlock(example1Path + "unknownItem")
-	chk.Err(err, ErrUnknownObject.Error()+": unknownItem")
+	chk.Err(err, gopkg.ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
 	chk.Stdout(

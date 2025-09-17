@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,19 +16,37 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package gopkg
 
 import (
 	"strings"
 )
 
-type docInfo struct {
+// DocInfo provides functions to return formatted go documentation.
+type DocInfo struct {
 	header []string
 	body   []string
 	doc    []string
 }
 
-func (di *docInfo) oneLine() string {
+// Header returns the documentation header.
+func (di *DocInfo) Header() []string {
+	return di.header
+}
+
+// Body returns the objects body.
+func (di *DocInfo) Body() []string {
+	return di.body
+}
+
+// Doc returns the objects documentation.
+func (di *DocInfo) Doc() []string {
+	return di.doc
+}
+
+// OneLine returns a string representing the go object's declaration on a
+// single line.
+func (di *DocInfo) OneLine() string {
 	res := ""
 
 	switch len(di.header) {
@@ -58,7 +76,9 @@ func (di *docInfo) oneLine() string {
 	return res
 }
 
-func (di *docInfo) naturalComments() string {
+// NaturalComment returns a go object's comments exactly as they appear in
+// its go source file.
+func (di *DocInfo) NaturalComment() string {
 	res := ""
 	for _, l := range di.doc {
 		if res != "" {
@@ -71,15 +91,20 @@ func (di *docInfo) naturalComments() string {
 	return res
 }
 
-func (di *docInfo) declGoLang() string {
-	return markGoCode(strings.Join(di.header, "\n"))
+// Declaration returns a go object's declaration exactly as it appears in
+// its go source file.
+func (di *DocInfo) Declaration() string {
+	return strings.Join(di.header, "\n")
 }
 
-func (di *docInfo) docMarkdown() string {
+// Comment returns a clean view of the object's comments.
+func (di *DocInfo) Comment() string {
 	return strings.Join(di.doc, "\n")
 }
 
-func (di *docInfo) constantBlock() string {
-	return di.naturalComments() + "\n" +
+// ConstantBlock returns a constant block formatted as it would in a go
+// source file.
+func (di *DocInfo) ConstantBlock() string {
+	return di.NaturalComment() + "\n" +
 		strings.Join(di.body, "\n")
 }

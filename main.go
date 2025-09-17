@@ -23,6 +23,7 @@ import (
 	"os"
 
 	"github.com/dancsecs/gotomd/internal/files"
+	"github.com/dancsecs/gotomd/internal/gopkg"
 )
 
 const license = `
@@ -47,7 +48,7 @@ func processFiles(filesToProcess []string) error {
 	var err error
 
 	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
-		clearPackageCache()
+		gopkg.Reset()
 
 		err = expandMD(filesToProcess[i])
 	}

@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,11 +16,13 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package gopkg_test
 
 import (
+	"strings"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/gopkg"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -36,14 +38,14 @@ func Test_GoPackage_GetInfo_InvalidDirectory(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	_, err := getInfo("INVALID_DIRECTORY", "TimesTwo")
+	_, err := gopkg.Info("INVALID_DIRECTORY", "TimesTwo")
 	chk.Err(
 		err,
-		ErrInvalidPackage.Error(),
+		gopkg.ErrInvalidPackage.Error(),
 	)
 
 	chk.Stdout(
-		"Loading Package info for: INVALID_DIRECTORY",
+		"Loading package info for: INVALID_DIRECTORY",
 	)
 }
 
@@ -51,11 +53,134 @@ func Test_GoPackage_GetInfo_InvalidObject(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	_, err := getInfo("./example1", "DOES_NOT_EXIST")
-	chk.Err(err, ErrUnknownObject.Error()+": DOES_NOT_EXIST")
+	_, err := gopkg.Info("./sample1", "DOES_NOT_EXIST")
+	chk.Err(err, gopkg.ErrUnknownObject.Error()+": DOES_NOT_EXIST")
 
 	chk.Stdout(
+		"Loading package info for: ./sample1",
 		"getInfo(\"DOES_NOT_EXIST\")",
+	)
+}
+
+//nolint:funlen // Ok.
+func Test_GoPackage_DocInfo_PackageInfo(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	gopkg.Reset()
+
+	data, err := gopkg.Info("./sample1", "package")
+
+	chk.NoErr(err)
+
+	chk.Str(
+		data.OneLine(),
+		"package sample1",
+	)
+
+	chk.Str(
+		data.Declaration(),
+		"package sample1",
+	)
+
+	chk.StrSlice(
+		strings.Split(data.NaturalComment(), "\n"),
+		[]string{
+			"// Package sample1 exists in order to test various go to git",
+			"// markdown (gToMD) extraction utilities.  Various object " +
+				"will be defined that",
+			"// exhibit the various comment and declaration options " +
+				"permitted by gofmt.",
+			"// ",
+			"// # Heading",
+			"// ",
+			"// This paragraph will demonstrating further documentation " +
+				"under a \"markdown\"",
+			"// header.",
+			"// ",
+			"// Declarations can be single-line or multi-line blocks or " +
+				"constructions.  Each",
+			"// type will be included here for complete testing.",
+		},
+	)
+
+	chk.StrSlice(
+		strings.Split(data.Comment(), "\n"),
+		[]string{
+			"Package sample1 exists in order to test various go to git",
+			"markdown (gToMD) extraction utilities.  Various object will be " +
+				"defined that",
+			"exhibit the various comment and declaration options permitted " +
+				"by gofmt.",
+			"",
+			"# Heading",
+			"",
+			"This paragraph will demonstrating further documentation under " +
+				"a \"markdown\"",
+			"header.",
+			"",
+			"Declarations can be single-line or multi-line blocks or " +
+				"constructions.  Each",
+			"type will be included here for complete testing.",
+		},
+	)
+
+	chk.Stdout(
+		"Loading package info for: ./sample1",
+		"getInfo(\"package\")",
+	)
+}
+
+func Test_GoPackage_DocInfo_TypeInfo(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	data, err := gopkg.Info("./sample1", "ConstGroupType")
+
+	chk.NoErr(err)
+
+	chk.Str(
+		data.OneLine(),
+		"type ConstGroupType int",
+	)
+
+	chk.StrSlice(
+		data.Doc(),
+		[]string{
+			"ConstGroupType set the type of the constant.",
+		},
+	)
+
+	chk.Stdout(
+		"getInfo(\"ConstGroupType\")",
+	)
+}
+
+func Test_GoPackage_DocInfo_ConstantBlock(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	data, err := gopkg.Info("./sample1", "ConstantGroup1")
+
+	chk.NoErr(err)
+
+	chk.StrSlice(
+		strings.Split(data.ConstantBlock(), "\n"),
+		[]string{
+			"// Here is a typed constant block.  All constants are " +
+				"reported as a group.",
+			"const (",
+			"    // ConstantGroup1 is a constant defined in a group.",
+			"    ConstantGroup1 ConstGroupType = iota",
+			"",
+			"    // ConstantGroup2 is a constant defined in a group.",
+			"    ConstantGroup2",
+			")",
+		},
+	)
+
+	chk.Stdout(
+		"getInfo(\"ConstantGroup1\")",
 	)
 }
 
@@ -189,12 +314,12 @@ func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
 	}
 
 	for _, tst := range docInfoTests {
-		dInfo, err := getInfo("./example1", tst.action)
+		dInfo, err := gopkg.Info("./sample1", tst.action)
 		chk.NoErr(err)
-		chk.StrSlice(dInfo.header, tst.header, "HEADER For action: ", tst.action)
-		chk.StrSlice(dInfo.body, tst.body, "BODY For action: ", tst.action)
-		chk.StrSlice(dInfo.doc, tst.doc, "DOC For action: ", tst.action)
-		chk.Str(dInfo.oneLine(), tst.oneLine, "OneLine For action: ", tst.action)
+		chk.StrSlice(dInfo.Header(), tst.header, "HEADER For action: ", tst.action)
+		chk.StrSlice(dInfo.Body(), tst.body, "BODY For action: ", tst.action)
+		chk.StrSlice(dInfo.Doc(), tst.doc, "DOC For action: ", tst.action)
+		chk.Str(dInfo.OneLine(), tst.oneLine, "OneLine For action: ", tst.action)
 	}
 
 	chk.Stdout(

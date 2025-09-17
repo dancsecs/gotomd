@@ -10,6 +10,7 @@
         "dcln",
         "dcls",
         "goerr",
+        "gopkg",
         "gostd",
         "gotextdiff",
         "gotomd",

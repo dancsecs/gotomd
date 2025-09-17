@@ -21,6 +21,7 @@ package main
 import (
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/gopkg"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -58,14 +59,14 @@ func Test_Markdown_Expand(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	docInfo, err := getInfo("./example1", "TimesTwo")
+	docInfo, err := gopkg.Info("./example1", "TimesTwo")
 	chk.NoErr(err)
 
 	chk.Str(
 		expand(szDocPrefix,
 			"TimesTwo",
-			docInfo.declGoLang()+"\n\n"+
-				docInfo.docMarkdown(),
+			markGoCode(docInfo.Declaration())+"\n\n"+
+				docInfo.Comment(),
 		),
 		"<!--- gotomd::Bgn::doc::TimesTwo -->\n"+
 			"```go\nfunc TimesTwo(i int) int\n```\n"+
@@ -75,7 +76,7 @@ func Test_Markdown_Expand(t *testing.T) {
 	)
 
 	chk.Stdout(
-		"Loading Package info for: ./example1",
+		"Loading package info for: ./example1",
 		`getInfo("TimesTwo")`,
 	)
 }

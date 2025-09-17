@@ -93,7 +93,7 @@ func runTest(dir, tests string) (string, string, error) {
 	if err == nil {
 		args = []string{"test", "-v", "-cover"}
 
-		if tests != pkgLabel {
+		if tests != "package" {
 			args = append(args, "-run", tests)
 		}
 

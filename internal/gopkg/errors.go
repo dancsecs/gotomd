@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,32 +16,12 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package gopkg
 
-import (
-	"testing"
+import "errors"
 
-	"github.com/dancsecs/sztestlog"
+// Exported Errors.
+var (
+	ErrUnknownObject  = errors.New("unknown package object")
+	ErrInvalidPackage = errors.New("invalid package")
 )
-
-func Test_DocInfo_OneLine(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	dInfo := new(docInfo)
-
-	chk.Str(dInfo.oneLine(), "UNKNOWN DECLARATION")
-}
-
-func Test_DocInfo_NaturalComments(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	dInfo := new(docInfo)
-	dInfo.doc = append(dInfo.doc, "a", "b")
-
-	chk.Str(
-		dInfo.naturalComments(),
-		"// a\n// b",
-	)
-}

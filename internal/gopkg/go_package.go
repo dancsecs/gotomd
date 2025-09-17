@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package gopkg
 
 import (
 	"fmt"
@@ -43,14 +43,9 @@ type packageInfo struct {
 //nolint:goCheckNoGlobals // Ok.
 var packageCache = make(map[string]*packageInfo)
 
-func clearPackageCache() {
-	keys := make([]string, 0, len(packageCache))
-
+// Reset clears all cached packages.
+func Reset() {
 	for k := range packageCache {
-		keys = append(keys, k)
-	}
-
-	for _, k := range keys {
 		delete(packageCache, k)
 	}
 }
@@ -119,9 +114,9 @@ func (pi *packageInfo) findType(name string) *doc.Type {
 	return pi.types[name]
 }
 
-// getInfoFunc looks up the documentation for a function.
-func (pi *packageInfo) getInfoFunc(docFunc *doc.Func) (*docInfo, error) {
-	var dInfo *docInfo
+// funcInfo looks up the documentation for a function.
+func (pi *packageInfo) funcInfo(docFunc *doc.Func) (*DocInfo, error) {
+	var dInfo *DocInfo
 
 	dStart := pi.fSet.PositionFor(docFunc.Decl.Pos(), true)
 	dEnd := pi.fSet.PositionFor(docFunc.Decl.Body.Lbrace, true)
@@ -131,7 +126,7 @@ func (pi *packageInfo) getInfoFunc(docFunc *doc.Func) (*docInfo, error) {
 	)
 
 	if err == nil {
-		dInfo = &docInfo{
+		dInfo = &DocInfo{
 			header: decl,
 			body:   body,
 			doc:    strings.Split(strings.TrimSpace(docFunc.Doc), "\n"),
@@ -141,9 +136,9 @@ func (pi *packageInfo) getInfoFunc(docFunc *doc.Func) (*docInfo, error) {
 	return dInfo, err
 }
 
-// getInfoConst looks up the documentation for a function.
-func (pi *packageInfo) getInfoConst(docConst *doc.Value) (*docInfo, error) {
-	var dInfo *docInfo
+// constInfo looks up the documentation for a function.
+func (pi *packageInfo) constInfo(docConst *doc.Value) (*DocInfo, error) {
+	var dInfo *DocInfo
 
 	dStart := pi.fSet.PositionFor(docConst.Decl.Pos(), true)
 	fEnd := pi.fSet.PositionFor(docConst.Decl.End(), true)
@@ -152,7 +147,7 @@ func (pi *packageInfo) getInfoConst(docConst *doc.Value) (*docInfo, error) {
 	)
 
 	if err == nil {
-		dInfo = &docInfo{
+		dInfo = &DocInfo{
 			header: decl,
 			body:   body,
 			doc:    strings.Split(strings.TrimSpace(docConst.Doc), "\n"),
@@ -162,9 +157,9 @@ func (pi *packageInfo) getInfoConst(docConst *doc.Value) (*docInfo, error) {
 	return dInfo, err
 }
 
-// getInfoType looks up the documentation for a function.
-func (pi *packageInfo) getInfoType(docType *doc.Type) (*docInfo, error) {
-	var dInfo *docInfo
+// typeInfo looks up the documentation for a function.
+func (pi *packageInfo) typeInfo(docType *doc.Type) (*DocInfo, error) {
+	var dInfo *DocInfo
 
 	dStart := pi.fSet.PositionFor(docType.Decl.Pos(), true)
 	dEnd := pi.fSet.PositionFor(docType.Decl.Lparen, true)
@@ -174,7 +169,7 @@ func (pi *packageInfo) getInfoType(docType *doc.Type) (*docInfo, error) {
 	)
 
 	if err == nil {
-		dInfo = &docInfo{
+		dInfo = &DocInfo{
 			header: decl,
 			body:   body,
 			doc:    strings.Split(strings.TrimSpace(docType.Doc), "\n"),
@@ -184,13 +179,13 @@ func (pi *packageInfo) getInfoType(docType *doc.Type) (*docInfo, error) {
 	return dInfo, err
 }
 
-// GetInfo looks up the documentation information for a declaration.
-func (pi *packageInfo) getInfo(name string) (*docInfo, error) {
+// getInfo looks up the documentation information for a declaration.
+func (pi *packageInfo) getInfo(name string) (*DocInfo, error) {
 	szlog.Say1f("getInfo(%q)\n", name)
 
 	if name == pkgLabel {
 		// Return Package information.
-		return &docInfo{
+		return &DocInfo{
 			header: []string{pkgLabel + " " + pi.docPkg.Name},
 			body:   []string{pkgLabel + " " + pi.docPkg.Name},
 			doc: strings.Split(
@@ -202,17 +197,17 @@ func (pi *packageInfo) getInfo(name string) (*docInfo, error) {
 
 	if f := pi.findFunc(name); f != nil {
 		// Process function
-		return pi.getInfoFunc(f)
+		return pi.funcInfo(f)
 	}
 
 	if c := pi.findConst(name); c != nil {
 		// Process Constant
-		return pi.getInfoConst(c)
+		return pi.constInfo(c)
 	}
 
 	if t := pi.findType(name); t != nil {
 		// Process Type
-		return pi.getInfoType(t)
+		return pi.typeInfo(t)
 	}
 
 	return nil, fmt.Errorf("%w: %s", ErrUnknownObject, name)
@@ -277,7 +272,7 @@ func createPackageInfo(dir string) (*packageInfo, error) {
 		err           error
 	)
 
-	szlog.Say1("Loading Package info for: ", dir, "\n")
+	szlog.Say1("Loading package info for: ", dir, "\n")
 
 	cfg := new(packages.Config)
 	cfg.Mode = packages.NeedName |
@@ -318,10 +313,11 @@ func createPackageInfo(dir string) (*packageInfo, error) {
 	return nil, err //nolint:wrapcheck // Caller will wrap error.
 }
 
-func getInfo(dir, name string) (*docInfo, error) {
+// Info returns documentation information for the named object.
+func Info(dir, name string) (*DocInfo, error) {
 	var (
 		pkgInfo *packageInfo
-		dInfo   *docInfo
+		dInfo   *DocInfo
 		ok      bool
 		err     error
 	)
