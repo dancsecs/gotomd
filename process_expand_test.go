@@ -35,6 +35,35 @@ type expandGlobals struct {
 	verboseLevel   szlog.VerboseLevel
 }
 
+func setupTest(
+	chk *sztest.Chk,
+	tForceOverwrite bool,
+	tVerbose szlog.VerboseLevel,
+) {
+	chk.T().Helper()
+
+	origOutputDir := outputDir
+	origCWD, err := os.Getwd()
+	origForceOverwrite := forceOverwrite
+	origVerboseLevel := szlog.Verbose()
+
+	forceOverwrite = tForceOverwrite
+
+	szlog.SetVerbose(tVerbose)
+
+	if chk.NoErr(err) {
+		outputDir = chk.CreateTmpDir()
+		chk.PushPostReleaseFunc(func() error {
+			outputDir = origOutputDir
+			forceOverwrite = origForceOverwrite
+
+			szlog.SetVerbose(origVerboseLevel)
+
+			return os.Chdir(origCWD)
+		})
+	}
+}
+
 func setupExpandGlobals(
 	chk *sztest.Chk, override expandGlobals,
 ) {

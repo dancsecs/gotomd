@@ -25,6 +25,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -120,7 +121,7 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 
 	chk.NoErr(os.Truncate(tName, 2))
 
-	// Run command expecting the overwrite to be cancelled.
+	// Run command expecting the overwrite to succeed.
 	main()
 
 	got, wnt, err := getTestFiles(dir, "README.md")
@@ -148,7 +149,7 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 		"getInfo(\"ConstantGroup1\")",
 		"getInfo(\"ConstantGroup1\")",
 		"getInfo(\"ConstantGroupA\")",
-		fmt.Sprintf(confirmMsg, tName),
+		fmt.Sprintf(update.ConfirmMsg, tName),
 	)
 }
 

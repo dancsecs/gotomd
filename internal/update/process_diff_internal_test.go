@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,45 +16,50 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package update
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/dancsecs/sztestlog"
 )
 
 func TestDiff_Same(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	diffFile(
-		"diff",
-		"abc\n",
-		"abc\n",
+	chk.Str(
+		diffFile(
+			"diff",
+			"abc",
+			"abc\n",
+		),
+		"",
 	)
-
-	chk.Stdout("")
 }
 
 func TestDiff_Diff(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
+	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	diffFile(
+	diff := diffFile(
 		"diff",
-		"abc\na1c\ndef\n",
-		"abc\na2c\ndef\n",
+		"abc\na1c\ndef",
+		"abc\na2c\ndef",
 	)
 
-	chk.Stdout(
-		"--- Old_diff",
-		"+++ New_diff",
-		"@@ -1,3 +1,3 @@",
-		" abc",
-		"-a1c",
-		"+a2c",
-		" def",
-		"",
+	chk.StrSlice(
+		strings.Split(diff, "\n"),
+		[]string{
+			"--- Old_diff",
+			"+++ New_diff",
+			"@@ -1,3 +1,3 @@",
+			" abc",
+			"-a1c",
+			"+a2c",
+			" def",
+			"",
+		},
 	)
 }

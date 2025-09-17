@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,16 +16,26 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package update
 
 import (
-	"github.com/dancsecs/szlog"
+	"fmt"
+	"strings"
+
 	"github.com/hexops/gotextdiff"
 	"github.com/hexops/gotextdiff/myers"
 	"github.com/hexops/gotextdiff/span"
 )
 
-func diffFile(fileName string, oldData, newData string) {
+func diffFile(fileName string, oldData, newData string) string {
+	if !strings.HasSuffix(oldData, "\n") {
+		oldData += "\n"
+	}
+
+	if !strings.HasSuffix(newData, "\n") {
+		newData += "\n"
+	}
+
 	// Create an edit script using the Myers diff algorithm
 	edits := myers.ComputeEdits(span.URI(fileName), oldData, newData)
 
@@ -36,5 +46,5 @@ func diffFile(fileName string, oldData, newData string) {
 		edits,
 	)
 
-	szlog.Say0(unifiedDiff, "\n")
+	return fmt.Sprint(unifiedDiff)
 }

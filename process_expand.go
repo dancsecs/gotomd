@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/szlog"
 )
 
@@ -60,8 +61,15 @@ func expandMD(rPath string) error {
 	}
 
 	if err == nil {
-		err = writeFile(wPath, res)
+		//nolint:gosec // Permission override ok.
+		perm := os.FileMode(uint32(defaultPerm))
+
+		res = strings.ReplaceAll(res, "\t", "    ")
+
+		_, err = update.File(
+			wPath, forceOverwrite, res, perm,
+		)
 	}
 
-	return err
+	return err //nolint:wrapcheck // Ok update returns clean errors.
 }
