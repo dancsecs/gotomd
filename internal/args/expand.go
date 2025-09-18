@@ -16,13 +16,37 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package files
+package args
 
-import "errors"
-
-// Exported Errors.
-var (
-	ErrInvalidTemplate = errors.New("invalid template")
-	ErrInvalidArgument = errors.New("invalid argument")
-	ErrUnknownObject   = errors.New("unknown object")
+import (
+	"fmt"
+	"strings"
 )
+
+// Expand scans the list replacing entries like "{dir}/..." with a
+// recursive list of {dir} and all of its subdirectories.
+func expand(list []string) error {
+	const recursiveSuffix = "/..."
+
+	var err error
+
+	for i, mi := 0, len(list); i < mi && err == nil; i++ {
+		entry := list[i]
+		if entry == "" {
+			entry = "."
+		}
+
+		recursive := strings.HasSuffix(entry, recursiveSuffix)
+		if recursive {
+			entry = entry[:len(entry)-len(recursiveSuffix)]
+		}
+
+		err = add(entry, recursive)
+	}
+
+	if err == nil {
+		return nil
+	}
+
+	return fmt.Errorf("%w: %w", ErrInvalidTemplate, err)
+}

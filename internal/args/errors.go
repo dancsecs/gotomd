@@ -16,8 +16,15 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-/*
-Package files processes directory hierarchies identifying all gotomd template
-files.
-*/
-package files
+package args
+
+import "errors"
+
+// Exported Errors.
+var (
+	ErrInvalidDefPerm   = errors.New("invalid default perm")
+	ErrInvalidOutputDir = errors.New("invalid output directory")
+	ErrInvalidTemplate  = errors.New("invalid template")
+	ErrInvalidArgument  = errors.New("invalid argument")
+	ErrUnknownObject    = errors.New("unknown object")
+)

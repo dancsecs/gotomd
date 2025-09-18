@@ -16,39 +16,8 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package files
-
-import (
-	"fmt"
-	"strings"
-)
-
-// Expand scans the list replacing entries like "{dir}/..." with a
-// recursive list of {dir} and all of its subdirectories.
-func Expand(list []string) error {
-	const recursiveSuffix = "/..."
-
-	var err error
-
-	Reset()
-
-	for i, mi := 0, len(list); i < mi && err == nil; i++ {
-		entry := list[i]
-		if entry == "" {
-			entry = "."
-		}
-
-		recursive := strings.HasSuffix(entry, recursiveSuffix)
-		if recursive {
-			entry = entry[:len(entry)-len(recursiveSuffix)]
-		}
-
-		err = add(entry, recursive)
-	}
-
-	if err == nil {
-		return nil
-	}
-
-	return fmt.Errorf("%w: %w", ErrInvalidTemplate, err)
-}
+/*
+Package args processes directory hierarchies identifying all gotomd template
+files.
+*/
+package args

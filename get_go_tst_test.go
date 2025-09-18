@@ -23,6 +23,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -59,10 +60,12 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	szColorize = true
-	defer func() {
-		szColorize = false
-	}()
+	chk.SetArgs(
+		"noProgName",
+		"-z",
+	)
+
+	chk.NoErr(args.Process())
 
 	file1 := example1Path + pkgLabel
 	file2 := example2Path + pkgLabel
@@ -194,6 +197,8 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 func Test_GetTest_RunTestNoColor(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
+
+	args.Reset()
 
 	file1 := example1Path + pkgLabel
 	file2 := example2Path + pkgLabel

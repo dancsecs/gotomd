@@ -16,12 +16,24 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package files
+package args
+
+import "os"
+
+const defaultPerm = os.FileMode(0o0644)
 
 //nolint:goCheckNoGlobals // Ok.
 var (
-	goFiles         []string
-	mdFiles         []string
+	goFiles        []string
+	mdFiles        []string
+	usage          string
+	forceOverwrite bool
+	szColorize     bool
+	outputDir      = "."
+	perm           = defaultPerm
+	showLicense    bool
+	showHelp       bool
+
 	alreadyIncluded = make(map[string]bool)
 )
 
@@ -29,6 +41,13 @@ var (
 func Reset() {
 	goFiles = nil
 	mdFiles = nil
+	usage = ""
+	forceOverwrite = false
+	szColorize = false
+	outputDir = "."
+	perm = defaultPerm
+	showLicense = false
+	showHelp = false
 
 	for k := range alreadyIncluded {
 		delete(alreadyIncluded, k)
@@ -43,4 +62,39 @@ func GoFiles() []string {
 // MdFiles returns the found markdown file templates.
 func MdFiles() []string {
 	return mdFiles
+}
+
+// Usage returns the usage string.
+func Usage() string {
+	return usage
+}
+
+// Force returns the force setting.
+func Force() bool {
+	return forceOverwrite
+}
+
+// Colorize returns the colorize setting.
+func Colorize() bool {
+	return szColorize
+}
+
+// OutputDir returns the overridden output directory.
+func OutputDir() string {
+	return outputDir
+}
+
+// Perm return the default permission.
+func Perm() os.FileMode {
+	return perm
+}
+
+// ShowLicense returns the show license setting.
+func ShowLicense() bool {
+	return showLicense
+}
+
+// ShowHelp returns the show help setting.
+func ShowHelp() bool {
+	return showHelp
 }

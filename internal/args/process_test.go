@@ -16,11 +16,12 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package args_test
 
 import (
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -32,11 +33,30 @@ func Test_ArgUsage_SampleNoArgsDefaultsToCWD(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-o",
-		dir,
+		"-z",
+		"-f",
+		"-l",
+		"-h",
+		"-p", "0600",
+		"-o", dir,
 	)
 
-	main()
+	chk.Str(args.Usage(), "")
+	chk.Str(args.OutputDir(), ".")
+	chk.False(args.Colorize())
+	chk.False(args.Force())
+	chk.Uint32(uint32(args.Perm()), 0o0644)
+	chk.False(args.ShowLicense())
+	chk.False(args.ShowHelp())
+
+	chk.NoErr(args.Process())
+
+	chk.Str(args.OutputDir(), dir)
+	chk.True(args.Colorize())
+	chk.True(args.Force())
+	chk.Uint32(uint32(args.Perm()), 0o0600)
+	chk.True(args.ShowLicense())
+	chk.True(args.ShowHelp())
 }
 
 func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
@@ -50,9 +70,12 @@ func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
 		fPath,
 	)
 
-	chk.Panic(
-		main,
-		ErrInvalidDefPerm.Error(),
+	chk.Err(
+		args.Process(),
+		chk.ErrChain(
+			args.ErrInvalidDefPerm,
+			"'0o0744'",
+		),
 	)
 }
 
@@ -60,17 +83,17 @@ func Test_ArgUsage_InvalidOutDirectory(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	fPath := chk.CreateTmpFile(nil)
 	chk.SetArgs(
 		"programName",
 		"-o", "DIRECTORY_DOES_NOT_EXIST",
-		fPath,
 	)
 
-	chk.Panic(
-		main,
-		ErrInvalidOutputDir.Error()+": "+
+	chk.Err(
+		args.Process(),
+		chk.ErrChain(
+			args.ErrInvalidOutputDir,
 			"'DIRECTORY_DOES_NOT_EXIST'",
+		),
 	)
 }
 
@@ -84,10 +107,12 @@ func TestArgUsage_Dedication(t *testing.T) {
 		"--Reem",
 	)
 
-	chk.Panic(
-		main,
-		ErrInvalidOutputDir.Error()+": "+
+	chk.Err(
+		args.Process(),
+		chk.ErrChain(
+			args.ErrInvalidOutputDir,
 			"'DIRECTORY_DOES_NOT_EXIST'",
+		),
 	)
 
 	chk.Stdout(`

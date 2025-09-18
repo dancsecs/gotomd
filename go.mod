@@ -4,7 +4,7 @@ go 1.25
 
 require github.com/dancsecs/sztest v0.1.7
 
-require github.com/dancsecs/szargs v0.1.13
+require github.com/dancsecs/szargs v0.1.14
 
 require (
 	github.com/dancsecs/szlog v0.0.15

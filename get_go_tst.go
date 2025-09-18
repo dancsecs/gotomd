@@ -25,6 +25,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/sztest"
 )
 
@@ -80,9 +81,9 @@ func setupEnv(env []string) []string {
 //nolint:funlen // Ok.
 func runTest(dir, tests string) (string, string, error) {
 	var (
-		rawRes []byte
-		args   []string
-		res    string
+		rawRes  []byte
+		tstArgs []string
+		res     string
 	)
 
 	stat, err := os.Stat(dir)
@@ -91,14 +92,14 @@ func runTest(dir, tests string) (string, string, error) {
 	}
 
 	if err == nil {
-		args = []string{"test", "-v", "-cover"}
+		tstArgs = []string{"test", "-v", "-cover"}
 
 		if tests != "package" {
-			args = append(args, "-run", tests)
+			tstArgs = append(tstArgs, "-run", tests)
 		}
 
-		args = append(args, dir)
-		c := exec.Command("go", args...) //nolint:gosec // Ok.
+		tstArgs = append(tstArgs, dir)
+		c := exec.Command("go", tstArgs...) //nolint:gosec // Ok.
 		//	c.Dir = dir
 		c.Env = setupEnv(os.Environ())
 		rawRes, _ = c.CombinedOutput() // We expect a general task error.
@@ -112,7 +113,7 @@ func runTest(dir, tests string) (string, string, error) {
 	}
 
 	if err == nil {
-		if szColorize {
+		if args.Colorize() {
 			res = translateToTestSymbols(string(rawRes))
 			res = squashTestTime.ReplaceAllString(res, `${1} (0.0s)`)
 			res = squashAllTestTime.ReplaceAllString(res, `FAIL ${1} 0.0s`)
@@ -152,7 +153,7 @@ func runTest(dir, tests string) (string, string, error) {
 			res = strings.ReplaceAll(res, "%", hardPercent)
 		}
 
-		return "go " + strings.Join(args, " "),
+		return "go " + strings.Join(tstArgs, " "),
 			strings.TrimRight(res, "\n"),
 			nil
 	}

@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package args
 
 import (
 	"fmt"
@@ -26,28 +26,25 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
-const defaultPermissions = 0o0644
-
-//nolint:goCheckNoGlobals // Ok.
-var (
-	forceOverwrite = false
-	szColorize     = false
-	outputDir      = "."
-	defaultPerm    = defaultPermissions
-	showLicense    = false
-	showHelp       = false
-)
-
+// Process parses the command line arguments
+//
 //nolint:cyclop,funlen // Ok for now.
-func processArgs() ([]string, string, error) {
+func Process() error {
 	var (
-		args       *szargs.Args
-		found      bool
-		setDefault bool
+		args        *szargs.Args
+		cleanedArgs []string
+		found       bool
+		permInt     uint32
+		stat        os.FileInfo
+		foundEgg    bool
+		err         error
 	)
 
-	cleanedArgs, err := szlog.AbsorbArgs(
-		easterEgg(os.Args),
+	Reset()
+
+	cleanedArgs, foundEgg = easterEgg(os.Args)
+	cleanedArgs, err = szlog.AbsorbArgs(
+		cleanedArgs,
 		szlog.EnableVerbose,
 	)
 
@@ -93,37 +90,37 @@ func processArgs() ([]string, string, error) {
 		outputDir = "."
 	}
 
-	defaultPerm, found = args.ValueInt(
+	permInt, found = args.ValueUint32(
 		"[-p | --permission <perm>]",
 		"Permissions to use when creating new file.\n"+
 			"(can only set RW bits)",
 	)
 
 	if !found {
-		defaultPerm = defaultPermissions
+		perm = defaultPerm
+	} else {
+		perm = os.FileMode(permInt)
 	}
 
-	if defaultPerm&(^0o0666) != 0 {
-		args.PushErr(ErrInvalidDefPerm)
+	if int(permInt)&(^0o0666) != 0 {
+		args.PushErr(fmt.Errorf("%w: '0o%#o'", ErrInvalidDefPerm, permInt))
 	}
 
 	if outputDir != "." {
-		s, err := os.Stat(outputDir)
-		if err != nil || !s.IsDir() {
+		stat, err = os.Stat(outputDir)
+		if err != nil || !stat.IsDir() {
 			args.PushErr(
 				fmt.Errorf("%w: '%s'", ErrInvalidOutputDir, outputDir),
 			)
 		}
 	}
 
-	if !args.HasNext() {
-		setDefault = showLicense || showHelp
-
+	if !args.HasNext() && !(showLicense || showHelp || foundEgg) {
 		args.PushArg(".") // Default to current directory if no args given.
 	}
 
 	var filesToProcess []string
-	for args.HasNext() && !args.HasErr() {
+	for args.HasNext() {
 		filesToProcess = append(filesToProcess, args.NextString(
 			"[path ...]",
 			"A specific gotomd file template with the extension '*.gtm.md' "+
@@ -133,26 +130,31 @@ func processArgs() ([]string, string, error) {
 		))
 	}
 
-	if setDefault {
-		filesToProcess = nil
+	args.Done()
+
+	usage = args.Usage()
+
+	err = args.Err()
+
+	if err == nil {
+		err = expand(filesToProcess)
 	}
 
-	if !args.HasErr() {
-		args.Done()
+	if err == nil {
+		return nil
 	}
 
-	if args.HasErr() {
-		return nil, args.Usage(), args.Err()
-	}
-
-	return filesToProcess, args.Usage(), nil
+	return err
 }
 
-func easterEgg(args []string) []string {
+func easterEgg(args []string) ([]string, bool) {
+	found := false
 	cleanedArgs := make([]string, 0, len(args))
 
 	for _, arg := range args {
 		if arg == "--Reem" {
+			found = true
+
 			fmt.Print(dedication) //nolint:forbidigo // Ok.
 
 			continue
@@ -161,5 +163,5 @@ func easterEgg(args []string) []string {
 		cleanedArgs = append(cleanedArgs, arg)
 	}
 
-	return cleanedArgs
+	return cleanedArgs, found
 }

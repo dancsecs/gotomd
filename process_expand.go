@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/szlog"
 )
@@ -41,8 +42,8 @@ func expandMD(rPath string) error {
 	rDir, rFile = filepath.Split(rPath)
 	wDir = rDir
 
-	if outputDir != "." {
-		wDir = outputDir
+	if args.OutputDir() != "." {
+		wDir = args.OutputDir()
 	}
 
 	wFile = strings.TrimSuffix(
@@ -61,13 +62,10 @@ func expandMD(rPath string) error {
 	}
 
 	if err == nil {
-		//nolint:gosec // Permission override ok.
-		perm := os.FileMode(uint32(defaultPerm))
-
 		res = strings.ReplaceAll(res, "\t", "    ")
 
 		_, err = update.File(
-			wPath, forceOverwrite, res, perm,
+			wPath, args.Force(), res, args.Perm(),
 		)
 	}
 

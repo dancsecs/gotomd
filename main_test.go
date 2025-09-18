@@ -25,6 +25,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/sztestlog"
 )
@@ -170,7 +171,7 @@ func setup(dir string, files ...string) error {
 			err = os.WriteFile(
 				filepath.Join(dir, strings.TrimSuffix(files[i], ext)),
 				fileBytes,
-				os.FileMode(defaultPerm), //nolint:gosec // Ok.
+				os.FileMode(0o0600),
 			)
 		}
 	}
@@ -204,10 +205,19 @@ func Test_JustHelp(t *testing.T) {
 		"-v",
 		"-l",
 		"-h",
+		"DOES_NOT_EXIST",
 	)
 
-	// Nor Run the main function with no -f arg requiring confirmation
-	main()
+	// Now Run the main function with no -f arg requiring confirmation
+	chk.Panic(
+		main,
+		chk.ErrChain(
+			args.ErrInvalidTemplate,
+			args.ErrUnknownObject,
+			"stat DOES_NOT_EXIST",
+			"no such file or directory",
+		),
+	)
 
 	chk.Stdout(
 		license + strings.Join(usage, "\n"),

@@ -19,12 +19,12 @@
 package main
 
 import (
-	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/szlog"
 	"github.com/dancsecs/sztest"
 	"github.com/dancsecs/sztestlog"
@@ -42,21 +42,33 @@ func setupTest(
 ) {
 	chk.T().Helper()
 
-	origOutputDir := outputDir
 	origCWD, err := os.Getwd()
-	origForceOverwrite := forceOverwrite
+	chk.NoErr(err)
+
 	origVerboseLevel := szlog.Verbose()
 
-	forceOverwrite = tForceOverwrite
+	outputDir := chk.CreateTmpDir()
+
+	if tForceOverwrite {
+		chk.SetArgs(
+			"noProgName",
+			"-f",
+			"-o", outputDir,
+		)
+	} else {
+		chk.SetArgs(
+			"noProgName",
+			"-o", outputDir,
+		)
+	}
+
+	chk.NoErr(args.Process())
 
 	szlog.SetVerbose(tVerbose)
 
 	if chk.NoErr(err) {
-		outputDir = chk.CreateTmpDir()
 		chk.PushPostReleaseFunc(func() error {
-			outputDir = origOutputDir
-			forceOverwrite = origForceOverwrite
-
+			args.Reset()
 			szlog.SetVerbose(origVerboseLevel)
 
 			return os.Chdir(origCWD)
@@ -83,9 +95,8 @@ func setupExpandDirs(makeTarget bool) error {
 	if makeTarget {
 		fData, err = os.ReadFile(filepath.Join(example1Path, fName))
 		if err == nil {
-			tFile = filepath.Join(outputDir, fName)
-			//nolint:gosec // Ok.
-			err = os.WriteFile(tFile, fData, fs.FileMode(defaultPerm))
+			tFile = filepath.Join(args.OutputDir(), fName)
+			err = os.WriteFile(tFile, fData, args.Perm())
 		}
 	}
 
@@ -102,7 +113,7 @@ func getExpandFiles() (string, []string, []string, error) {
 		wntBytes   []byte
 	)
 
-	targetPath = filepath.Join(outputDir, fName)
+	targetPath = filepath.Join(args.OutputDir(), fName)
 	gotBytes, err = os.ReadFile(targetPath) //nolint:gosec // Ok.
 
 	if err == nil {

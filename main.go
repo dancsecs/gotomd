@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/dancsecs/gotomd/internal/files"
+	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/gopkg"
 )
 
@@ -58,10 +58,8 @@ func processFiles(filesToProcess []string) error {
 
 func main() {
 	var (
-		err            error
-		origWd         string
-		filesToProcess []string
-		usage          string
+		origWd string
+		err    error
 	)
 
 	// Restore original working directory on exit.
@@ -72,22 +70,18 @@ func main() {
 		}()
 	}
 
-	filesToProcess, usage, err = processArgs()
+	err = args.Process()
 
-	if showLicense {
+	if args.ShowLicense() {
 		fmt.Print(license) //nolint:forbidigo  // Ok.
 	}
 
-	if showHelp {
-		fmt.Println(usage) //nolint:forbidigo  // Ok.
+	if args.ShowHelp() {
+		fmt.Println(args.Usage()) //nolint:forbidigo  // Ok.
 	}
 
 	if err == nil {
-		err = files.Expand(filesToProcess)
-	}
-
-	if err == nil {
-		err = processFiles(files.MdFiles())
+		err = processFiles(args.MdFiles())
 	}
 
 	if err != nil {
