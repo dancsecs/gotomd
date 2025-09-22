@@ -23,6 +23,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/ansi"
 	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/sztestlog"
 )
@@ -76,25 +77,25 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 
 	chk.AddSub("{{file1}}", file1)
 	chk.AddSub("{{file2}}", file2)
-	chk.AddSub("{{insOn}}", internalTestMarkInsOn)
-	chk.AddSub("{{insOff}}", internalTestMarkInsOff)
-	chk.AddSub("{{delOn}}", internalTestMarkDelOn)
-	chk.AddSub("{{delOff}}", internalTestMarkDelOff)
-	chk.AddSub("{{chgOn}}", internalTestMarkChgOn)
-	chk.AddSub("{{chgOff}}", internalTestMarkChgOff)
-	chk.AddSub("{{gotOn}}", internalTestMarkGotOn)
-	chk.AddSub("{{gotOff}}", internalTestMarkGotOff)
-	chk.AddSub("{{wntOn}}", internalTestMarkWntOn)
-	chk.AddSub("{{wntOff}}", internalTestMarkWntOff)
-	chk.AddSub("{{msgOn}}", internalTestMarkMsgOn)
-	chk.AddSub("{{msgOff}}", internalTestMarkMsgOff)
-	chk.AddSub("{{sepOn}}", internalTestMarkSepOn)
-	chk.AddSub("{{sepOff}}", internalTestMarkSepOff)
+	chk.AddSub("{{insOn}}", "{\\color{green}{")
+	chk.AddSub("{{insOff}}", "}}")
+	chk.AddSub("{{delOn}}", "{\\color{red}{")
+	chk.AddSub("{{delOff}}", "}}")
+	chk.AddSub("{{chgOn}}", "{\\color{cyan}{")
+	chk.AddSub("{{chgOff}}", "}}")
+	chk.AddSub("{{gotOn}}", "{\\color{magenta}{")
+	chk.AddSub("{{gotOff}}", "}}")
+	chk.AddSub("{{wntOn}}", "{\\color{blue}{")
+	chk.AddSub("{{wntOff}}", "}}")
+	chk.AddSub("{{msgOn}}", "{\\emph{")
+	chk.AddSub("{{msgOff}}", "}}")
+	chk.AddSub("{{sepOn}}", "{\\color{yellow}{")
+	chk.AddSub("{{sepOff}}", "}}")
 	chk.AddSub("{{latexOn}}", `$\small{\texttt{`)
 	chk.AddSub("{{latexOff}}", `}}$`)
 	chk.AddSub(`\t\d+\.\d+s`, "\t0.0s")
-	chk.AddSub(` `, hardSpace)
-	chk.AddSub(`_`, hardUnderscore)
+	chk.AddSub(` `, ansi.HardSpace)
+	chk.AddSub(`_`, ansi.HardUnderscore)
 	chk.AddSub(`---`, "\u2012\u2012\u2012") // Replace dash with "FIGURE DASH".
 
 	//nolint:lll // Ok.
@@ -230,7 +231,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     \s       WNT: Sum: 6
     --- FAIL: Test_FAIL_Example1 (0.0s)
     FAIL
-    coverage: 100.0&#xFE6A; of statements
+    coverage: 100.0% of statements
     FAIL github.com/dancsecs/gotomd/example1 0.0s
     FAIL
     </pre>
@@ -256,7 +257,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     \s       WNT: Sum: 6
     --- FAIL: Test_FAIL_Example2 (0.0s)
     FAIL
-    coverage: 100.0&#xFE6A; of statements
+    coverage: 100.0% of statements
     FAIL github.com/dancsecs/gotomd/example2 0.0s
     FAIL
     </pre>

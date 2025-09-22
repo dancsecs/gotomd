@@ -25,25 +25,27 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/dancsecs/gotomd/internal/ansi"
 	"github.com/dancsecs/gotomd/internal/args"
-	"github.com/dancsecs/sztest"
 )
 
-const (
-	tabSpaces = "    "
-	// Using a no break space \u00A0 with a "Combining Grapheme Joiner" \u034F
-	// which has no visible display but prevents GitHub's LaTeX from merging
-	// consecutive spaces.  Two in a row is the same width as a fixed LaTeX
-	// font character.
-	hardSpace = "&#xA0;&#x34F;&#xA0;&#x34F;" //
-	// Using a no break space \u00A0 with a "Combining Low Line" \u0332 to
-	// simulate an underscore which GitHub LaTeX only permits in math mode.
-	// Two in a row is the same width as a fixed LaTeX font character.
-	hardUnderscore = "&#xA0;&#x332;&#xA0;&#x332;"
-	// Using a "SMALL PERCENT SIGN" \uFE6A in place of a regular percent sign
-	// GitHub markdown processes normal percent signs.
-	hardPercent = "&#xFE6A;"
-)
+//nolint:goCheckNoGlobals // Ok.
+var szEnvSetup = []string{
+	"SZTEST_MARK_WNT_ON=" + ansi.Blue,
+	"SZTEST_MARK_WNT_OFF=" + ansi.Off,
+	"SZTEST_MARK_GOT_ON=" + ansi.Magenta,
+	"SZTEST_MARK_GOT_OFF=" + ansi.Off,
+	"SZTEST_MARK_MSG_ON=" + ansi.Italic,
+	"SZTEST_MARK_MSG_OFF=" + ansi.Off,
+	"SZTEST_MARK_INS_ON=" + ansi.Green,
+	"SZTEST_MARK_INS_OFF=" + ansi.Off,
+	"SZTEST_MARK_DEL_ON=" + ansi.Red,
+	"SZTEST_MARK_DEL_OFF=" + ansi.Off,
+	"SZTEST_MARK_CHG_ON=" + ansi.Cyan,
+	"SZTEST_MARK_CHG_OFF=" + ansi.Off,
+	"SZTEST_MARK_SEP_ON=" + ansi.Yellow,
+	"SZTEST_MARK_SEP_OFF=" + ansi.Off,
+}
 
 // "--- PASS: Test_PASS_Example1 (0.0s)".
 // "--- FAIL: Test_FAIL_Example1 (0.0s)".
@@ -69,7 +71,7 @@ func setupEnv(env []string) []string {
 
 	for _, e := range env {
 		add := !strings.HasPrefix(e, "\"SZTEST_") &&
-			e != "\""+sztest.EnvTmpDir+"="
+			e != "\"SZTEST_TMP_DIR="
 		if add {
 			newEnv = append(newEnv, e)
 		}
@@ -78,7 +80,6 @@ func setupEnv(env []string) []string {
 	return append(newEnv, szEnv...)
 }
 
-//nolint:funlen // Ok.
 func runTest(dir, tests string) (string, string, error) {
 	var (
 		rawRes  []byte
@@ -114,43 +115,22 @@ func runTest(dir, tests string) (string, string, error) {
 
 	if err == nil {
 		if args.Colorize() {
-			res = translateToTestSymbols(string(rawRes))
-			res = squashTestTime.ReplaceAllString(res, `${1} (0.0s)`)
+			res = squashTestTime.ReplaceAllString(
+				string(rawRes), `${1} (0.0s)`,
+			)
 			res = squashAllTestTime.ReplaceAllString(res, `FAIL ${1} 0.0s`)
 			res = squashCached.ReplaceAllString(res, `${1}${2}`)
-			// Replacing hyphens with an 'FIGURE DASH' u2012 as a regular
-			// hyphen in LaTeX is too short (compared to a = used in the
-			// corresponding '=== RUN' test bracket.)
-			const dashes = "\u2012\u2012\u2012"
-			res = strings.ReplaceAll(res, "--- PASS: ", dashes+" PASS:  ")
-			res = strings.ReplaceAll(res, "--- FAIL: ", dashes+" FAIL:  ")
-			res = strings.ReplaceAll(res, "\t", tabSpaces)
-			res = strings.ReplaceAll(res, "%", hardPercent)
-			res = strings.ReplaceAll(res, " ", hardSpace)
-			res = strings.ReplaceAll(res, "_", hardUnderscore)
-
-			latexRes := ""
-			lines := strings.Split(res, "\n")
-
-			for _, line := range lines[:len(lines)-1] {
-				if latexRes != "" {
-					latexRes += "\n"
-				}
-
-				latexRes += "$\\small{\\texttt{" +
-					line +
-					"}}$\n<br>"
-			}
-
-			res = latexRes
+			res = strings.ReplaceAll(res, " PASS: ", " PASS:  ")
+			res = strings.ReplaceAll(res, " FAIL: ", " FAIL:  ")
+			res = ansi.Colorize(res, true)
 		} else {
-			res = translateToBlankSymbols(string(rawRes))
-			res = "<pre>\n" + strings.TrimRight(res, "\n") + "\n</pre>"
+			res = "<pre>\n" + strings.TrimRight(string(rawRes), "\n") +
+				"\n</pre>"
 			res = squashTestTime.ReplaceAllString(res, `${1} (0.0s)`)
 			res = squashAllTestTime.ReplaceAllString(res, `FAIL ${1} 0.0s`)
 			res = squashCached.ReplaceAllString(res, `${1}${2}`)
-			res = strings.ReplaceAll(res, "\t", tabSpaces)
-			res = strings.ReplaceAll(res, "%", hardPercent)
+			res = strings.ReplaceAll(res, "\t", ansi.TabSpaces)
+			res = ansi.Colorize(res, false)
 		}
 
 		return "go " + strings.Join(tstArgs, " "),
