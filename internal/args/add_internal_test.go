@@ -22,6 +22,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -32,7 +33,7 @@ func TestFiles_Valid_TooShort(t *testing.T) {
 	chk.Err(
 		isValidTemplate(""),
 		chk.ErrChain(
-			ErrInvalidArgument,
+			errs.ErrInvalidArgument,
 			"''",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),
@@ -40,7 +41,7 @@ func TestFiles_Valid_TooShort(t *testing.T) {
 	chk.Err(
 		isValidTemplate(GoTemplate),
 		chk.ErrChain(
-			ErrInvalidArgument,
+			errs.ErrInvalidArgument,
 			"'"+GoTemplate+"'",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),
@@ -48,7 +49,7 @@ func TestFiles_Valid_TooShort(t *testing.T) {
 	chk.Err(
 		isValidTemplate(MdTemplate),
 		chk.ErrChain(
-			ErrInvalidArgument,
+			errs.ErrInvalidArgument,
 			"'"+MdTemplate+"'",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),
@@ -57,7 +58,7 @@ func TestFiles_Valid_TooShort(t *testing.T) {
 	chk.Err(
 		isValidTemplate("."+GoTemplate),
 		chk.ErrChain(
-			ErrInvalidArgument,
+			errs.ErrInvalidArgument,
 			"'."+GoTemplate+"'",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),
@@ -65,7 +66,7 @@ func TestFiles_Valid_TooShort(t *testing.T) {
 	chk.Err(
 		isValidTemplate("."+MdTemplate),
 		chk.ErrChain(
-			ErrInvalidArgument,
+			errs.ErrInvalidArgument,
 			"'."+MdTemplate+"'",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),
@@ -79,7 +80,7 @@ func TestFiles_Valid_Invalid(t *testing.T) {
 	chk.Err(
 		isValidTemplate("a."+GoTemplate),
 		chk.ErrChain(
-			ErrInvalidArgument,
+			errs.ErrInvalidArgument,
 			"'a."+GoTemplate+"'",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),
@@ -87,7 +88,7 @@ func TestFiles_Valid_Invalid(t *testing.T) {
 	chk.Err(
 		isValidTemplate("a."+MdTemplate),
 		chk.ErrChain(
-			ErrInvalidArgument,
+			errs.ErrInvalidArgument,
 			"'a."+MdTemplate+"'",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),
@@ -96,7 +97,7 @@ func TestFiles_Valid_Invalid(t *testing.T) {
 	chk.Err(
 		isValidTemplate(filepath.Join("dir", "a."+GoTemplate)),
 		chk.ErrChain(
-			ErrInvalidArgument,
+			errs.ErrInvalidArgument,
 			"'"+filepath.Join("dir", "a."+GoTemplate)+"'",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),
@@ -104,7 +105,7 @@ func TestFiles_Valid_Invalid(t *testing.T) {
 	chk.Err(
 		isValidTemplate(filepath.Join("dir", "a."+MdTemplate)),
 		chk.ErrChain(
-			ErrInvalidArgument,
+			errs.ErrInvalidArgument,
 			"'"+filepath.Join("dir", "a."+MdTemplate)+"'",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),
@@ -185,7 +186,7 @@ func TestFiles_AddDir(t *testing.T) {
 	chk.Err(
 		add("DOES_NOT_EXIST", false),
 		chk.ErrChain(
-			ErrUnknownObject,
+			errs.ErrUnknownObject,
 			"stat DOES_NOT_EXIST",
 			"no such file or directory",
 		),
@@ -239,8 +240,8 @@ func TestFiles_AddDir(t *testing.T) {
 	chk.Err(
 		add(fileBad, false),
 		chk.ErrChain(
-			ErrUnknownObject,
-			ErrInvalidArgument,
+			errs.ErrUnknownObject,
+			errs.ErrInvalidArgument,
 			"'"+fileBad+"'",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),

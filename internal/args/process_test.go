@@ -22,6 +22,7 @@ import (
 	"testing"
 
 	"github.com/dancsecs/gotomd/internal/args"
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -73,7 +74,7 @@ func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
 	chk.Err(
 		args.Process(),
 		chk.ErrChain(
-			args.ErrInvalidDefPerm,
+			errs.ErrInvalidDefPerm,
 			"'0o0744'",
 		),
 	)
@@ -91,7 +92,7 @@ func Test_ArgUsage_InvalidOutDirectory(t *testing.T) {
 	chk.Err(
 		args.Process(),
 		chk.ErrChain(
-			args.ErrInvalidOutputDir,
+			errs.ErrInvalidOutputDir,
 			"'DIRECTORY_DOES_NOT_EXIST'",
 		),
 	)
@@ -110,7 +111,7 @@ func TestArgUsage_Dedication(t *testing.T) {
 	chk.Err(
 		args.Process(),
 		chk.ErrChain(
-			args.ErrInvalidOutputDir,
+			errs.ErrInvalidOutputDir,
 			"'DIRECTORY_DOES_NOT_EXIST'",
 		),
 	)

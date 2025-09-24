@@ -22,6 +22,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -85,8 +86,8 @@ func TestFiles_Expand(t *testing.T) {
 	chk.Err(
 		expand([]string{"DOES_NOT_EXIST"}),
 		chk.ErrChain(
-			ErrInvalidTemplate,
-			ErrUnknownObject,
+			errs.ErrInvalidTemplate,
+			errs.ErrUnknownObject,
 			"stat DOES_NOT_EXIST",
 			"no such file or directory",
 		),
@@ -140,9 +141,9 @@ func TestFiles_Expand(t *testing.T) {
 	chk.Err(
 		expand([]string{fileBad}),
 		chk.ErrChain(
-			ErrInvalidTemplate,
-			ErrUnknownObject,
-			ErrInvalidArgument,
+			errs.ErrInvalidTemplate,
+			errs.ErrUnknownObject,
+			errs.ErrInvalidArgument,
 			"'"+fileBad+"'",
 			"expected - ("+GoTemplate+" or "+MdTemplate+")",
 		),

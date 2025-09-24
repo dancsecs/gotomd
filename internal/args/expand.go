@@ -21,6 +21,8 @@ package args
 import (
 	"fmt"
 	"strings"
+
+	"github.com/dancsecs/gotomd/internal/errs"
 )
 
 // Expand scans the list replacing entries like "{dir}/..." with a
@@ -48,5 +50,5 @@ func expand(list []string) error {
 		return nil
 	}
 
-	return fmt.Errorf("%w: %w", ErrInvalidTemplate, err)
+	return fmt.Errorf("%w: %w", errs.ErrInvalidTemplate, err)
 }

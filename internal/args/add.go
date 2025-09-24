@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/szlog"
 )
 
@@ -47,7 +48,7 @@ func isValidTemplate(path string) error {
 
 	return fmt.Errorf(
 		"%w: '%s': expected - (%s or %s)",
-		ErrInvalidArgument,
+		errs.ErrInvalidArgument,
 		path,
 		GoTemplate,
 		MdTemplate,
@@ -76,7 +77,7 @@ func addDir(dir string, recursive bool) error {
 		filePath := filepath.Join(dir, files[i].Name())
 
 		if files[i].IsDir() {
-			if recursive {
+			if recursive && files[i].Name() != "testdata" {
 				err = addDir(filePath, recursive)
 			}
 		} else {
@@ -117,5 +118,5 @@ func add(item string, recursive bool) error {
 		return nil
 	}
 
-	return fmt.Errorf("%w: %w", ErrUnknownObject, err)
+	return fmt.Errorf("%w: %w", errs.ErrUnknownObject, err)
 }

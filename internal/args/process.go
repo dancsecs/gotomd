@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/szargs"
 	"github.com/dancsecs/szlog"
 )
@@ -103,14 +104,16 @@ func Process() error {
 	}
 
 	if int(permInt)&(^0o0666) != 0 {
-		args.PushErr(fmt.Errorf("%w: '0o%#o'", ErrInvalidDefPerm, permInt))
+		args.PushErr(
+			fmt.Errorf("%w: '0o%#o'", errs.ErrInvalidDefPerm, permInt),
+		)
 	}
 
 	if outputDir != "." {
 		stat, err = os.Stat(outputDir)
 		if err != nil || !stat.IsDir() {
 			args.PushErr(
-				fmt.Errorf("%w: '%s'", ErrInvalidOutputDir, outputDir),
+				fmt.Errorf("%w: '%s'", errs.ErrInvalidOutputDir, outputDir),
 			)
 		}
 	}
