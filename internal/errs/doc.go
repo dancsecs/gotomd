@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2025 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,12 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package gopkg
-
-import "errors"
-
-// Exported Errors.
-var (
-	ErrUnknownObject  = errors.New("unknown package object")
-	ErrInvalidPackage = errors.New("invalid package")
-)
+/*
+Package errs collects all exported errors used by the application.
+*/
+package errs

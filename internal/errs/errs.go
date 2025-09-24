@@ -16,16 +16,23 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package errs
 
 import "errors"
 
 // Exported errors.
 var (
+	ErrInvalidDefPerm     = errors.New("invalid default perm")
+	ErrInvalidOutputDir   = errors.New("invalid output directory")
+	ErrInvalidTemplate    = errors.New("invalid template")
+	ErrInvalidArgument    = errors.New("invalid argument")
+	ErrUnknownObject      = errors.New("unknown package object")
+	ErrInvalidPackage     = errors.New("invalid package")
 	ErrInvalidRelativeDir = errors.New("invalid relative directory")
 	ErrInvalidDirectory   = errors.New("invalid directory")
 	ErrMissingAction      = errors.New("missing action")
 	ErrNoTestToRun        = errors.New("no tests to run")
 	ErrNoPackageToRun     = errors.New("no package to run")
 	ErrUnknownCommand     = errors.New("unknown command")
+	ErrUnknownTag         = errors.New("unknown tag")
 )
