@@ -16,28 +16,23 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package internal_test
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
-	"github.com/dancsecs/gotomd/internal/args"
-	"github.com/dancsecs/gotomd/internal/update"
+	"github.com/dancsecs/gotomd/internal"
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/sztestlog"
 )
 
 const (
-	example1     = "example1"
-	example1Path = "." + string(os.PathSeparator) +
-		example1 + string(os.PathSeparator)
-
-	example2     = "example2"
-	example2Path = "." + string(os.PathSeparator) +
-		example2 + string(os.PathSeparator)
+	tstpkgName = "tstpkg"
+	sep        = string(os.PathSeparator)
+	tstpkgPath = "." + sep + "testdata" + sep + tstpkgName
 )
 
 //nolint:goCheckNoGlobals // Ok for test.
@@ -93,45 +88,49 @@ var usage = []string{
 	"",
 }
 
+//nolint:gosec // Ok.
+func getTestFiles(fName, tName string) ([]string, []string, error) {
+	gotBytes, err := os.ReadFile(fName)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	wntBytes, err := os.ReadFile(tName)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return strings.Split(string(gotBytes), "\n"),
+		strings.Split(string(wntBytes), "\n"),
+		nil
+}
+
 func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	dir := chk.CreateTmpDir()
-	chk.NoErr(
-		setup(
-			dir,
-			"README.md",
-			".README.gtm.md",
-			"example1_test.go",
-			"example1.go",
-		),
-	)
 
-	rName := filepath.Join(dir, ".README.gtm.md")
+	fName := tstpkgPath + sep + ".README.gtm.md"
 	tName := filepath.Join(dir, "README.md")
 
 	chk.SetArgs(
 		"programName",
 		"-v",
 		"-z",
-		rName,
+		"-o", dir,
+		fName,
 	)
 
-	chk.SetStdinData("Y\n")
+	chk.Int(internal.Main(), 0)
 
-	chk.NoErr(os.Truncate(tName, 2))
-
-	// Run command expecting the overwrite to succeed.
-	main()
-
-	got, wnt, err := getTestFiles(dir, "README.md")
+	got, wnt, err := getTestFiles(tstpkgPath+sep+"README.md", tName)
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Stdout(
-		"File to process: '"+rName+"'",
-		"Expanding "+rName+" to: "+tName,
+		"File to process: '"+fName+"'",
+		"Expanding "+fName[2:]+" to: "+tName,
 		"Loading package info for: .",
 		"getInfo(\"package\")",
 		"getInfo(\"TimesTwo\")",
@@ -150,51 +149,10 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 		"getInfo(\"ConstantGroup1\")",
 		"getInfo(\"ConstantGroup1\")",
 		"getInfo(\"ConstantGroupA\")",
-		fmt.Sprintf(update.ConfirmMsg, tName),
 	)
 }
 
 ////////////
-
-func setup(dir string, files ...string) error {
-	const ext = ".example"
-
-	var (
-		err       error
-		fileBytes []byte
-	)
-
-	files = append(files, "go.mod"+ext, "go.sum"+ext)
-	for i, mi := 0, len(files); i < mi && err == nil; i++ {
-		fileBytes, err = os.ReadFile(filepath.Join("example1", files[i]))
-		if err == nil {
-			err = os.WriteFile(
-				filepath.Join(dir, strings.TrimSuffix(files[i], ext)),
-				fileBytes,
-				os.FileMode(0o0600),
-			)
-		}
-	}
-
-	return err
-}
-
-//nolint:gosec // Ok.
-func getTestFiles(dir, fName string) ([]string, []string, error) {
-	gotBytes, err := os.ReadFile(filepath.Join(dir, fName))
-	if err != nil {
-		return nil, nil, err
-	}
-
-	wntBytes, err := os.ReadFile(filepath.Join("example1", fName))
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return strings.Split(string(gotBytes), "\n"),
-		strings.Split(string(wntBytes), "\n"),
-		nil
-}
 
 func Test_JustHelp(t *testing.T) {
 	chk := sztestlog.CaptureLogAndStdout(t)
@@ -208,19 +166,17 @@ func Test_JustHelp(t *testing.T) {
 		"DOES_NOT_EXIST",
 	)
 
-	// Now Run the main function with no -f arg requiring confirmation
-	chk.Panic(
-		main,
+	chk.Int(internal.Main(), 1)
+
+	chk.Stdout(
+		internal.License+strings.Join(usage, "\n"),
 		chk.ErrChain(
-			args.ErrInvalidTemplate,
-			args.ErrUnknownObject,
+			"Failed",
+			errs.ErrInvalidTemplate,
+			errs.ErrUnknownObject,
 			"stat DOES_NOT_EXIST",
 			"no such file or directory",
 		),
-	)
-
-	chk.Stdout(
-		license + strings.Join(usage, "\n"),
 	)
 
 	chk.Log()

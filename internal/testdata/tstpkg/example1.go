@@ -1,4 +1,4 @@
-// Package example1 exists in order to test various go to git
+// Package tstpkg exists in order to test various go to git
 // markdown (gToMD) extraction utilities.  Various object will be defined that
 // exhibit the various comment and declaration options permitted by gofmt.
 //
@@ -9,7 +9,7 @@
 //
 // Declarations can be single-line or multi-line blocks or constructions.  Each
 // type will be included here for complete testing.
-package example1
+package tstpkg
 
 import "strconv"
 

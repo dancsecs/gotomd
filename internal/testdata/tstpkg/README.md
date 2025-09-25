@@ -1,6 +1,6 @@
 <!--- gotomd::Auto:: See github.com/dancsecs/gotomd **DO NOT MODIFY** -->
 
-# Package example1
+# Package tstpkg
 
 This project is used by the Szerszam utility function to test its markdown
 update methods against an independent standalone project. All features
@@ -10,10 +10,10 @@ The following will be replaced by the go package documentation
 
 <!--- gotomd::Bgn::doc::./package -->
 ```go
-package example1
+package tstpkg
 ```
 
-Package example1 exists in order to test various go to git
+Package tstpkg exists in order to test various go to git
 markdown (gToMD) extraction utilities.  Various object will be defined that
 exhibit the various comment and declaration options permitted by gofmt.
 
@@ -75,22 +75,22 @@ StructureType tests the documentation of structures.
 
 and run a specific test
 
-<!--- gotomd::Bgn::tst::./Test_PASS_Example1 -->
+<!--- gotomd::Bgn::tst::./Test_PASS_Tstpkg -->
 ```bash
-go test -v -cover -run Test_PASS_Example1 .
+go test -v -cover -run Test_PASS_Tstpkg .
 ```
 
-$\small{\texttt{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1}}$
+$\small{\texttt{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Tstpkg}}$
 <br>
-$\small{\texttt{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;PASS:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}$
+$\small{\texttt{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;PASS:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Tstpkg&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}$
 <br>
 $\small{\texttt{PASS}}$
 <br>
 $\small{\texttt{coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}$
 <br>
-$\small{\texttt{ok&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/example1&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}$
+$\small{\texttt{ok&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/internal/testdata/tstpkg&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}$
 <br>
-<!--- gotomd::End::tst::./Test_PASS_Example1 -->
+<!--- gotomd::End::tst::./Test_PASS_Tstpkg -->
 
 or run all tests in a package:
 
@@ -99,11 +99,11 @@ or run all tests in a package:
 go test -v -cover .
 ```
 
-$\small{\texttt{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1}}$
+$\small{\texttt{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Tstpkg}}$
 <br>
-$\small{\texttt{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;PASS:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}$
+$\small{\texttt{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;PASS:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;PASS&#xA0;&#x332;&#xA0;&#x332;Tstpkg&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}$
 <br>
-$\small{\texttt{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;FAIL&#xA0;&#x332;&#xA0;&#x332;Example1}}$
+$\small{\texttt{===&#xA0;&#x34F;&#xA0;&#x34F;RUN&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;FAIL&#xA0;&#x332;&#xA0;&#x332;Tstpkg}}$
 <br>
 $\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;example1&#xA0;&#x332;&#xA0;&#x332;test.go:29:&#xA0;&#x34F;&#xA0;&#x34F;unexpected&#xA0;&#x34F;&#xA0;&#x34F;int:}}$
 <br>
@@ -129,13 +129,13 @@ $\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F
 <br>
 $\small{\texttt{&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;{\color{blue}{WNT:&#xA0;&#x34F;&#xA0;&#x34F;}}{\color{cyan}{Sum}}:&#xA0;&#x34F;&#xA0;&#x34F;6}}$
 <br>
-$\small{\texttt{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;FAIL:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;FAIL&#xA0;&#x332;&#xA0;&#x332;Example1&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}$
+$\small{\texttt{‒‒‒&#xA0;&#x34F;&#xA0;&#x34F;FAIL:&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;Test&#xA0;&#x332;&#xA0;&#x332;FAIL&#xA0;&#x332;&#xA0;&#x332;Tstpkg&#xA0;&#x34F;&#xA0;&#x34F;(0.0s)}}$
 <br>
 $\small{\texttt{FAIL}}$
 <br>
 $\small{\texttt{coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}$
 <br>
-$\small{\texttt{FAIL&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/example1&#xA0;&#x34F;&#xA0;&#x34F;0.0s}}$
+$\small{\texttt{FAIL&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/internal/testdata/tstpkg&#xA0;&#x34F;&#xA0;&#x34F;0.0s}}$
 <br>
 $\small{\texttt{FAIL}}$
 <br>
@@ -149,7 +149,7 @@ cat ./example1.go
 ```
 
 ```go
-// Package example1 exists in order to test various go to git
+// Package tstpkg exists in order to test various go to git
 // markdown (gToMD) extraction utilities.  Various object will be defined that
 // exhibit the various comment and declaration options permitted by gofmt.
 //
@@ -160,7 +160,7 @@ cat ./example1.go
 //
 // Declarations can be single-line or multi-line blocks or constructions.  Each
 // type will be included here for complete testing.
-package example1
+package tstpkg
 
 import "strconv"
 
