@@ -16,12 +16,14 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package gorun_test
 
 import (
 	"os"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/errs"
+	"github.com/dancsecs/gotomd/internal/gorun"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -29,21 +31,21 @@ func Test_GetRun_GetGoRun(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	_, err := getGoRun("")
+	_, err := gorun.GetGoRun("")
 	chk.Err(
 		err,
-		ErrInvalidRelativeDir.Error()+": \"\"",
+		errs.ErrInvalidRelativeDir.Error()+": \"\"",
 	)
 
 	cmd := "TEST_DIRECTORY_DOES_NOT_EXIST" + string(os.PathSeparator)
-	_, err = getGoRun(cmd)
+	_, err = gorun.GetGoRun(cmd)
 	chk.Err(
 		err,
-		ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
+		errs.ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
 	)
 
-	_, err = getGoRun("./TEST_DOES_NOT_EXIST")
-	chk.Err(err, ErrNoPackageToRun.Error())
+	_, err = gorun.GetGoRun("./TEST_DOES_NOT_EXIST")
+	chk.Err(err, errs.ErrNoPackageToRun.Error())
 }
 
 func Test_GetRun_RunTestNotDirectory(t *testing.T) {
@@ -52,10 +54,10 @@ func Test_GetRun_RunTestNotDirectory(t *testing.T) {
 
 	f := chk.CreateTmpFile(nil)
 
-	_, _, err := runGo(f, "")
+	_, _, err := gorun.RunGo(f, "")
 	chk.Err(
 		err,
-		ErrInvalidDirectory.Error(),
+		errs.ErrInvalidDirectory.Error(),
 	)
 }
 
@@ -63,7 +65,7 @@ func Test_GetRun_RunTestNoPackage(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	_, _, err := runGo(".", "")
+	_, _, err := gorun.RunGo(".", "")
 	chk.NoErr(err)
 }
 
@@ -71,12 +73,12 @@ func Test_GetRun_RunExampleNoPackage(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	out, err := getGoRun("./example3/main.go -v")
+	out, err := gorun.GetGoRun("./testdata/tstpkg/main.go -v")
 	chk.NoErr(err)
 	chk.Str(
 		out,
 		"---\n```bash\n"+
-			"go run ./example3/main.go -v\n"+
+			"go run ./testdata/tstpkg/main.go -v\n"+
 			"```\n"+
 			"\n"+
 			"<pre>\n"+

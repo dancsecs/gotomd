@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package gorun
 
 import (
 	"bytes"
@@ -24,7 +24,14 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/dancsecs/gotomd/internal/cmds"
+	"github.com/dancsecs/gotomd/internal/errs"
 )
+
+func markBashCode(content string) string {
+	return "```bash\n" + strings.TrimRight(content, "\n") + "\n```"
+}
 
 func joinKeepPrefix(dir, file string) string {
 	const relativePrefix = "." + string(os.PathSeparator)
@@ -40,7 +47,8 @@ func joinKeepPrefix(dir, file string) string {
 	return joined
 }
 
-func runGo(dir, cmd string) (string, string, error) {
+// RunGo executes the named go package in the provided directory.
+func RunGo(dir, cmd string) (string, string, error) {
 	var (
 		rawRes []byte
 		args   []string
@@ -49,7 +57,7 @@ func runGo(dir, cmd string) (string, string, error) {
 
 	stat, err := os.Stat(dir)
 	if err == nil && !stat.IsDir() {
-		err = ErrInvalidDirectory
+		err = errs.ErrInvalidDirectory
 	}
 
 	if err == nil {
@@ -70,7 +78,7 @@ func runGo(dir, cmd string) (string, string, error) {
 			rawRes,
 			[]byte("package TEST_DOES_NOT_EXIST is not in"),
 		) {
-			err = ErrNoPackageToRun
+			err = errs.ErrNoPackageToRun
 		}
 	}
 
@@ -87,16 +95,18 @@ func runGo(dir, cmd string) (string, string, error) {
 	return "", "", err
 }
 
-func getGoRun(cmd string) (string, error) {
+// GetGoRun runs "go run" the provided package collecting and returning the
+// output.
+func GetGoRun(cmd string) (string, error) {
 	var (
 		res    string
 		runRes string
 		runCmd string
 	)
 
-	dir, action, err := parseCmd(cmd)
+	dir, action, err := cmds.ParseCmd(cmd)
 	if err == nil {
-		runCmd, runRes, err = runGo(dir, action)
+		runCmd, runRes, err = RunGo(dir, action)
 	}
 
 	if err == nil {
