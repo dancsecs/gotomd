@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package cmds
 
 import (
 	"fmt"
@@ -24,11 +24,14 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/dancsecs/gotomd/internal/errs"
 )
 
-func parseCmd(cmd string) (string, string, error) {
+// ParseCmd parses and verifies a single command.
+func ParseCmd(cmd string) (string, string, error) {
 	if !strings.HasPrefix(cmd, "./") {
-		return "", "", fmt.Errorf("%w: %q", ErrInvalidRelativeDir, cmd)
+		return "", "", fmt.Errorf("%w: %q", errs.ErrInvalidRelativeDir, cmd)
 	}
 
 	lastSeparatorPos := strings.LastIndex(cmd, string(os.PathSeparator))
@@ -39,11 +42,11 @@ func parseCmd(cmd string) (string, string, error) {
 	if err != nil || !s.IsDir() {
 		return "",
 			"",
-			fmt.Errorf("%w: %q", ErrInvalidDirectory, dir)
+			fmt.Errorf("%w: %q", errs.ErrInvalidDirectory, dir)
 	}
 
 	if action == "" {
-		return "", "", ErrMissingAction
+		return "", "", errs.ErrMissingAction
 	}
 
 	return dir, action, nil
@@ -54,7 +57,7 @@ func parseCmd(cmd string) (string, string, error) {
 // The first entry must contain a relative directory component however
 // subsequent entries that do not specify a directory will default to
 // the last directory defined.
-func parseCmds(cmdStr string) ([]string, []string, error) {
+func ParseCmds(cmdStr string) ([]string, []string, error) {
 	var (
 		lastDir       string
 		dir, action   string
@@ -71,7 +74,7 @@ func parseCmds(cmdStr string) ([]string, []string, error) {
 			cmd = "." + string(os.PathSeparator) + filepath.Join(lastDir, cmd)
 		}
 
-		dir, action, err = parseCmd(cmd)
+		dir, action, err = ParseCmd(cmd)
 		if err == nil {
 			dirs = append(dirs, dir)
 			actions = append(actions, action)
