@@ -22,9 +22,12 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/gotomd/internal/gopkg"
 	"github.com/dancsecs/sztestlog"
 )
+
+const samplePath = "./testdata/sample1"
 
 type docInfoTest struct {
 	action  string
@@ -41,7 +44,7 @@ func Test_GoPackage_GetInfo_InvalidDirectory(t *testing.T) {
 	_, err := gopkg.Info("INVALID_DIRECTORY", "TimesTwo")
 	chk.Err(
 		err,
-		gopkg.ErrInvalidPackage.Error(),
+		errs.ErrInvalidPackage.Error(),
 	)
 
 	chk.Stdout(
@@ -53,11 +56,11 @@ func Test_GoPackage_GetInfo_InvalidObject(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	_, err := gopkg.Info("./sample1", "DOES_NOT_EXIST")
-	chk.Err(err, gopkg.ErrUnknownObject.Error()+": DOES_NOT_EXIST")
+	_, err := gopkg.Info(samplePath, "DOES_NOT_EXIST")
+	chk.Err(err, errs.ErrUnknownObject.Error()+": DOES_NOT_EXIST")
 
 	chk.Stdout(
-		"Loading package info for: ./sample1",
+		"Loading package info for: "+samplePath,
 		"getInfo(\"DOES_NOT_EXIST\")",
 	)
 }
@@ -69,7 +72,7 @@ func Test_GoPackage_DocInfo_PackageInfo(t *testing.T) {
 
 	gopkg.Reset()
 
-	data, err := gopkg.Info("./sample1", "package")
+	data, err := gopkg.Info(samplePath, "package")
 
 	chk.NoErr(err)
 
@@ -126,7 +129,7 @@ func Test_GoPackage_DocInfo_PackageInfo(t *testing.T) {
 	)
 
 	chk.Stdout(
-		"Loading package info for: ./sample1",
+		"Loading package info for: "+samplePath,
 		"getInfo(\"package\")",
 	)
 }
@@ -135,7 +138,7 @@ func Test_GoPackage_DocInfo_TypeInfo(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	data, err := gopkg.Info("./sample1", "ConstGroupType")
+	data, err := gopkg.Info(samplePath, "ConstGroupType")
 
 	chk.NoErr(err)
 
@@ -160,7 +163,7 @@ func Test_GoPackage_DocInfo_ConstantBlock(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	data, err := gopkg.Info("./sample1", "ConstantGroup1")
+	data, err := gopkg.Info(samplePath, "ConstantGroup1")
 
 	chk.NoErr(err)
 
@@ -314,7 +317,7 @@ func Test_GoPackage_DocInfo_RunTests(t *testing.T) {
 	}
 
 	for _, tst := range docInfoTests {
-		dInfo, err := gopkg.Info("./sample1", tst.action)
+		dInfo, err := gopkg.Info(samplePath, tst.action)
 		chk.NoErr(err)
 		chk.StrSlice(dInfo.Header(), tst.header, "HEADER For action: ", tst.action)
 		chk.StrSlice(dInfo.Body(), tst.body, "BODY For action: ", tst.action)

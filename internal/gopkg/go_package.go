@@ -26,6 +26,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/szlog"
 	"golang.org/x/tools/go/packages"
 )
@@ -210,7 +211,7 @@ func (pi *packageInfo) getInfo(name string) (*DocInfo, error) {
 		return pi.typeInfo(t)
 	}
 
-	return nil, fmt.Errorf("%w: %s", ErrUnknownObject, name)
+	return nil, fmt.Errorf("%w: %s", errs.ErrUnknownObject, name)
 }
 
 func leadingTabsToSpaces(lines []string) []string {
@@ -287,7 +288,7 @@ func createPackageInfo(dir string) (*packageInfo, error) {
 	packagesToDoc, err = packages.Load(cfg, dir)
 
 	if err == nil && len(packagesToDoc[0].Errors) > 0 {
-		err = ErrInvalidPackage
+		err = errs.ErrInvalidPackage
 	}
 
 	if err == nil {
