@@ -29,6 +29,7 @@ import (
 	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/gopkg"
 	"github.com/dancsecs/gotomd/internal/markdown"
+	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/szlog"
 )
 
@@ -51,8 +52,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 `
 
-func processFiles(filesToProcess []string) error {
+// func processGoFiles(filesToProcess []string) error {
+// 	var err error
+
+// 	update.FormatForGoDoc()
+
+// 	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
+// 		gopkg.Reset()
+
+// 		err = markdown.ExpandMD(filesToProcess[i])
+// 	}
+
+// 	return err //nolint:wrapcheck // Ok.
+// }
+
+func processMDFiles(filesToProcess []string) error {
 	var err error
+
+	update.FormatForMarkdown()
 
 	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
 		gopkg.Reset()
@@ -88,8 +105,12 @@ func Main() int {
 		fmt.Println(args.Usage()) //nolint:forbidigo  // Ok.
 	}
 
+	// if err == nil {
+	// 	err = processGoFiles(args.GoFiles())
+	// }
+
 	if err == nil {
-		err = processFiles(args.MdFiles())
+		err = processMDFiles(args.MdFiles())
 	}
 
 	if err == nil {

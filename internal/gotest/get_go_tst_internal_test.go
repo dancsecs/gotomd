@@ -26,6 +26,7 @@ import (
 	"github.com/dancsecs/gotomd/internal/ansi"
 	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/errs"
+	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -112,7 +113,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 
 	//nolint:lll // Ok.
 	chk.Stdout("" +
-		markBashCode(
+		update.MarkBashCode(
 			"go test -v -cover ."+
 				sep+"testdata"+sep+tstpkg1) + "\n\n" +
 		chk.TrimAll(`
@@ -158,7 +159,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
 
     `) + "\n\n" +
-		markBashCode(
+		update.MarkBashCode(
 			"go test -v -cover ."+
 				sep+"testdata"+sep+tstpkg2) + "\n\n" +
 		chk.TrimAll(`
@@ -222,7 +223,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
 
 	//nolint:lll // Ok.
 	chk.Stdout("" +
-		markBashCode(
+		update.MarkBashCode(
 			"go test -v -cover ."+
 				sep+"testdata"+sep+tstpkg1) + "\n\n" + chk.TrimAll(`
     <pre>
@@ -248,7 +249,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     FAIL
     </pre>
     `) + "\n\n" +
-		markBashCode(
+		update.MarkBashCode(
 			"go test -v -cover ."+
 				sep+"testdata"+sep+tstpkg2) + "\n\n" + chk.TrimAll(`
     <pre>

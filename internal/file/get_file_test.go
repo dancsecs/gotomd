@@ -20,11 +20,11 @@ package file_test
 
 import (
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/gotomd/internal/file"
+	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -39,14 +39,6 @@ const (
 	tstpkg2     = "tstpkg2"
 	tstpkg2Path = "." + sep + "testdata" + sep + tstpkg2 + sep
 )
-
-func markGoCode(content string) string {
-	return "```go\n" + strings.TrimRight(content, "\n") + "\n```"
-}
-
-func markBashCode(content string) string {
-	return "```bash\n" + strings.TrimRight(content, "\n") + "\n```"
-}
 
 func Test_GetFile_GetGoFileInvalid(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
@@ -69,9 +61,9 @@ func Test_GetFile_GetGoFile(t *testing.T) {
 	chk.Str(
 		d,
 		""+
-			markBashCode(catCmd+tstpkg1Path+"crumb.go")+
+			update.MarkBashCode(catCmd+tstpkg1Path+"crumb.go")+
 			"\n\n"+
-			markGoCode(pkgLabel+" "+tstpkg1),
+			update.MarkGoCode(pkgLabel+" "+tstpkg1),
 	)
 }
 
@@ -87,13 +79,13 @@ func Test_GetFile_GetGoFile2(t *testing.T) {
 	chk.Str(
 		d,
 		""+
-			markBashCode(catCmd+file1)+
+			update.MarkBashCode(catCmd+file1)+
 			"\n\n"+
-			markGoCode(pkgLabel+" "+tstpkg1)+
+			update.MarkGoCode(pkgLabel+" "+tstpkg1)+
 			"\n\n"+
-			markBashCode(catCmd+file2)+
+			update.MarkBashCode(catCmd+file2)+
 			"\n\n"+
-			markGoCode(pkgLabel+" "+tstpkg2)+
+			update.MarkGoCode(pkgLabel+" "+tstpkg2)+
 			"",
 	)
 }

@@ -29,6 +29,7 @@ import (
 	"testing"
 
 	"github.com/dancsecs/gotomd/internal/errs"
+	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -59,36 +60,6 @@ func Test_CmdParse_ParseCmd_InvalidDir(t *testing.T) {
 	)
 }
 
-func Test_GetDoc_MarkGoCode(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	chk.Str(
-		markGoCode("ABC"),
-		"```go\nABC\n```",
-	)
-
-	chk.Str(
-		markGoCode("ABC\n"),
-		"```go\nABC\n```",
-	)
-}
-
-func Test_GetDoc_MarkBashCode(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	chk.Str(
-		markBashCode("ABC"),
-		"```bash\nABC\n```",
-	)
-
-	chk.Str(
-		markBashCode("ABC\n"),
-		"```bash\nABC\n```",
-	)
-}
-
 func Test_GetDoc_GetGoDcl_NoItems(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
@@ -106,7 +77,7 @@ func Test_GetDoc_GetGoDcl_Package(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		markGoCode(pkgLabel+" "+tstpkg+"\n"),
+		update.MarkGoCode(pkgLabel+" "+tstpkg+"\n"),
 	)
 
 	chk.Stdout(
@@ -141,7 +112,7 @@ func Test_GetDoc_GetGoDcl_OneItem(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		markGoCode("func TimesTwo(i int) int\n"),
+		update.MarkGoCode("func TimesTwo(i int) int\n"),
 	)
 
 	chk.Stdout(
@@ -162,7 +133,9 @@ func Test_GetDoc_GetGoDcl_TwoItems(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		markGoCode("func TimesTwo(i int) int\nfunc TimesThree(i int) int\n"),
+		update.MarkGoCode(
+			"func TimesTwo(i int) int\nfunc TimesThree(i int) int\n",
+		),
 	)
 
 	chk.Stdout(
@@ -188,7 +161,7 @@ func Test_GetDoc_GetGoDclSingle_PackageNoItems(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		markGoCode(pkgLabel+" "+tstpkg+"\n"),
+		update.MarkGoCode(pkgLabel+" "+tstpkg+"\n"),
 	)
 
 	chk.Stdout(
@@ -222,7 +195,7 @@ func Test_GetDoc_GetGoDclSingle_OneItem(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		line,
-		markGoCode("func TimesTwo(i int) int\n"),
+		update.MarkGoCode("func TimesTwo(i int) int\n"),
 	)
 
 	chk.Stdout(
@@ -243,7 +216,9 @@ func Test_GetDoc_GetGoDclSingle_TwoItems(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		markGoCode("func TimesTwo(i int) int\nfunc TimesThree(i int) int\n"),
+		update.MarkGoCode(
+			"func TimesTwo(i int) int\nfunc TimesThree(i int) int\n",
+		),
 	)
 
 	chk.Stdout(
@@ -278,7 +253,7 @@ func Test_GetDoc_GetGoDclNatural_OneItem(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		line,
-		markGoCode(
+		update.MarkGoCode(
 			"// TimesTwo returns the value times two.\n"+
 				"func TimesTwo(i int) int",
 		),
@@ -302,7 +277,7 @@ func Test_GetDoc_GetGoDclNatural_TwoItems(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		line,
-		markGoCode(
+		update.MarkGoCode(
 			"// TimesTwo returns the value times two.\n"+
 				"func TimesTwo(i int) int\n"+
 				"\n"+
@@ -331,10 +306,10 @@ func Test_GetDoc_GetDoc_TwoItems(t *testing.T) {
 	chk.Str(
 		s,
 		""+
-			markGoCode("func TimesTwo(i int) int")+"\n\n"+
+			update.MarkGoCode("func TimesTwo(i int) int")+"\n\n"+
 			"TimesTwo returns the value times two.\n"+
 			"\n"+
-			markGoCode("func TimesThree(i int) int")+"\n\n"+
+			update.MarkGoCode("func TimesThree(i int) int")+"\n\n"+
 			"TimesThree returns the value times three.",
 	)
 

@@ -29,6 +29,7 @@ import (
 	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/cmds"
 	"github.com/dancsecs/gotomd/internal/errs"
+	"github.com/dancsecs/gotomd/internal/update"
 )
 
 //nolint:goCheckNoGlobals // Ok.
@@ -66,10 +67,6 @@ var squashAllTestTime = regexp.MustCompile(`(?m)^FAIL\s(.+?)\s\d+\.\d+s$`)
 var squashCached = regexp.MustCompile(
 	`(?m)^(ok\s+.+?\s+)(?:\(cached\)|\d+\.\d+s)\s+(.*)$`,
 )
-
-func markBashCode(content string) string {
-	return "```bash\n" + strings.TrimRight(content, "\n") + "\n```"
-}
 
 func setupEnv(env []string) []string {
 	szEnv := szEnvSetup
@@ -202,7 +199,7 @@ func GetGoTst(cmd string) (string, error) {
 				res += "\n\n"
 			}
 
-			res += markBashCode(tstCmd) + "\n\n" + tstRes
+			res += update.MarkBashCode(tstCmd) + "\n\n" + tstRes
 		}
 	}
 

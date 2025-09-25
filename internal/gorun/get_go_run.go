@@ -27,11 +27,8 @@ import (
 
 	"github.com/dancsecs/gotomd/internal/cmds"
 	"github.com/dancsecs/gotomd/internal/errs"
+	"github.com/dancsecs/gotomd/internal/update"
 )
-
-func markBashCode(content string) string {
-	return "```bash\n" + strings.TrimRight(content, "\n") + "\n```"
-}
 
 func joinKeepPrefix(dir, file string) string {
 	const relativePrefix = "." + string(os.PathSeparator)
@@ -110,7 +107,8 @@ func GetGoRun(cmd string) (string, error) {
 	}
 
 	if err == nil {
-		res += "---\n" + markBashCode(runCmd) + "\n\n" + runRes + "\n---"
+		res += "---\n" + update.MarkBashCode(runCmd) +
+			"\n\n" + runRes + "\n---"
 	}
 
 	if err == nil {

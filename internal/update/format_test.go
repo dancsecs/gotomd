@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,43 +16,40 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package file
+package update_test
 
 import (
-	"os"
+	"testing"
 
-	"github.com/dancsecs/gotomd/internal/cmds"
 	"github.com/dancsecs/gotomd/internal/update"
+	"github.com/dancsecs/sztestlog"
 )
 
-const catCmd = "cat "
+func TestUpdate_Format(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
 
-// GetGoFile retrieves a go file.
-func GetGoFile(cmd string) (string, error) {
-	var (
-		fData []byte
-		res   string
+	update.FormatForMarkdown()
+
+	chk.Str(
+		update.MarkGoCode("ABC\n"),
+		"```go\nABC\n```",
 	)
 
-	dir, fName, err := cmds.ParseCmds(cmd)
-	for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-		fPath := dir[i] + string(os.PathSeparator) + fName[i]
-		fData, err = os.ReadFile(fPath) //nolint:gosec // Ok.
+	chk.Str(
+		update.MarkBashCode("ABC\n"),
+		"```bash\nABC\n```",
+	)
 
-		if err == nil {
-			if res != "" {
-				res += "\n\n"
-			}
+	update.FormatForGoDoc()
 
-			res += "" +
-				update.MarkBashCode(catCmd+fPath) + "\n\n" +
-				update.MarkGoCode(string(fData))
-		}
-	}
+	chk.Str(
+		update.MarkGoCode("ABC\n"),
+		"\tABC",
+	)
 
-	if err == nil {
-		return res, nil
-	}
-
-	return "", err //nolint:wrapcheck // Caller will wrap error.
+	chk.Str(
+		update.MarkBashCode("ABC\n"),
+		"\tABC",
+	)
 }

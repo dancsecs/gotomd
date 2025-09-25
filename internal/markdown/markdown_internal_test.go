@@ -24,6 +24,7 @@ import (
 
 	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/gotomd/internal/gopkg"
+	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -74,7 +75,7 @@ func Test_Markdown_Expand(t *testing.T) {
 	chk.Str(
 		expand(szDocPrefix,
 			"TimesTwo",
-			markGoCode(docInfo.Declaration())+"\n\n"+
+			update.MarkGoCode(docInfo.Declaration())+"\n\n"+
 				docInfo.Comment(),
 		),
 		"<!--- gotomd::Bgn::doc::TimesTwo -->\n"+

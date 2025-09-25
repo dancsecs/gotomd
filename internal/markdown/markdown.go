@@ -95,10 +95,6 @@ func init() {
 	action.sort()
 }
 
-func markGoCode(content string) string {
-	return "```go\n" + strings.TrimRight(content, "\n") + "\n```"
-}
-
 func expand(prefix, cmd, content string) string {
 	return "" +
 		sztestBgnPrefix + prefix + cmd + " -->\n" +
