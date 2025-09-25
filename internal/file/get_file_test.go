@@ -16,42 +16,62 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package file_test
 
 import (
 	"os"
+	"strings"
 	"testing"
 
+	"github.com/dancsecs/gotomd/internal/errs"
+	"github.com/dancsecs/gotomd/internal/file"
 	"github.com/dancsecs/sztestlog"
 )
+
+const (
+	catCmd   = "cat "
+	pkgLabel = "package"
+	sep      = string(os.PathSeparator)
+
+	tstpkg1     = "tstpkg1"
+	tstpkg1Path = "." + sep + "testdata" + sep + tstpkg1 + sep
+
+	tstpkg2     = "tstpkg2"
+	tstpkg2Path = "." + sep + "testdata" + sep + tstpkg2 + sep
+)
+
+func markGoCode(content string) string {
+	return "```go\n" + strings.TrimRight(content, "\n") + "\n```"
+}
+
+func markBashCode(content string) string {
+	return "```bash\n" + strings.TrimRight(content, "\n") + "\n```"
+}
 
 func Test_GetFile_GetGoFileInvalid(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	tstDir := "TEST_DIRECTORY_DOES_NOT_EXIST" + string(os.PathSeparator)
-	_, err := getGoFile(tstDir)
+	_, err := file.GetGoFile(tstDir)
 	chk.Err(
 		err,
-		ErrInvalidRelativeDir.Error()+": \""+tstDir+"\"",
+		errs.ErrInvalidRelativeDir.Error()+": \""+tstDir+"\"",
 	)
-
-	_, err = getGoTst(example1Path + "TEST_DOES_NOT_EXIST")
-	chk.Err(err, ErrNoTestToRun.Error())
 }
 
 func Test_GetFile_GetGoFile(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	d, err := getGoFile(example1Path + "crumb.go")
+	d, err := file.GetGoFile(tstpkg1Path + "crumb.go")
 	chk.NoErr(err)
 	chk.Str(
 		d,
 		""+
-			markBashCode(catCmd+example1Path+"crumb.go")+
+			markBashCode(catCmd+tstpkg1Path+"crumb.go")+
 			"\n\n"+
-			markGoCode(pkgLabel+" "+example1),
+			markGoCode(pkgLabel+" "+tstpkg1),
 	)
 }
 
@@ -59,21 +79,21 @@ func Test_GetFile_GetGoFile2(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	file1 := example1Path + "crumb.go"
-	file2 := example2Path + "crumb.go"
+	file1 := tstpkg1Path + "crumb.go"
+	file2 := tstpkg2Path + "crumb.go"
 
-	d, err := getGoFile(file1 + " " + file2)
+	d, err := file.GetGoFile(file1 + " " + file2)
 	chk.NoErr(err)
 	chk.Str(
 		d,
 		""+
 			markBashCode(catCmd+file1)+
 			"\n\n"+
-			markGoCode(pkgLabel+" "+example1)+
+			markGoCode(pkgLabel+" "+tstpkg1)+
 			"\n\n"+
 			markBashCode(catCmd+file2)+
 			"\n\n"+
-			markGoCode(pkgLabel+" "+example2)+
+			markGoCode(pkgLabel+" "+tstpkg2)+
 			"",
 	)
 }

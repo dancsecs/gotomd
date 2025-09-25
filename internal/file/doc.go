@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,39 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
-
-import (
-	"os"
-)
-
-const catCmd = "cat "
-
-func getGoFile(cmd string) (string, error) {
-	var (
-		fData []byte
-		res   string
-	)
-
-	dir, fName, err := parseCmds(cmd)
-	for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-		fPath := dir[i] + string(os.PathSeparator) + fName[i]
-		fData, err = os.ReadFile(fPath) //nolint:gosec // Ok.
-
-		if err == nil {
-			if res != "" {
-				res += "\n\n"
-			}
-
-			res += "" +
-				markBashCode(catCmd+fPath) + "\n\n" +
-				markGoCode(string(fData))
-		}
-	}
-
-	if err == nil {
-		return res, nil
-	}
-
-	return "", err //nolint:wrapcheck // Caller will wrap error.
-}
+/*
+Package file provides for retrieving files from go package directories.
+*/
+package file
