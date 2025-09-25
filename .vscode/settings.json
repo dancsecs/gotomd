@@ -9,9 +9,12 @@
         "darkturquoise",
         "dcln",
         "dcls",
+        "godoc",
         "goerr",
         "gopkg",
+        "gorun",
         "gostd",
+        "gotest",
         "gotextdiff",
         "gotomd",
         "hexops",
@@ -21,8 +24,10 @@
         "Struct",
         "Szerszam",
         "sztest",
+        "testdata",
         "texttt",
         "toplevel",
+        "tstpkg",
         //
         // Ignore golanci-lint linter setting.
         "golangci",
