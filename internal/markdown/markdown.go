@@ -16,13 +16,19 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package markdown
 
 import (
 	"fmt"
 	"os"
 	"sort"
 	"strings"
+
+	"github.com/dancsecs/gotomd/internal/errs"
+	"github.com/dancsecs/gotomd/internal/file"
+	"github.com/dancsecs/gotomd/internal/godoc"
+	"github.com/dancsecs/gotomd/internal/gorun"
+	"github.com/dancsecs/gotomd/internal/gotest"
 )
 
 const (
@@ -78,15 +84,19 @@ var action = new(commandAction)
 
 //nolint:goCheckNoInits // Ok.
 func init() {
-	action.add("doc::", getDoc)
-	action.add("docConstGrp::", getDocDeclConstantBlock)
-	action.add("dcl::", getDocDecl)
-	action.add("dcln::", getDocDeclNatural)
-	action.add("dcls::", getDocDeclSingle)
-	action.add("file::", getGoFile)
-	action.add("run::", getGoRun)
-	action.add("tst::", getGoTst)
+	action.add("doc::", godoc.GetDoc)
+	action.add("docConstGrp::", godoc.GetDocDeclConstantBlock)
+	action.add("dcl::", godoc.GetDocDecl)
+	action.add("dcln::", godoc.GetDocDeclNatural)
+	action.add("dcls::", godoc.GetDocDeclSingle)
+	action.add("file::", file.GetGoFile)
+	action.add("run::", gorun.GetGoRun)
+	action.add("tst::", gotest.GetGoTst)
 	action.sort()
+}
+
+func markGoCode(content string) string {
+	return "```go\n" + strings.TrimRight(content, "\n") + "\n```"
 }
 
 func expand(prefix, cmd, content string) string {
@@ -114,7 +124,7 @@ func isCmd(line string) (int, int, error) {
 		}
 
 		if end < 0 || cmdIdx == -1 {
-			return 0, 0, fmt.Errorf("%w: %q", ErrUnknownCommand, line)
+			return 0, 0, fmt.Errorf("%w: %q", errs.ErrUnknownCommand, line)
 		}
 	}
 
@@ -122,7 +132,7 @@ func isCmd(line string) (int, int, error) {
 }
 
 //nolint:cyclop // Ok.
-func updateMarkDownDocument(dir, fData string) (string, error) {
+func updateMD(dir, fData string) (string, error) {
 	const (
 		skipDirBlank   = ""
 		skipDirThis    = "."

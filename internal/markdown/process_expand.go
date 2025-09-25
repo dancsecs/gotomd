@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package markdown
 
 import (
 	"bytes"
@@ -29,7 +29,10 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
-func expandMD(rPath string) error {
+// ExpandMD processes the supplied file data (after switching
+// to the supplied directory if necessary) returning the updated data with
+// all the gotomd commands expanded.
+func ExpandMD(rPath string) error {
 	var (
 		err         error
 		rDir, rFile string
@@ -58,7 +61,7 @@ func expandMD(rPath string) error {
 
 	if err == nil {
 		fileData := string(bytes.TrimRight(fileBytes, "\n"))
-		res, err = updateMarkDownDocument(rDir, fileData)
+		res, err = updateMD(rDir, fileData)
 	}
 
 	if err == nil {

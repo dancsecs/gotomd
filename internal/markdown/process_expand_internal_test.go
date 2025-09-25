@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package markdown
 
 import (
 	"os"
@@ -84,7 +84,7 @@ func setupExpandGlobals(
 }
 
 func setupExpandDirs(makeTarget bool) error {
-	const fName = "README_SHORT.md"
+	const fName = "README.md"
 
 	var (
 		err   error
@@ -93,7 +93,7 @@ func setupExpandDirs(makeTarget bool) error {
 	)
 
 	if makeTarget {
-		fData, err = os.ReadFile(filepath.Join(example1Path, fName))
+		fData, err = os.ReadFile(filepath.Join(tstpkgPath, fName))
 		if err == nil {
 			tFile = filepath.Join(args.OutputDir(), fName)
 			err = os.WriteFile(tFile, fData, args.Perm())
@@ -104,7 +104,7 @@ func setupExpandDirs(makeTarget bool) error {
 }
 
 func getExpandFiles() (string, []string, []string, error) {
-	const fName = "README_SHORT.md"
+	const fName = "README.md"
 
 	var (
 		targetPath string
@@ -117,7 +117,7 @@ func getExpandFiles() (string, []string, []string, error) {
 	gotBytes, err = os.ReadFile(targetPath) //nolint:gosec // Ok.
 
 	if err == nil {
-		wntBytes, err = os.ReadFile(example1Path + fName)
+		wntBytes, err = os.ReadFile(tstpkgPath + sep + fName)
 	}
 
 	if err != nil {
@@ -139,7 +139,7 @@ func Test_ProcessExpand_NoTargetNoForceNoVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
+	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -157,7 +157,7 @@ func Test_ProcessExpand_NoTargetForceNoVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
+	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -176,14 +176,14 @@ func Test_ProcessExpand_NoTargetNoForceVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
+	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
 
 	tFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Stdout(
-		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
+		"Expanding "+tstpkgPath+sep+".README.gtm.md to: "+tFile,
 		"getInfo(\"package\")",
 	)
 }
@@ -198,14 +198,14 @@ func Test_ProcessExpand_NoTargetForceVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
+	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
 
 	tFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Stdout(
-		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
+		"Expanding "+tstpkgPath+sep+".README.gtm.md to: "+tFile,
 		"getInfo(\"package\")",
 	)
 }
@@ -221,7 +221,7 @@ func Test_ProcessExpand_CancelOverwriteTargetForceNoVerbose(t *testing.T) {
 
 	chk.SetStdinData("N\n")
 
-	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
+	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -239,14 +239,14 @@ func Test_ProcessExpand_CancelOverwriteForceVerbose(t *testing.T) {
 
 	chk.SetStdinData("N\n")
 
-	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
+	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
 
 	tFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Stdout(
-		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+tFile,
+		"Expanding "+tstpkgPath+sep+".README.gtm.md to: "+tFile,
 		"getInfo(\"package\")",
 	)
 }
@@ -262,7 +262,7 @@ func Test_ProcessExpand_OverwriteTargetForceNoVerbose(t *testing.T) {
 
 	chk.SetStdinData("Y\n")
 
-	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
+	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -280,14 +280,14 @@ func Test_ProcessExpand_OverwriteForceVerbose(t *testing.T) {
 
 	chk.SetStdinData("Y\n")
 
-	chk.NoErr(expandMD(example1Path + ".README_SHORT.gtm.md"))
+	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
 
 	wFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Stdout(
-		"Expanding "+example1Path+".README_SHORT.gtm.md to: "+wFile,
+		"Expanding "+tstpkgPath+sep+".README.gtm.md to: "+wFile,
 		"getInfo(\"package\")",
 	)
 }
