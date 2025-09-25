@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package gotest
 
 import (
 	"fmt"
@@ -25,7 +25,19 @@ import (
 
 	"github.com/dancsecs/gotomd/internal/ansi"
 	"github.com/dancsecs/gotomd/internal/args"
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/sztestlog"
+)
+
+const (
+	pkgLabel = "package"
+	sep      = string(os.PathSeparator)
+
+	tstpkg1     = "tstpkg1"
+	tstpkg1Path = "." + sep + "testdata" + sep + tstpkg1 + sep
+
+	tstpkg2     = "tstpkg2"
+	tstpkg2Path = "." + sep + "testdata" + sep + tstpkg2 + sep
 )
 
 func Test_GetTest_GetGoTst(t *testing.T) {
@@ -33,14 +45,14 @@ func Test_GetTest_GetGoTst(t *testing.T) {
 	defer chk.Release()
 
 	cmd := "TEST_DIRECTORY_DOES_NOT_EXIST" + string(os.PathSeparator)
-	_, err := getGoTst(cmd)
+	_, err := GetGoTst(cmd)
 	chk.Err(
 		err,
-		ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
+		errs.ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
 	)
 
-	_, err = getGoTst("./TEST_DOES_NOT_EXIST")
-	chk.Err(err, ErrNoTestToRun.Error())
+	_, err = GetGoTst("./TEST_DOES_NOT_EXIST")
+	chk.Err(err, errs.ErrNoTestToRun.Error())
 }
 
 func Test_GetTest_RunTestNotDirectory(t *testing.T) {
@@ -68,9 +80,9 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 
 	chk.NoErr(args.Process())
 
-	file1 := example1Path + pkgLabel
-	file2 := example2Path + pkgLabel
-	s, err := getGoTst(file1 + " " + file2)
+	file1 := tstpkg1Path + pkgLabel
+	file2 := tstpkg2Path + pkgLabel
+	s, err := GetGoTst(file1 + " " + file2)
 
 	chk.NoErr(err)
 	fmt.Printf("%s\n", s)
@@ -102,7 +114,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 	chk.Stdout("" +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+example1) + "\n\n" +
+				sep+"testdata"+sep+tstpkg1) + "\n\n" +
 		chk.TrimAll(`
     {{latexOn}}=== RUN   Test_PASS_Example1{{latexOff}}
     <br>
@@ -140,7 +152,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}coverage: 100.0&#xFE6A; of statements{{latexOff}}
     <br>
-    {{latexOn}}FAIL github.com/dancsecs/gotomd/example1 0.0s{{latexOff}}
+    {{latexOn}}FAIL github.com/dancsecs/gotomd/internal/gotest/testdata/tstpkg1 0.0s{{latexOff}}
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
@@ -148,7 +160,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     `) + "\n\n" +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+example2) + "\n\n" +
+				sep+"testdata"+sep+tstpkg2) + "\n\n" +
 		chk.TrimAll(`
     {{latexOn}}=== RUN   Test_PASS_Example2{{latexOff}}
     <br>
@@ -186,7 +198,7 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
     <br>
     {{latexOn}}coverage: 100.0&#xFE6A; of statements{{latexOff}}
     <br>
-    {{latexOn}}FAIL github.com/dancsecs/gotomd/example2 0.0s{{latexOff}}
+    {{latexOn}}FAIL github.com/dancsecs/gotomd/internal/gotest/testdata/tstpkg2 0.0s{{latexOff}}
     <br>
     {{latexOn}}FAIL{{latexOff}}
     <br>
@@ -201,9 +213,9 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
 
 	args.Reset()
 
-	file1 := example1Path + pkgLabel
-	file2 := example2Path + pkgLabel
-	s, err := getGoTst(file1 + " " + file2)
+	file1 := tstpkg1Path + pkgLabel
+	file2 := tstpkg2Path + pkgLabel
+	s, err := GetGoTst(file1 + " " + file2)
 
 	chk.NoErr(err)
 	fmt.Printf("%s\n", s)
@@ -212,7 +224,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
 	chk.Stdout("" +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+example1) + "\n\n" + chk.TrimAll(`
+				sep+"testdata"+sep+tstpkg1) + "\n\n" + chk.TrimAll(`
     <pre>
     === RUN   Test_PASS_Example1
     --- PASS: Test_PASS_Example1 (0.0s)
@@ -232,13 +244,13 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     --- FAIL: Test_FAIL_Example1 (0.0s)
     FAIL
     coverage: 100.0% of statements
-    FAIL github.com/dancsecs/gotomd/example1 0.0s
+    FAIL github.com/dancsecs/gotomd/internal/gotest/testdata/tstpkg1 0.0s
     FAIL
     </pre>
     `) + "\n\n" +
 		markBashCode(
 			"go test -v -cover ."+
-				string(os.PathSeparator)+example2) + "\n\n" + chk.TrimAll(`
+				sep+"testdata"+sep+tstpkg2) + "\n\n" + chk.TrimAll(`
     <pre>
     === RUN   Test_PASS_Example2
     --- PASS: Test_PASS_Example2 (0.0s)
@@ -258,7 +270,7 @@ func Test_GetTest_RunTestNoColor(t *testing.T) {
     --- FAIL: Test_FAIL_Example2 (0.0s)
     FAIL
     coverage: 100.0% of statements
-    FAIL github.com/dancsecs/gotomd/example2 0.0s
+    FAIL github.com/dancsecs/gotomd/internal/gotest/testdata/tstpkg2 0.0s
     FAIL
     </pre>
   `))

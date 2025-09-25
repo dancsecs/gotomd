@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2023-2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package gotest
 
 import (
 	"bytes"
@@ -27,6 +27,8 @@ import (
 
 	"github.com/dancsecs/gotomd/internal/ansi"
 	"github.com/dancsecs/gotomd/internal/args"
+	"github.com/dancsecs/gotomd/internal/cmds"
+	"github.com/dancsecs/gotomd/internal/errs"
 )
 
 //nolint:goCheckNoGlobals // Ok.
@@ -65,6 +67,10 @@ var squashCached = regexp.MustCompile(
 	`(?m)^(ok\s+.+?\s+)(?:\(cached\)|\d+\.\d+s)\s+(.*)$`,
 )
 
+func markBashCode(content string) string {
+	return "```bash\n" + strings.TrimRight(content, "\n") + "\n```"
+}
+
 func setupEnv(env []string) []string {
 	szEnv := szEnvSetup
 	newEnv := make([]string, 0, len(env)+len(szEnv))
@@ -89,7 +95,7 @@ func runTest(dir, tests string) (string, string, error) {
 
 	stat, err := os.Stat(dir)
 	if err == nil && !stat.IsDir() {
-		err = ErrInvalidDirectory
+		err = errs.ErrInvalidDirectory
 	}
 
 	if err == nil {
@@ -109,7 +115,7 @@ func runTest(dir, tests string) (string, string, error) {
 			rawRes,
 			[]byte("testing: warning: no tests to run"),
 		) {
-			err = ErrNoTestToRun
+			err = errs.ErrNoTestToRun
 		}
 	}
 
@@ -176,14 +182,15 @@ func buildTestCmds(dir, action []string) ([]string, []string) {
 	return newDir, newAction
 }
 
-func getGoTst(cmd string) (string, error) {
+// GetGoTst runs the go tests collecting all of the results.
+func GetGoTst(cmd string) (string, error) {
 	var (
 		res    string
 		tstRes string
 		tstCmd string
 	)
 
-	dir, action, err := parseCmds(cmd)
+	dir, action, err := cmds.ParseCmds(cmd)
 	if err == nil {
 		dir, action = buildTestCmds(dir, action)
 	}
