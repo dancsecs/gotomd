@@ -21,18 +21,43 @@
 // project to help automate keeping the README.md up to date
 // when an example changes.
 
-package main
+package godoc
 
 import (
 	"os"
 	"strings"
 	"testing"
 
-	"github.com/dancsecs/gotomd/internal/gopkg"
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/sztestlog"
 )
 
-const pkgLabel = "package"
+const (
+	pkgLabel   = "package"
+	sep        = string(os.PathSeparator)
+	tstpkg     = "tstpkg"
+	tstpkgPath = "." + sep + "testdata" + sep + tstpkg + sep
+)
+
+func Test_CmdParse_ParseCmd_InvalidDir(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	cmd := "." + sep + "INVALID_DIR" + sep + "action"
+
+	str, err := GetDoc(cmd)
+	chk.Err(
+		err,
+		chk.ErrChain(
+			errs.ErrInvalidDirectory,
+			"\"."+sep+"INVALID_DIR\"",
+		),
+	)
+	chk.Str(
+		str,
+		"",
+	)
+}
 
 func Test_GetDoc_MarkGoCode(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
@@ -68,8 +93,8 @@ func Test_GetDoc_GetGoDcl_NoItems(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDocDecl(example1Path)
-	chk.Err(err, ErrMissingAction.Error())
+	s, err := GetDocDecl(tstpkgPath)
+	chk.Err(err, errs.ErrMissingAction.Error())
 	chk.Str(s, "")
 }
 
@@ -77,15 +102,15 @@ func Test_GetDoc_GetGoDcl_Package(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	s, err := getDocDecl(example1Path + pkgLabel)
+	s, err := GetDocDecl(tstpkgPath + pkgLabel)
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		markGoCode(pkgLabel+" "+example1+"\n"),
+		markGoCode(pkgLabel+" "+tstpkg+"\n"),
 	)
 
 	chk.Stdout(
-		"Loading package info for: ./example1",
+		"Loading package info for: ./testdata/tstpkg",
 		"getInfo(\"package\")",
 	)
 }
@@ -94,8 +119,8 @@ func Test_GetDoc_GetGoDcl_InvalidItem(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	s, err := getDocDecl(example1Path + "unknownItem")
-	chk.Err(err, gopkg.ErrUnknownObject.Error()+": unknownItem")
+	s, err := GetDocDecl(tstpkgPath + "unknownItem")
+	chk.Err(err, errs.ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
 	chk.Stdout(
@@ -109,10 +134,10 @@ func Test_GetDoc_GetGoDcl_OneItem(t *testing.T) {
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
-		pkgLabel+" ."+string(os.PathSeparator)+example1,
+		pkgLabel+" ."+string(os.PathSeparator)+tstpkg,
 	)
 
-	s, err := getDocDecl(example1Path + "TimesTwo")
+	s, err := GetDocDecl(tstpkgPath + "TimesTwo")
 	chk.NoErr(err)
 	chk.Str(
 		s,
@@ -130,10 +155,10 @@ func Test_GetDoc_GetGoDcl_TwoItems(t *testing.T) {
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
-		pkgLabel+" ."+string(os.PathSeparator)+example1,
+		pkgLabel+" ."+string(os.PathSeparator)+tstpkg,
 	)
 
-	s, err := getDocDecl(example1Path + "TimesTwo TimesThree")
+	s, err := GetDocDecl(tstpkgPath + "TimesTwo TimesThree")
 	chk.NoErr(err)
 	chk.Str(
 		s,
@@ -150,8 +175,8 @@ func Test_GetDoc_GetGoDclSingle_NoItems(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	s, err := getDocDeclSingle(example1Path)
-	chk.Err(err, ErrMissingAction.Error())
+	s, err := GetDocDeclSingle(tstpkgPath)
+	chk.Err(err, errs.ErrMissingAction.Error())
 	chk.Str(s, "")
 }
 
@@ -159,11 +184,11 @@ func Test_GetDoc_GetGoDclSingle_PackageNoItems(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	s, err := getDocDeclSingle(example1Path + pkgLabel)
+	s, err := GetDocDeclSingle(tstpkgPath + pkgLabel)
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		markGoCode(pkgLabel+" "+example1+"\n"),
+		markGoCode(pkgLabel+" "+tstpkg+"\n"),
 	)
 
 	chk.Stdout(
@@ -175,8 +200,8 @@ func Test_GetDoc_GetGoDclSingle_InvalidItem(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	s, err := getDocDeclSingle(example1Path + "unknownItem")
-	chk.Err(err, gopkg.ErrUnknownObject.Error()+": unknownItem")
+	s, err := GetDocDeclSingle(tstpkgPath + "unknownItem")
+	chk.Err(err, errs.ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
 	chk.Stdout(
@@ -188,11 +213,11 @@ func Test_GetDoc_GetGoDclSingle_OneItem(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	line, err := getDocDeclSingle(example1Path + "TimesTwo")
+	line, err := GetDocDeclSingle(tstpkgPath + "TimesTwo")
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
-		pkgLabel+" ."+string(os.PathSeparator)+example1,
+		pkgLabel+" ."+string(os.PathSeparator)+tstpkg,
 	)
 	chk.NoErr(err)
 	chk.Str(
@@ -211,10 +236,10 @@ func Test_GetDoc_GetGoDclSingle_TwoItems(t *testing.T) {
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
-		pkgLabel+" ."+string(os.PathSeparator)+example1,
+		pkgLabel+" ."+string(os.PathSeparator)+tstpkg,
 	)
 
-	s, err := getDocDeclSingle(example1Path + "TimesTwo TimesThree")
+	s, err := GetDocDeclSingle(tstpkgPath + "TimesTwo TimesThree")
 	chk.NoErr(err)
 	chk.Str(
 		s,
@@ -231,8 +256,8 @@ func Test_GetDoc_GetGoDclNatural_InvalidItem(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	s, err := getDocDeclNatural(example1Path + "unknownItem")
-	chk.Err(err, gopkg.ErrUnknownObject.Error()+": unknownItem")
+	s, err := GetDocDeclNatural(tstpkgPath + "unknownItem")
+	chk.Err(err, errs.ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
 	chk.Stdout(
@@ -244,11 +269,11 @@ func Test_GetDoc_GetGoDclNatural_OneItem(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	line, err := getDocDeclNatural(example1Path + "TimesTwo")
+	line, err := GetDocDeclNatural(tstpkgPath + "TimesTwo")
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
-		pkgLabel+" ."+string(os.PathSeparator)+example1,
+		pkgLabel+" ."+string(os.PathSeparator)+tstpkg,
 	)
 	chk.NoErr(err)
 	chk.Str(
@@ -268,11 +293,11 @@ func Test_GetDoc_GetGoDclNatural_TwoItems(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	line, err := getDocDeclNatural(example1Path + "TimesTwo TimesThree")
+	line, err := GetDocDeclNatural(tstpkgPath + "TimesTwo TimesThree")
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
-		pkgLabel+" ."+string(os.PathSeparator)+example1,
+		pkgLabel+" ."+string(os.PathSeparator)+tstpkg,
 	)
 	chk.NoErr(err)
 	chk.Str(
@@ -298,10 +323,10 @@ func Test_GetDoc_GetDoc_TwoItems(t *testing.T) {
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
-		pkgLabel+" ."+string(os.PathSeparator)+example1,
+		pkgLabel+" ."+string(os.PathSeparator)+tstpkg,
 	)
 
-	s, err := getDoc(example1Path + "TimesTwo TimesThree")
+	s, err := GetDoc(tstpkgPath + "TimesTwo TimesThree")
 	chk.NoErr(err)
 	chk.Str(
 		s,
@@ -323,8 +348,8 @@ func Test_GetDoc_GetDocConstantBlock_InvalidItem(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	s, err := getDocDeclConstantBlock(example1Path + "unknownItem")
-	chk.Err(err, gopkg.ErrUnknownObject.Error()+": unknownItem")
+	s, err := GetDocDeclConstantBlock(tstpkgPath + "unknownItem")
+	chk.Err(err, errs.ErrUnknownObject.Error()+": unknownItem")
 	chk.Str(s, "")
 
 	chk.Stdout(
@@ -338,10 +363,10 @@ func Test_GetDoc_GetDocConstantBlockOne(t *testing.T) {
 
 	chk.AddSub(
 		pkgLabel+` .*$`,
-		pkgLabel+" ."+string(os.PathSeparator)+example1,
+		pkgLabel+" ."+string(os.PathSeparator)+tstpkg,
 	)
 
-	s, err := getDocDeclConstantBlock(example1Path + "ConstantGroup1")
+	s, err := GetDocDeclConstantBlock(tstpkgPath + "ConstantGroup1")
 	chk.NoErr(err)
 	chk.StrSlice(
 		strings.Split(s, "\n"),
@@ -369,7 +394,7 @@ func Test_GetDoc_GetDocConstantBlockTwo(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
-	s, err := getDocDeclConstantBlock(example1Path +
+	s, err := GetDocDeclConstantBlock(tstpkgPath +
 		"ConstantGroup1 ConstantGroupA",
 	)
 	chk.NoErr(err)

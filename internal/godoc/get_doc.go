@@ -16,11 +16,12 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package main
+package godoc
 
 import (
 	"strings"
 
+	"github.com/dancsecs/gotomd/internal/cmds"
 	"github.com/dancsecs/gotomd/internal/gopkg"
 )
 
@@ -32,13 +33,14 @@ func markBashCode(content string) string {
 	return "```bash\n" + strings.TrimRight(content, "\n") + "\n```"
 }
 
-func getDoc(cmd string) (string, error) {
+// GetDoc returns the go documentation requested.
+func GetDoc(cmd string) (string, error) {
 	var (
 		dInfo *gopkg.DocInfo
 		res   string
 	)
 
-	dir, action, err := parseCmds(cmd)
+	dir, action, err := cmds.ParseCmds(cmd)
 	for i, mi := 0, len(dir); i < mi && err == nil; i++ {
 		dInfo, err = gopkg.Info(dir[i], action[i])
 		if err == nil {
@@ -58,13 +60,15 @@ func getDoc(cmd string) (string, error) {
 	return "", err //nolint:wrapcheck // Ok.
 }
 
-func getDocDecl(cmd string) (string, error) {
+// GetDocDecl returns go information for requested objects as presented in
+// the source..
+func GetDocDecl(cmd string) (string, error) {
 	var (
 		dInfo *gopkg.DocInfo
 		res   string
 	)
 
-	dir, action, err := parseCmds(cmd)
+	dir, action, err := cmds.ParseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
 			dInfo, err = gopkg.Info(dir[i], action[i])
@@ -85,13 +89,15 @@ func getDocDecl(cmd string) (string, error) {
 	return "", err //nolint:wrapcheck // Ok.
 }
 
-func getDocDeclSingle(cmd string) (string, error) {
+// GetDocDeclSingle returns the go declaration for requested objects on a
+// single line.
+func GetDocDeclSingle(cmd string) (string, error) {
 	var (
 		dInfo *gopkg.DocInfo
 		res   string
 	)
 
-	dir, action, err := parseCmds(cmd)
+	dir, action, err := cmds.ParseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
 			dInfo, err = gopkg.Info(dir[i], action[i])
@@ -112,13 +118,15 @@ func getDocDeclSingle(cmd string) (string, error) {
 	return "", err //nolint:wrapcheck // Ok.
 }
 
-func getDocDeclNatural(cmd string) (string, error) {
+// GetDocDeclNatural returns the go declaration for requested objects exactly
+// as defined in the source code.
+func GetDocDeclNatural(cmd string) (string, error) {
 	var (
 		dInfo *gopkg.DocInfo
 		res   string
 	)
 
-	dir, action, err := parseCmds(cmd)
+	dir, action, err := cmds.ParseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
 			dInfo, err = gopkg.Info(dir[i], action[i])
@@ -140,13 +148,15 @@ func getDocDeclNatural(cmd string) (string, error) {
 	return "", err //nolint:wrapcheck // Ok.
 }
 
-func getDocDeclConstantBlock(cmd string) (string, error) {
+// GetDocDeclConstantBlock returns the go declaration for a typed constant
+// block.
+func GetDocDeclConstantBlock(cmd string) (string, error) {
 	var (
 		dInfo *gopkg.DocInfo
 		res   string
 	)
 
-	dir, action, err := parseCmds(cmd)
+	dir, action, err := cmds.ParseCmds(cmd)
 	if err == nil {
 		for i, mi := 0, len(dir); i < mi && err == nil; i++ {
 			dInfo, err = gopkg.Info(dir[i], action[i])
