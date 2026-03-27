@@ -22,8 +22,8 @@ import (
 	"strings"
 
 	"github.com/dancsecs/gotomd/internal/cmds"
+	"github.com/dancsecs/gotomd/internal/format"
 	"github.com/dancsecs/gotomd/internal/gopkg"
-	"github.com/dancsecs/gotomd/internal/update"
 )
 
 // GetDoc returns the go documentation requested.
@@ -41,7 +41,7 @@ func GetDoc(cmd string) (string, error) {
 				res += "\n\n"
 			}
 
-			res += update.MarkGoCode(dInfo.Declaration()) + "\n\n" +
+			res += format.Inline("go", dInfo.Declaration()) + "\n\n" +
 				dInfo.Comment()
 		}
 	}
@@ -76,7 +76,7 @@ func GetDocDecl(cmd string) (string, error) {
 	}
 
 	if err == nil {
-		return update.MarkGoCode(res), nil
+		return format.Inline("go", res), nil
 	}
 
 	return "", err //nolint:wrapcheck // Ok.
@@ -105,7 +105,7 @@ func GetDocDeclSingle(cmd string) (string, error) {
 	}
 
 	if err == nil {
-		return update.MarkGoCode(res), nil
+		return format.Inline("go", res), nil
 	}
 
 	return "", err //nolint:wrapcheck // Ok.
@@ -135,7 +135,7 @@ func GetDocDeclNatural(cmd string) (string, error) {
 	}
 
 	if err == nil {
-		return update.MarkGoCode(res), nil
+		return format.Inline("go", res), nil
 	}
 
 	return "", err //nolint:wrapcheck // Ok.
@@ -164,7 +164,7 @@ func GetDocDeclConstantBlock(cmd string) (string, error) {
 	}
 
 	if err == nil {
-		return update.MarkGoCode(res), nil
+		return format.Inline("go", res), nil
 	}
 
 	return "", err //nolint:wrapcheck // Ok.

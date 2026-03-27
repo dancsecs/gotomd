@@ -27,7 +27,7 @@ import (
 
 	"github.com/dancsecs/gotomd/internal/cmds"
 	"github.com/dancsecs/gotomd/internal/errs"
-	"github.com/dancsecs/gotomd/internal/update"
+	"github.com/dancsecs/gotomd/internal/format"
 )
 
 func joinKeepPrefix(dir, file string) string {
@@ -107,7 +107,7 @@ func GetGoRun(cmd string) (string, error) {
 	}
 
 	if err == nil {
-		res += "---\n" + update.MarkBashCode(runCmd) +
+		res += "---\n" + format.Inline("bash", runCmd) +
 			"\n\n" + runRes + "\n---"
 	}
 

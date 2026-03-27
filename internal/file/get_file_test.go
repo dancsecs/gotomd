@@ -24,7 +24,7 @@ import (
 
 	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/gotomd/internal/file"
-	"github.com/dancsecs/gotomd/internal/update"
+	"github.com/dancsecs/gotomd/internal/format"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -61,9 +61,9 @@ func Test_GetFile_GetGoFile(t *testing.T) {
 	chk.Str(
 		d,
 		""+
-			update.MarkBashCode(catCmd+tstpkg1Path+"crumb.go")+
+			format.Inline("bash", catCmd+tstpkg1Path+"crumb.go")+
 			"\n\n"+
-			update.MarkGoCode(pkgLabel+" "+tstpkg1),
+			format.Inline("go", pkgLabel+" "+tstpkg1),
 	)
 }
 
@@ -79,13 +79,13 @@ func Test_GetFile_GetGoFile2(t *testing.T) {
 	chk.Str(
 		d,
 		""+
-			update.MarkBashCode(catCmd+file1)+
+			format.Inline("bash", catCmd+file1)+
 			"\n\n"+
-			update.MarkGoCode(pkgLabel+" "+tstpkg1)+
+			format.Inline("go", pkgLabel+" "+tstpkg1)+
 			"\n\n"+
-			update.MarkBashCode(catCmd+file2)+
+			format.Inline("bash", catCmd+file2)+
 			"\n\n"+
-			update.MarkGoCode(pkgLabel+" "+tstpkg2)+
+			format.Inline("go", pkgLabel+" "+tstpkg2)+
 			"",
 	)
 }

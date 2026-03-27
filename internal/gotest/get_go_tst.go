@@ -29,7 +29,7 @@ import (
 	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/cmds"
 	"github.com/dancsecs/gotomd/internal/errs"
-	"github.com/dancsecs/gotomd/internal/update"
+	"github.com/dancsecs/gotomd/internal/format"
 )
 
 //nolint:goCheckNoGlobals // Ok.
@@ -199,7 +199,7 @@ func GetGoTst(cmd string) (string, error) {
 				res += "\n\n"
 			}
 
-			res += update.MarkBashCode(tstCmd) + "\n\n" + tstRes
+			res += format.Inline("bash", tstCmd) + "\n\n" + tstRes
 		}
 	}
 

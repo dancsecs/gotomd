@@ -29,7 +29,7 @@ import (
 	"testing"
 
 	"github.com/dancsecs/gotomd/internal/errs"
-	"github.com/dancsecs/gotomd/internal/update"
+	"github.com/dancsecs/gotomd/internal/format"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -77,7 +77,7 @@ func Test_GetDoc_GetGoDcl_Package(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		update.MarkGoCode(pkgLabel+" "+tstpkg+"\n"),
+		format.Inline("go", pkgLabel+" "+tstpkg+"\n"),
 	)
 
 	chk.Stdout(
@@ -112,7 +112,7 @@ func Test_GetDoc_GetGoDcl_OneItem(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		update.MarkGoCode("func TimesTwo(i int) int\n"),
+		format.Inline("go", "func TimesTwo(i int) int\n"),
 	)
 
 	chk.Stdout(
@@ -133,7 +133,7 @@ func Test_GetDoc_GetGoDcl_TwoItems(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		update.MarkGoCode(
+		format.Inline("go",
 			"func TimesTwo(i int) int\nfunc TimesThree(i int) int\n",
 		),
 	)
@@ -161,7 +161,7 @@ func Test_GetDoc_GetGoDclSingle_PackageNoItems(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		update.MarkGoCode(pkgLabel+" "+tstpkg+"\n"),
+		format.Inline("go", pkgLabel+" "+tstpkg+"\n"),
 	)
 
 	chk.Stdout(
@@ -195,7 +195,7 @@ func Test_GetDoc_GetGoDclSingle_OneItem(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		line,
-		update.MarkGoCode("func TimesTwo(i int) int\n"),
+		format.Inline("go", "func TimesTwo(i int) int\n"),
 	)
 
 	chk.Stdout(
@@ -216,7 +216,7 @@ func Test_GetDoc_GetGoDclSingle_TwoItems(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		s,
-		update.MarkGoCode(
+		format.Inline("go",
 			"func TimesTwo(i int) int\nfunc TimesThree(i int) int\n",
 		),
 	)
@@ -253,7 +253,7 @@ func Test_GetDoc_GetGoDclNatural_OneItem(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		line,
-		update.MarkGoCode(
+		format.Inline("go",
 			"// TimesTwo returns the value times two.\n"+
 				"func TimesTwo(i int) int",
 		),
@@ -277,7 +277,7 @@ func Test_GetDoc_GetGoDclNatural_TwoItems(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		line,
-		update.MarkGoCode(
+		format.Inline("go",
 			"// TimesTwo returns the value times two.\n"+
 				"func TimesTwo(i int) int\n"+
 				"\n"+
@@ -306,10 +306,10 @@ func Test_GetDoc_GetDoc_TwoItems(t *testing.T) {
 	chk.Str(
 		s,
 		""+
-			update.MarkGoCode("func TimesTwo(i int) int")+"\n\n"+
+			format.Inline("go", "func TimesTwo(i int) int")+"\n\n"+
 			"TimesTwo returns the value times two.\n"+
 			"\n"+
-			update.MarkGoCode("func TimesThree(i int) int")+"\n\n"+
+			format.Inline("go", "func TimesThree(i int) int")+"\n\n"+
 			"TimesThree returns the value times three.",
 	)
 

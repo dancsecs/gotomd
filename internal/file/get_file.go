@@ -22,7 +22,7 @@ import (
 	"os"
 
 	"github.com/dancsecs/gotomd/internal/cmds"
-	"github.com/dancsecs/gotomd/internal/update"
+	"github.com/dancsecs/gotomd/internal/format"
 )
 
 const catCmd = "cat "
@@ -45,8 +45,8 @@ func GetGoFile(cmd string) (string, error) {
 			}
 
 			res += "" +
-				update.MarkBashCode(catCmd+fPath) + "\n\n" +
-				update.MarkGoCode(string(fData))
+				format.Inline("bash", catCmd+fPath) + "\n\n" +
+				format.Inline("go", string(fData))
 		}
 	}
 
