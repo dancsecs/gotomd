@@ -17,19 +17,16 @@
 */
 
 /*
-Package gotomd maintains GitHub-style README.md files by embedding Go
-documentation, source code, test output, and command output directly
-from the Go codebase. This ensures that program documentation is kept
-in one place—the Go code itself—while keeping the README automatically
-up to date.
+Package gotomd maintains GitHub-style README.md and go package documentation
+files by embedding Go documentation, source code, test output, and command
+output directly from the Go codebase. This ensures that program documentation
+is kept in one place—the Go code itself—while keeping the README and package
+documentation automatically up to date.
 
 ## How it works
 
-gotomd processes a Markdown file in one of two ways:
-
- 1. **Template mode** — You maintain a separate template file named `*.gtm.md`.
- 2. **In-place mode** — You insert directives directly into an existing
-    `*.md` file, and gotomd replaces them in place.
+gotomd processes template files (.*.gtm.md and .*.gtm.go) into their
+respective *.md and *.go expanding included directives.
 
 Directives are written inside HTML-style comments:
 
@@ -38,10 +35,8 @@ Directives are written inside HTML-style comments:
 gotomd::ACTION::PARAMETERS
 -->
 ```
-
 When processing the file, gotomd replaces each directive with the
-corresponding generated content, enclosed in matching "Bgn" and "End"
-markers.
+corresponding generated content.
 
 ## Actions
 
@@ -71,8 +66,8 @@ gotomd::dcls::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
 -->
 ```
 
-Inserts each listed declaration as a single line, regardless of
-how it is declared in the source. No comments are included.
+Inserts each listed declaration as a single line, regardless of how it is
+declared in the source. No comments are included.
 
 Example: functions, methods, constants.
 
@@ -82,8 +77,8 @@ gotomd::dcln::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
 -->
 ```
 
-Inserts each listed declaration exactly as in the source, including
-any leading comments.
+Inserts each listed declaration exactly as in the source, including any
+leading comments.
 
 ```html
 <!---
@@ -100,8 +95,8 @@ gotomd::tst::goTest::./relativeDirectory/testName
 -->
 ```
 
-Runs go test in the given directory, targeting the specified test(s)
-or package, and includes the output.
+Runs go test in the given directory, targeting the specified test(s) or
+package, and includes the output.
 
 ```html
 <!---
@@ -117,31 +112,26 @@ gotomd::run::./relativeDirectory [args ...]
 -->
 ```
 
-Runs go run on the package in the given directory (assumes main)
-with the provided arguments, including the output.
+Runs go run on the package in the given directory (assumes main) with the
+provided arguments, including the output.
 
 ## Output Markers
 
-Generated content is wrapped between markers in the target file:
-
-	const sztestBgnPrefix = sztestPrefix + "Bgn::"
-	const sztestEndPrefix = sztestPrefix + "End::"
-
-Additionally, an auto-generated section header is prefixed with:
+Generated content is preceded by an auto-generated section header prefixed
+with:
 
 	const szAutoPrefix = sztestPrefix + "Auto::"
 
-This header is followed by a blank line. If operating in template mode
-(not in-place), a DO NOT MODIFY warning is also inserted.
+This header is followed by a blank line. If operating in template mode (not
+in-place), a DO NOT MODIFY warning is also inserted.
 
 # Usage: gotomd
 
-Synchronize GitHub README.md files with Go source code,
-documentation, tests, and command output. gotomd processes
-Markdown templates or existing README files, replacing special
-directives with content generated directly from your Go
-codebase. This ensures your documentation is always accurate
-and in sync with the source.
+Synchronize GitHub README.md files and Go package document files with Go
+source code, documentation, tests, and command output. gotomd processes
+templates replacing special directives with content generated directly from
+your Go codebase. This ensures your documentation is always accurate and in
+sync with the source.
 
 	gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
 	       [-f | --force] [-z | --colorize] [-o | --output <dir>]
@@ -184,10 +174,9 @@ and in sync with the source.
 
 # Dedication
 
-This project is dedicated to Reem.
-Your brilliance, courage, and quiet strength continue to inspire me.
-Every line is written in gratitude for the light and hope you brought into my
-life.
+This project is dedicated to Reem. Your brilliance, courage, and quiet
+strength continue to inspire me. Every line is written in gratitude for the
+light and hope you brought into my life.
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
