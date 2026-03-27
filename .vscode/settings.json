@@ -18,6 +18,7 @@
         "gotextdiff",
         "gotomd",
         "hexops",
+        "pkgdoc",
         "runtimes",
         "strconv",
         "Strs",
