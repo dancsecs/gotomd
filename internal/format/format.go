@@ -16,24 +16,24 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package update
+package format
 
 import "strings"
 
 //nolint:goCheckNoGlobals // Ok.
 var formatForPackage bool
 
-// FormatForMarkdown sets the format style.
-func FormatForMarkdown() {
+// ForMarkdown sets the format style.
+func ForMarkdown() {
 	formatForPackage = false
 }
 
-// FormatForGoDoc code for markdown templates.
-func FormatForGoDoc() {
+// ForGoDoc code for markdown templates.
+func ForGoDoc() {
 	formatForPackage = true
 }
 
-func markForGo(content string) string {
+func markForGoPackageInline(content string) string {
 	contentLines := strings.Split(content, "\n")
 	newContent := make([]string, len(contentLines))
 
@@ -41,31 +41,21 @@ func markForGo(content string) string {
 		newContent[i] = "\t" + l
 	}
 
-	return strings.Join(newContent, "\n")
+	return "\n" + strings.Join(newContent, "\n") + "\n"
 }
 
-// MarkGoCode frames the content in go code braces (```go ...```) if
-// processing a markdown document or by prefixing each line with a tab (\t)
-// character for go package documentation.
-func MarkGoCode(content string) string {
-	content = strings.TrimRight(content, "\n")
-
-	if formatForPackage {
-		return markForGo(content)
+// Inline frames the content in a ```language ... ``` multiline block for an
+// .md output and prefixes each body line with a tab "\t" character for a
+// go package document.
+func Inline(language, body string) string {
+	body = strings.Trim(body, "\n \t")
+	if body == "" {
+		return ""
 	}
 
-	return "```go\n" + content + "\n```"
-}
-
-// MarkBashCode frames the content in go code braces (```go ...```) if
-// processing a markdown document or by prefixing each line with a tab (\t)
-// character for go package documentation.
-func MarkBashCode(content string) string {
-	content = strings.TrimRight(content, "\n")
-
 	if formatForPackage {
-		return markForGo(content)
+		return markForGoPackageInline(body)
 	}
 
-	return "```bash\n" + content + "\n```"
+	return "```" + language + "\n" + body + "\n```"
 }

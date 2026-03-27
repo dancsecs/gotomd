@@ -16,12 +16,12 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package update_test
+package format_test
 
 import (
 	"testing"
 
-	"github.com/dancsecs/gotomd/internal/update"
+	"github.com/dancsecs/gotomd/internal/format"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -29,27 +29,33 @@ func TestUpdate_Format(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	update.FormatForMarkdown()
+	format.ForMarkdown()
+
+	chk.Str(format.Inline("go", "\n"), "")
+	chk.Str(format.Inline("bash", "\n"), "")
 
 	chk.Str(
-		update.MarkGoCode("ABC\n"),
+		format.Inline("go", "ABC\n"),
 		"```go\nABC\n```",
 	)
 
 	chk.Str(
-		update.MarkBashCode("ABC\n"),
+		format.Inline("bash", "ABC\n"),
 		"```bash\nABC\n```",
 	)
 
-	update.FormatForGoDoc()
+	format.ForGoDoc()
+
+	chk.Str(format.Inline("go", "\n"), "")
+	chk.Str(format.Inline("bash", "\n"), "")
 
 	chk.Str(
-		update.MarkGoCode("ABC\n"),
-		"\tABC",
+		format.Inline("go", "ABC\n"),
+		"\n\tABC\n",
 	)
 
 	chk.Str(
-		update.MarkBashCode("ABC\n"),
-		"\tABC",
+		format.Inline("bash", "ABC\n"),
+		"\n\tABC\n",
 	)
 }
