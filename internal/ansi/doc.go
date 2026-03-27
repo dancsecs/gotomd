@@ -18,7 +18,7 @@
 
 /*
 Package ansi provides for converting text containing ansi color codes to
-be rendered in LaTeX format to enable the decorated ans text to be displayed
+be rendered in LaTeX format to enable the decorated ansi text to be displayed
 in a GitHub README.md document.
 */
 package ansi
