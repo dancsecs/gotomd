@@ -17,7 +17,7 @@
 */
 
 /*
-Package markdown coordinates the building of a *.md file from its template
-*.gtm.md file.
+Package expand parses .*.gtm.md template files identifing and including output
+from gotomd commands.
 */
-package markdown
+package expand

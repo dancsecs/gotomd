@@ -16,15 +16,15 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package markdown
+package expand
 
 import (
 	"os"
 	"testing"
 
 	"github.com/dancsecs/gotomd/internal/errs"
+	"github.com/dancsecs/gotomd/internal/format"
 	"github.com/dancsecs/gotomd/internal/gopkg"
-	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/sztestlog"
 )
 
@@ -38,7 +38,7 @@ func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	updatedDoc, err := updateMD("",
+	updatedDoc, err := parse("",
 		sztestPrefix+szDocPrefix+"./INVALID_ROOT_DIRECTORY/action1 -->\n",
 	)
 
@@ -53,7 +53,7 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	updatedDoc, err := updateMD("",
+	updatedDoc, err := parse("",
 		sztestPrefix+"unknownCommand -->\n",
 	)
 
@@ -75,7 +75,7 @@ func Test_Markdown_Expand(t *testing.T) {
 	chk.Str(
 		expand(szDocPrefix,
 			"TimesTwo",
-			update.MarkGoCode(docInfo.Declaration())+"\n\n"+
+			format.Inline("go", docInfo.Declaration())+"\n\n"+
 				docInfo.Comment(),
 		),
 		"<!--- gotomd::Bgn::doc::TimesTwo -->\n"+

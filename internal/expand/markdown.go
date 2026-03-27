@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package markdown
+package expand
 
 import (
 	"fmt"
@@ -128,7 +128,7 @@ func isCmd(line string) (int, int, error) {
 }
 
 //nolint:cyclop // Ok.
-func updateMD(dir, fData string) (string, error) {
+func parse(dir, fData string) (string, error) {
 	const (
 		skipDirBlank   = ""
 		skipDirThis    = "."

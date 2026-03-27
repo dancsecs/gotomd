@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package markdown
+package expand
 
 import (
 	"os"
@@ -139,7 +139,7 @@ func Test_ProcessExpand_NoTargetNoForceNoVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
+	chk.NoErr(Process(tstpkgPath + sep + ".README.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -157,7 +157,7 @@ func Test_ProcessExpand_NoTargetForceNoVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
+	chk.NoErr(Process(tstpkgPath + sep + ".README.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -176,7 +176,7 @@ func Test_ProcessExpand_NoTargetNoForceVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
+	chk.NoErr(Process(tstpkgPath + sep + ".README.gtm.md"))
 
 	tFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -198,7 +198,7 @@ func Test_ProcessExpand_NoTargetForceVerbose(t *testing.T) {
 	)
 	chk.NoErr(setupExpandDirs(false))
 
-	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
+	chk.NoErr(Process(tstpkgPath + sep + ".README.gtm.md"))
 
 	tFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -221,7 +221,7 @@ func Test_ProcessExpand_CancelOverwriteTargetForceNoVerbose(t *testing.T) {
 
 	chk.SetStdinData("N\n")
 
-	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
+	chk.NoErr(Process(tstpkgPath + sep + ".README.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -239,7 +239,7 @@ func Test_ProcessExpand_CancelOverwriteForceVerbose(t *testing.T) {
 
 	chk.SetStdinData("N\n")
 
-	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
+	chk.NoErr(Process(tstpkgPath + sep + ".README.gtm.md"))
 
 	tFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -262,7 +262,7 @@ func Test_ProcessExpand_OverwriteTargetForceNoVerbose(t *testing.T) {
 
 	chk.SetStdinData("Y\n")
 
-	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
+	chk.NoErr(Process(tstpkgPath + sep + ".README.gtm.md"))
 
 	_, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
@@ -280,7 +280,7 @@ func Test_ProcessExpand_OverwriteForceVerbose(t *testing.T) {
 
 	chk.SetStdinData("Y\n")
 
-	chk.NoErr(ExpandMD(tstpkgPath + sep + ".README.gtm.md"))
+	chk.NoErr(Process(tstpkgPath + sep + ".README.gtm.md"))
 
 	wFile, got, wnt, err := getExpandFiles()
 	chk.NoErr(err)
