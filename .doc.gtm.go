@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023-2025 Leslie Dancsecs
+   Copyright (C) 2023, 2024 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
 /*
 Package gotomd maintains GitHub-style README.md and go package documentation
 files by embedding Go documentation, source code, test output, and command
@@ -189,26 +188,12 @@ import (
 )
 
 const copyrightMessage = `
-   Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023-2025 Leslie Dancsecs
-
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//<<<! gotomd::file::~/.copyright >>
 `
 
 // Copyright writes the copyright message to os.Stdout.
 //
-//nolint:forbidigo // Copyright is public
+//nolint:forbidigo // Copyright is public.
 func Copyright() {
-	fmt.Print(strings.TrimLeft(copyrightMessage, "\n"))
+	fmt.Print(strings.Trim(copyrightMessage, " \t\n"))
 }

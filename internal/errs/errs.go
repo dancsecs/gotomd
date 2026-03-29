@@ -35,4 +35,5 @@ var (
 	ErrNoPackageToRun     = errors.New("no package to run")
 	ErrUnknownCommand     = errors.New("unknown command")
 	ErrUnknownTag         = errors.New("unknown tag")
+	ErrUnknownTemplate    = errors.New("unknown template")
 )

@@ -25,6 +25,7 @@ import (
 	"strings"
 
 	"github.com/dancsecs/gotomd/internal/args"
+	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/szlog"
 )
@@ -49,15 +50,27 @@ func Process(rPath string) error {
 		wDir = args.OutputDir()
 	}
 
-	wFile = strings.TrimSuffix(
-		strings.TrimPrefix(rFile, "."),
-		".gtm.md",
-	) + ".md"
-	wPath = filepath.Join(wDir, wFile)
+	var found bool
 
-	szlog.Say1f("Expanding %s to: %s\n", rPath, wPath)
+	wFile, found = strings.CutSuffix(rFile, ".gtm.go")
+	if found {
+		wFile += ".go"
+	} else {
+		wFile, found = strings.CutSuffix(rFile, ".gtm.md")
+		if found {
+			wFile += ".md"
+		} else {
+			err = errs.ErrUnknownTemplate
+		}
+	}
 
-	fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
+	if err == nil {
+		wPath = filepath.Join(wDir, strings.TrimPrefix(wFile, "."))
+
+		szlog.Say1f("Expanding %s to: %s\n", rPath, wPath)
+
+		fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
+	}
 
 	if err == nil {
 		fileData := string(bytes.TrimRight(fileBytes, "\n"))

@@ -52,19 +52,19 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 `
 
-// func processGoFiles(filesToProcess []string) error {
-// 	var err error
+func processGoFiles(filesToProcess []string) error {
+	var err error
 
-// 	update.FormatForGoDoc()
+	format.ForGoDoc()
 
-// 	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
-// 		gopkg.Reset()
+	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
+		gopkg.Reset()
 
-// 		err = markdown.ExpandMD(filesToProcess[i])
-// 	}
+		err = expand.Process(filesToProcess[i])
+	}
 
-// 	return err //nolint:wrapcheck // Ok.
-// }
+	return err //nolint:wrapcheck // Ok.
+}
 
 func processMDFiles(filesToProcess []string) error {
 	var err error
@@ -105,9 +105,9 @@ func Main() int {
 		fmt.Println(args.Usage()) //nolint:forbidigo  // Ok.
 	}
 
-	// if err == nil {
-	// 	err = processGoFiles(args.GoFiles())
-	// }
+	if err == nil {
+		err = processGoFiles(args.GoFiles())
+	}
 
 	if err == nil {
 		err = processMDFiles(args.MdFiles())
