@@ -21,16 +21,16 @@ package format
 import "strings"
 
 //nolint:goCheckNoGlobals // Ok.
-var formatForPackage bool
+var formatForGo bool
 
 // ForMarkdown sets the format style.
 func ForMarkdown() {
-	formatForPackage = false
+	formatForGo = false
 }
 
 // ForGoDoc code for markdown templates.
 func ForGoDoc() {
-	formatForPackage = true
+	formatForGo = true
 }
 
 func markForGoPackageInline(content string) string {
@@ -53,9 +53,36 @@ func Inline(language, body string) string {
 		return ""
 	}
 
-	if formatForPackage {
+	if formatForGo {
 		return markForGoPackageInline(body)
 	}
 
 	return "```" + language + "\n" + body + "\n```"
+}
+
+// Comment creates a stand alone comment.
+func Comment(line string) string {
+	if formatForGo {
+		return "// " + line + ".\n"
+	}
+
+	return "<!--- " + line + " -->\n"
+}
+
+// BalancedComment returns the string centered in a comment line.
+func BalancedComment(line string) string {
+	extra := 79
+
+	if formatForGo {
+		extra -= 4
+	} else {
+		extra -= 10
+	}
+
+	extra = (extra - len(line)) / 2
+	if extra > 0 {
+		line = strings.Repeat(" ", extra) + line
+	}
+
+	return Comment(line)
 }

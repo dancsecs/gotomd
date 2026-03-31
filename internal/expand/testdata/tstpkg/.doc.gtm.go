@@ -18,7 +18,7 @@
 
 /*
 Package example1 exists in order to test various go to git
-markdown (gToMD) extraction utilities.  Various object will be defined that
+markdown (goToMD) extraction utilities.  Various object will be defined that
 exhibit the various comment and declaration options permitted by gofmt.
 
 # Heading
@@ -29,4 +29,4 @@ header.
 Declarations can be single-line or multi-line blocks or constructions.  Each
 type will be included here for complete testing.
 */
-package expand
+package example1

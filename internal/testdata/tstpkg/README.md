@@ -1,4 +1,6 @@
-<!--- gotomd::Auto:: See github.com/dancsecs/gotomd **DO NOT MODIFY** -->
+<!---             *****  AUTO GENERATED:  DO NOT MODIFY  ***** -->
+<!---           MODIFY TEMPLATE: 'testdata/tstpkg/.README.gtm.md' -->
+<!---               See: 'https://github.com/dancsecs/gotomd' -->
 
 # Package tstpkg
 

@@ -1,4 +1,6 @@
-<!--- gotomd::Auto:: See github.com/dancsecs/gotomd **DO NOT MODIFY** -->
+<!---             *****  AUTO GENERATED:  DO NOT MODIFY  ***** -->
+<!---          MODIFY TEMPLATE: './testdata/tstpkg/.README.gtm.md' -->
+<!---               See: 'https://github.com/dancsecs/gotomd' -->
 
 # Package example1
 
@@ -14,7 +16,7 @@ package example1
 ```
 
 Package example1 exists in order to test various go to git
-markdown (gToMD) extraction utilities.  Various object will be defined that
+markdown (goToMD) extraction utilities.  Various object will be defined that
 exhibit the various comment and declaration options permitted by gofmt.
 
 # Heading

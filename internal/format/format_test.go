@@ -25,7 +25,7 @@ import (
 	"github.com/dancsecs/sztestlog"
 )
 
-func TestUpdate_Format(t *testing.T) {
+func TestFormat_Inline(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
@@ -57,5 +57,42 @@ func TestUpdate_Format(t *testing.T) {
 	chk.Str(
 		format.Inline("bash", "ABC\n"),
 		"\n\tABC\n",
+	)
+}
+
+func TestFormat_Comment(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	format.ForMarkdown()
+
+	chk.Str(
+		format.Comment("|---|"),
+		"<!--- |---| -->\n",
+	)
+
+	format.ForGoDoc()
+
+	chk.Str(
+		format.Comment("|---|"),
+		"// |---|.\n",
+	)
+}
+func TestFormat_BalancedComment(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	format.ForMarkdown()
+
+	chk.Str(
+		format.BalancedComment("|---|"),
+		"<!---                                 |---| -->\n",
+	)
+
+	format.ForGoDoc()
+
+	chk.Str(
+		format.BalancedComment("|---|"),
+		"//                                    |---|.\n",
 	)
 }

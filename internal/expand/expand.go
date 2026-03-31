@@ -26,23 +26,44 @@ import (
 
 	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/gotomd/internal/file"
+	"github.com/dancsecs/gotomd/internal/format"
 	"github.com/dancsecs/gotomd/internal/godoc"
 	"github.com/dancsecs/gotomd/internal/gorun"
 	"github.com/dancsecs/gotomd/internal/gotest"
 )
 
 const (
-	sztestPrefix    = "<!--- gotomd::"
-	szAutoPrefix    = sztestPrefix + "Auto::"
+	cmdSep     = "::"
+	szCmdLabel = "gotomd"
+)
+
+const (
+	sztestPrefix    = "<!--- " + szCmdLabel + cmdSep
 	sztestBgnPrefix = sztestPrefix + "Bgn::"
 	sztestEndPrefix = sztestPrefix + "End::"
 	szDocPrefix     = "doc::"
+)
+
+const (
+	szAutoHeader1 = "*****  AUTO GENERATED:  DO NOT MODIFY  *****"
+	szAutoHeader2 = "MODIFY TEMPLATE: "
+	szAutoHeader3 = "See: 'https://github.com/dancsecs/gotomd'"
 )
 
 type commandAction struct {
 	cmdPrefix []string
 	cmdAction []func(string) (string, error)
 }
+
+// func buildCommand(cmd string, args ...string) string {
+// 	rootCmd := szCmdLabel + cmdSep + cmd
+
+// 	if len(args) > 0 {
+// 		rootCmd += cmdSep + strings.Join(args, cmdSep)
+// 	}
+
+// 	return format.Comment(rootCmd)
+// }
 
 func (c *commandAction) add(p string, a func(string) (string, error)) {
 	c.cmdPrefix = append(c.cmdPrefix, p)
@@ -128,7 +149,7 @@ func isCmd(line string) (int, int, error) {
 }
 
 //nolint:cyclop // Ok.
-func parse(dir, fData string) (string, error) {
+func parse(dir, fPath, fData string) (string, error) {
 	const (
 		skipDirBlank   = ""
 		skipDirThis    = "."
@@ -155,10 +176,12 @@ func parse(dir, fData string) (string, error) {
 		}
 	}
 
-	updatedFile := szAutoPrefix + " See github.com/dancsecs/gotomd "
-	updatedFile += "**DO NOT MODIFY** "
+	updatedFile := "" +
+		format.BalancedComment(szAutoHeader1) +
+		format.BalancedComment(szAutoHeader2+"'"+fPath+"'") +
+		format.BalancedComment(szAutoHeader3) +
+		"\n"
 
-	updatedFile += "-->\n\n"
 	lines := strings.Split(fData+"\n", "\n")
 
 	for i, mi := 0, len(lines)-1; i < mi && err == nil; i++ {

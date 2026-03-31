@@ -26,6 +26,7 @@ import (
 
 	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/errs"
+	"github.com/dancsecs/gotomd/internal/format"
 	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/szlog"
 )
@@ -54,10 +55,14 @@ func Process(rPath string) error {
 
 	wFile, found = strings.CutSuffix(rFile, ".gtm.go")
 	if found {
+		format.ForGoDoc()
+
 		wFile += ".go"
 	} else {
 		wFile, found = strings.CutSuffix(rFile, ".gtm.md")
 		if found {
+			format.ForMarkdown()
+
 			wFile += ".md"
 		} else {
 			err = errs.ErrUnknownTemplate
@@ -74,7 +79,7 @@ func Process(rPath string) error {
 
 	if err == nil {
 		fileData := string(bytes.TrimRight(fileBytes, "\n"))
-		res, err = parse(rDir, fileData)
+		res, err = parse(rDir, rPath, fileData)
 	}
 
 	if err == nil {

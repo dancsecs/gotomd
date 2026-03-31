@@ -29,16 +29,16 @@ import (
 )
 
 const (
-	sep        = string(os.PathSeparator)
+	pathSep    = string(os.PathSeparator)
 	tstpkg     = "tstpkg"
-	tstpkgPath = "." + sep + "testdata" + sep + tstpkg
+	tstpkgPath = "." + pathSep + "testdata" + pathSep + tstpkg
 )
 
 func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	updatedDoc, err := parse("",
+	updatedDoc, err := parse("", "",
 		sztestPrefix+szDocPrefix+"./INVALID_ROOT_DIRECTORY/action1 -->\n",
 	)
 
@@ -53,7 +53,7 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	updatedDoc, err := parse("",
+	updatedDoc, err := parse("", "",
 		sztestPrefix+"unknownCommand -->\n",
 	)
 

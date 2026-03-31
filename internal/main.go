@@ -28,7 +28,6 @@ import (
 
 	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/expand"
-	"github.com/dancsecs/gotomd/internal/format"
 	"github.com/dancsecs/gotomd/internal/gopkg"
 	"github.com/dancsecs/szlog"
 )
@@ -55,8 +54,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 func processGoFiles(filesToProcess []string) error {
 	var err error
 
-	format.ForGoDoc()
-
 	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
 		gopkg.Reset()
 
@@ -68,8 +65,6 @@ func processGoFiles(filesToProcess []string) error {
 
 func processMDFiles(filesToProcess []string) error {
 	var err error
-
-	format.ForMarkdown()
 
 	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
 		gopkg.Reset()

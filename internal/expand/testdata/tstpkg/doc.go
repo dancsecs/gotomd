@@ -1,3 +1,7 @@
+//                *****  AUTO GENERATED:  DO NOT MODIFY  *****.
+//              MODIFY TEMPLATE: './testdata/tstpkg/.doc.gtm.go'.
+//                  See: 'https://github.com/dancsecs/gotomd'.
+
 /*
    Golang To Github Markdown Utility: gotomd
    Copyright (C) 2023-2025 Leslie Dancsecs
@@ -18,7 +22,7 @@
 
 /*
 Package example1 exists in order to test various go to git
-markdown (gToMD) extraction utilities.  Various object will be defined that
+markdown (goToMD) extraction utilities.  Various object will be defined that
 exhibit the various comment and declaration options permitted by gofmt.
 
 # Heading
