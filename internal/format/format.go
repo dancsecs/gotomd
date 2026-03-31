@@ -79,7 +79,7 @@ func BalancedComment(line string) string {
 		extra -= 10
 	}
 
-	extra = (extra - len(line)) / 2
+	extra = (extra - len(line)) / 2 //nolint:mnd // Ok Half.
 	if extra > 0 {
 		line = strings.Repeat(" ", extra) + line
 	}

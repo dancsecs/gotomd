@@ -78,6 +78,7 @@ func TestFormat_Comment(t *testing.T) {
 		"// |---|.\n",
 	)
 }
+
 func TestFormat_BalancedComment(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
