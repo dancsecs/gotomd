@@ -19,6 +19,7 @@
 package format_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/dancsecs/gotomd/internal/format"
@@ -95,5 +96,24 @@ func TestFormat_BalancedComment(t *testing.T) {
 	chk.Str(
 		format.BalancedComment("|---|"),
 		"//                                    |---|.\n",
+	)
+}
+
+func TestFormat_HLine(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	format.ForMarkdown()
+
+	chk.Str(
+		format.HLine(),
+		"---\n",
+	)
+
+	format.ForGoDoc()
+
+	chk.Str(
+		format.HLine(),
+		strings.Repeat("-", 78)+"\n",
 	)
 }

@@ -86,3 +86,13 @@ func BalancedComment(line string) string {
 
 	return Comment(line)
 }
+
+// HLine returns a horizontal line.
+func HLine() string {
+	const lineLength = 78
+	if formatForGo {
+		return strings.Repeat("-", lineLength) + "\n"
+	}
+
+	return "---\n"
+}

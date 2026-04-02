@@ -77,13 +77,50 @@ func Test_GetRun_RunExampleNoPackage(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		out,
-		"---\n```bash\n"+
+		""+
+			"---\n"+
+			"```bash\n"+
 			"go run ./testdata/tstpkg/main.go -v\n"+
 			"```\n"+
 			"\n"+
-			"<pre>\n"+
+			"```\n"+
 			"Running with 1 arguments\n"+
 			"-v\n"+
-			"</pre>\n---",
+			"```\n"+
+			"---\n"+
+			"",
+	)
+}
+
+func Test_GetRun_RawGoRun(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	_, err := gorun.RawGoRun("")
+	chk.Err(
+		err,
+		errs.ErrInvalidRelativeDir.Error()+": \"\"",
+	)
+
+	cmd := "TEST_DIRECTORY_DOES_NOT_EXIST" + string(os.PathSeparator)
+	_, err = gorun.RawGoRun(cmd)
+	chk.Err(
+		err,
+		errs.ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
+	)
+
+	_, err = gorun.RawGoRun("./TEST_DOES_NOT_EXIST")
+	chk.Err(err, errs.ErrNoPackageToRun.Error())
+}
+
+func Test_GetRun_RunExampleRaw(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	out, err := gorun.RawGoRun("./testdata/tstpkg/main.go -v")
+	chk.NoErr(err)
+	chk.Str(
+		out,
+		"Running with 1 arguments\n-v",
 	)
 }

@@ -10,7 +10,6 @@ will be tested against this file so it will be updated and changed often.
 
 The following will be replaced by the go package documentation
 
-<!--- gotomd::Bgn::doc::./package -->
 ```go
 package example1
 ```
@@ -26,4 +25,3 @@ header.
 
 Declarations can be single-line or multi-line blocks or constructions.  Each
 type will be included here for complete testing.
-<!--- gotomd::End::doc::./package -->

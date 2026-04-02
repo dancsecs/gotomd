@@ -49,7 +49,6 @@ func RunGo(dir, cmd string) (string, string, error) {
 	var (
 		rawRes []byte
 		args   []string
-		res    string
 	)
 
 	stat, err := os.Stat(dir)
@@ -80,39 +79,59 @@ func RunGo(dir, cmd string) (string, string, error) {
 	}
 
 	if err == nil {
-		res = "<pre>\n" + strings.TrimRight(string(rawRes), "\n") + "\n</pre>"
-		//  res = strings.ReplaceAll(res, "\t", tabSpaces)
-		//  res = strings.ReplaceAll(res, "%", hardPercent)
-
 		return "go " + strings.Join(args, " "),
-			strings.TrimRight(res, "\n"),
+			strings.TrimRight(string(rawRes), "\n"),
 			nil
 	}
 
 	return "", "", err
 }
 
-// GetGoRun runs "go run" the provided package collecting and returning the
-// output.
-func GetGoRun(cmd string) (string, error) {
+func goRun(cmd string) (string, string, error) {
 	var (
-		res    string
-		runRes string
+		dir    string
+		action string
 		runCmd string
+		runRes string
+		err    error
 	)
 
-	dir, action, err := cmds.ParseCmd(cmd)
+	dir, action, err = cmds.ParseCmd(cmd)
 	if err == nil {
 		runCmd, runRes, err = RunGo(dir, action)
 	}
 
 	if err == nil {
-		res += "---\n" + format.Inline("bash", runCmd) +
-			"\n\n" + runRes + "\n---"
+		return runCmd, runRes, nil
 	}
 
+	return "", "", err
+}
+
+// GetGoRun runs "go run" the provided package collecting and returning the
+// formatted output.
+func GetGoRun(cmd string) (string, error) {
+	runCmd, runRes, err := goRun(cmd)
+
 	if err == nil {
-		return res, nil
+		return format.HLine() +
+				format.Inline("bash", runCmd) + "\n" +
+				"\n" +
+				format.Inline("", runRes) + "\n" +
+				format.HLine(),
+			nil
+	}
+
+	return "", err
+}
+
+// RawGoRun runs "go run" the provided package collecting and returning the
+// raw output.
+func RawGoRun(cmd string) (string, error) {
+	_, runRes, err := goRun(cmd)
+
+	if err == nil {
+		return runRes, nil
 	}
 
 	return "", err

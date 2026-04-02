@@ -10,7 +10,6 @@ will be tested against this file so it will be updated and changed often.
 
 The following will be replaced by the go package documentation
 
-<!--- gotomd::Bgn::doc::./package -->
 ```go
 package tstpkg
 ```
@@ -26,31 +25,25 @@ header.
 
 Declarations can be single-line or multi-line blocks or constructions.  Each
 type will be included here for complete testing.
-<!--- gotomd::End::doc::./package -->
 
 Here we will add function documentation:
 
-<!--- gotomd::Bgn::doc::./TimesTwo -->
 ```go
 func TimesTwo(i int) int
 ```
 
 TimesTwo returns the value times two.
-<!--- gotomd::End::doc::./TimesTwo -->
 
 and another:
 
-<!--- gotomd::Bgn::doc::./TimesThree -->
 ```go
 func TimesThree(i int) int
 ```
 
 TimesThree returns the value times three.
-<!--- gotomd::End::doc::./TimesThree -->
 
 and the defined interface:
 
-<!--- gotomd::Bgn::doc::./InterfaceType -->
 ```go
 type InterfaceType interface {
     func(int) int
@@ -58,11 +51,9 @@ type InterfaceType interface {
 ```
 
 InterfaceType tests the documentation of interfaces.
-<!--- gotomd::End::doc::./InterfaceType -->
 
 and the defined structure:
 
-<!--- gotomd::Bgn::doc::./StructureType -->
 ```go
 type StructureType struct {
     // F1 is the first test field of the structure.
@@ -73,11 +64,9 @@ type StructureType struct {
 ```
 
 StructureType tests the documentation of structures.
-<!--- gotomd::End::doc::./StructureType -->
 
 and run a specific test
 
-<!--- gotomd::Bgn::tst::./Test_PASS_Tstpkg -->
 ```bash
 go test -v -cover -run Test_PASS_Tstpkg .
 ```
@@ -92,11 +81,9 @@ $\small{\texttt{coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#x
 <br>
 $\small{\texttt{ok&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/internal/testdata/tstpkg&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;&#xA0;&#x34F;coverage:&#xA0;&#x34F;&#xA0;&#x34F;100.0&#xFE6A;&#xA0;&#x34F;&#xA0;&#x34F;of&#xA0;&#x34F;&#xA0;&#x34F;statements}}$
 <br>
-<!--- gotomd::End::tst::./Test_PASS_Tstpkg -->
 
 or run all tests in a package:
 
-<!--- gotomd::Bgn::tst::./package -->
 ```bash
 go test -v -cover .
 ```
@@ -141,11 +128,9 @@ $\small{\texttt{FAIL&#xA0;&#x34F;&#xA0;&#x34F;github.com/dancsecs/gotomd/interna
 <br>
 $\small{\texttt{FAIL}}$
 <br>
-<!--- gotomd::End::tst::./package -->
 
 or include a file
 
-<!--- gotomd::Bgn::file::./example1.go -->
 ```bash
 cat ./example1.go
 ```
@@ -260,54 +245,42 @@ func TimesThree(i int) int {
     return i + i + i
 }
 ```
-<!--- gotomd::End::file::./example1.go -->
 
 or a single declaration:
 
-<!--- gotomd::Bgn::dcl::./TimesTwo -->
 ```go
 func TimesTwo(i int) int
 ```
-<!--- gotomd::End::dcl::./TimesTwo -->
 
 or a multiple declarations:
 
-<!--- gotomd::Bgn::dcl::./TimesTwo TimesThree -->
 ```go
 func TimesTwo(i int) int
 func TimesThree(i int) int
 ```
-<!--- gotomd::End::dcl::./TimesTwo TimesThree -->
 
 or a single declaration on a single-line:
 
-<!--- gotomd::Bgn::dcls::./TimesTwo -->
 ```go
 func TimesTwo(i int) int
 ```
-<!--- gotomd::End::dcls::./TimesTwo -->
 
 or a multiple declarations on a single-line:
 
-<!--- gotomd::Bgn::dcls::./TimesTwo TimesThree -->
 ```go
 func TimesTwo(i int) int
 func TimesThree(i int) int
 ```
-<!--- gotomd::End::dcls::./TimesTwo TimesThree -->
 
 or a natural declaration:
 
-<!--- gotomd::Bgn::dcln::./TimesTwo -->
 ```go
 // TimesTwo returns the value times two.
 func TimesTwo(i int) int
 ```
-<!--- gotomd::End::dcln::./TimesTwo -->
 
 or a multiple natural declarations:
 
-<!--- gotomd::Bgn::dcln::./TimesTwo TimesThree -->
 ```go
 // TimesTwo returns the value times two.
 func TimesTwo(i int) int
@@ -315,11 +288,9 @@ func TimesTwo(i int) int
 // TimesThree returns the value times three.
 func TimesThree(i int) int
 ```
-<!--- gotomd::End::dcln::./TimesTwo TimesThree -->
 
 or a constant group:
 
-<!--- gotomd::Bgn::docConstGrp::./ConstantGroup1 -->
 ```go
 // Here is a typed constant block.  All constants are reported as a group.
 const (
@@ -330,11 +301,9 @@ const (
     ConstantGroup2
 )
 ```
-<!--- gotomd::End::docConstGrp::./ConstantGroup1 -->
 
 or multiple constant groups:
 
-<!--- gotomd::Bgn::docConstGrp::./ConstantGroup1 ConstantGroupA -->
 ```go
 // Here is a typed constant block.  All constants are reported as a group.
 const (
@@ -355,4 +324,3 @@ const (
     ConstantGroupB = "constant B"
 )
 ```
-<!--- gotomd::End::docConstGrp::./ConstantGroup1 ConstantGroupA -->

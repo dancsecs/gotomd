@@ -19,19 +19,10 @@
 package expand
 
 import (
-	"os"
 	"testing"
 
 	"github.com/dancsecs/gotomd/internal/errs"
-	"github.com/dancsecs/gotomd/internal/format"
-	"github.com/dancsecs/gotomd/internal/gopkg"
 	"github.com/dancsecs/sztestlog"
-)
-
-const (
-	pathSep    = string(os.PathSeparator)
-	tstpkg     = "tstpkg"
-	tstpkgPath = "." + pathSep + "testdata" + pathSep + tstpkg
 )
 
 func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
@@ -63,32 +54,6 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 			": \"<!--- gotomd::unknownCommand -->\"",
 	)
 	chk.Str(updatedDoc, "")
-}
-
-func Test_Markdown_Expand(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
-	defer chk.Release()
-
-	docInfo, err := gopkg.Info(tstpkgPath, "TimesTwo")
-	chk.NoErr(err)
-
-	chk.Str(
-		expand(szDocPrefix,
-			"TimesTwo",
-			format.Inline("go", docInfo.Declaration())+"\n\n"+
-				docInfo.Comment(),
-		),
-		"<!--- gotomd::Bgn::doc::TimesTwo -->\n"+
-			"```go\nfunc TimesTwo(i int) int\n```\n"+
-			"\n"+
-			"TimesTwo returns the value times two.\n"+
-			"<!--- gotomd::End::doc::TimesTwo -->\n",
-	)
-
-	chk.Stdout(
-		"Loading package info for: "+tstpkgPath,
-		`getInfo("TimesTwo")`,
-	)
 }
 
 func Test_Markdown_Search(t *testing.T) {

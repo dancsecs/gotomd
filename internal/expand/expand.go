@@ -38,10 +38,8 @@ const (
 )
 
 const (
-	sztestPrefix    = "<!--- " + szCmdLabel + cmdSep
-	sztestBgnPrefix = sztestPrefix + "Bgn::"
-	sztestEndPrefix = sztestPrefix + "End::"
-	szDocPrefix     = "doc::"
+	sztestPrefix = "<!--- " + szCmdLabel + cmdSep
+	szDocPrefix  = "doc::"
 )
 
 const (
@@ -112,15 +110,9 @@ func init() {
 	action.add("dcls::", godoc.GetDocDeclSingle)
 	action.add("file::", file.GetGoFile)
 	action.add("run::", gorun.GetGoRun)
+	action.add("inline-run::", gorun.RawGoRun)
 	action.add("tst::", gotest.GetGoTst)
 	action.sort()
-}
-
-func expand(prefix, cmd, content string) string {
-	return "" +
-		sztestBgnPrefix + prefix + cmd + " -->\n" +
-		content + "\n" +
-		sztestEndPrefix + prefix + cmd + " -->\n"
 }
 
 func isCmd(line string) (int, int, error) {
@@ -194,7 +186,7 @@ func parse(dir, fPath, fData string) (string, error) {
 				res, err = action.run(cmdIdx, cmd)
 
 				if err == nil {
-					updatedFile += expand(action.cmdPrefix[cmdIdx], cmd, res)
+					updatedFile += res + "\n"
 				}
 			} else {
 				updatedFile += line + "\n"
