@@ -28,6 +28,7 @@
         "testdata",
         "texttt",
         "toplevel",
+        "tstcmd",
         "tstpkg",
         //
         // Ignore golanci-lint linter setting.
