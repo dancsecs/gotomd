@@ -25,3 +25,4 @@ header.
 
 Declarations can be single-line or multi-line blocks or constructions.  Each
 type will be included here for complete testing.
+

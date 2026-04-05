@@ -22,6 +22,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/dancsecs/szlog"
 )
@@ -70,11 +71,14 @@ func File(
 	fPath string, force bool, data string, perm os.FileMode,
 ) (Result, error) {
 	var (
-		oldData       []byte
+		oldData       string
 		okToOverwrite bool
 		exists        bool
 		err           error
 	)
+
+	// Insure a data ends in a single linefeed.
+	data = strings.TrimRight(data, "\n") + "\n"
 
 	exists, err = fileExists(fPath)
 
@@ -86,10 +90,15 @@ func File(
 	}
 
 	if err == nil {
-		oldData, err = os.ReadFile(fPath) //nolint:gosec // Ok.
+		var rawOldData []byte
+
+		rawOldData, err = os.ReadFile(fPath) //nolint:gosec // Ok.
+		if err == nil {
+			oldData = strings.TrimRight(string(rawOldData), "\n") + "\n"
+		}
 	}
 
-	if err == nil && string(oldData) == data {
+	if err == nil && oldData == data {
 		szlog.Say1("No change: ", fPath, "\n")
 
 		return Unchanged, nil
@@ -97,7 +106,7 @@ func File(
 
 	okToOverwrite = force
 	if err == nil && !force {
-		okToOverwrite, err = confirm(fPath, string(oldData), data)
+		okToOverwrite, err = confirm(fPath, oldData, data)
 	}
 
 	if err == nil && okToOverwrite {

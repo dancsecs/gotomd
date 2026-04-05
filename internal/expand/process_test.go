@@ -113,7 +113,9 @@ func setupExpandGlobals(
 	setupTest(chk, override.forceOverwrite, override.verboseLevel)
 }
 
-func setupExpandDirs(makeTarget bool, fPath, fName string) error {
+func setupExpandDirs(
+	makeTarget bool, fPath, fName string, additional []byte,
+) error {
 	var (
 		err   error
 		tFile string
@@ -125,7 +127,11 @@ func setupExpandDirs(makeTarget bool, fPath, fName string) error {
 		fData, err = os.ReadFile(filepath.Join(fPath, fName))
 		if err == nil {
 			tFile = filepath.Join(args.OutputDir(), fName)
-			err = os.WriteFile(tFile, fData, args.Perm())
+			err = os.WriteFile(
+				tFile,
+				append(fData, additional...),
+				args.Perm(),
+			)
 		}
 	}
 
@@ -153,8 +159,8 @@ func getExpandFiles(fPath, fName string) (string, []string, []string, error) {
 	}
 
 	return targetPath,
-		strings.Split(string(gotBytes), "\n"),
-		strings.Split(string(wntBytes), "\n"),
+		strings.Split(strings.TrimRight(string(gotBytes), "\n")+"\n", "\n"),
+		strings.Split(strings.TrimRight(string(wntBytes), "\n")+"\n", "\n"),
 		nil
 }
 
@@ -184,7 +190,7 @@ func Test_ProcessExpand_MDPkg_NoTargetNoForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: false, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -207,7 +213,7 @@ func Test_ProcessExpand_MDPkg_NoTargetForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -232,7 +238,7 @@ func Test_ProcessExpand_MDPkg_NoTargetNoForceVerbose(t *testing.T) {
 		chk,
 		expandGlobals{forceOverwrite: false, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -261,7 +267,7 @@ func Test_ProcessExpand_MDPkg_NoTargetForceVerbose(t *testing.T) {
 		chk,
 		expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -290,7 +296,7 @@ func Test_ProcessExpand_MDPkg_CancelOverwriteTargetForceNoVerbose(
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
 
 	chk.SetStdinData("N\n")
 
@@ -299,6 +305,37 @@ func Test_ProcessExpand_MDPkg_CancelOverwriteTargetForceNoVerbose(
 	_, got, wnt, err := getExpandFiles(tPath, tName)
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
+}
+
+func Test_ProcessExpand_MDPkg_NoChange(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	const (
+		tPath       = tstpkgPaths
+		tName       = "README.md"
+		sourceFName = ".README.gtm.md"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
+	)
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
+
+	chk.SetStdinData("N\n")
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	tFile, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Stdout(
+		"Expanding "+tPath+sep+sourceFName+" to: "+tFile,
+		"Loading package info for: .",
+		"getInfo(\"package\")",
+		"No change: "+tFile,
+	)
 }
 
 func Test_ProcessExpand_MDPkg_CancelOverwriteForceVerbose(t *testing.T) {
@@ -314,7 +351,7 @@ func Test_ProcessExpand_MDPkg_CancelOverwriteForceVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("newLine\n")))
 
 	chk.SetStdinData("N\n")
 
@@ -343,7 +380,7 @@ func Test_ProcessExpand_MDPkg_OverwriteTargetForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
 
 	chk.SetStdinData("Y\n")
 
@@ -367,7 +404,7 @@ func Test_ProcessExpand_MDPkg_OverwriteForceVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("NewLine\n")))
 
 	chk.SetStdinData("Y\n")
 
@@ -398,7 +435,7 @@ func Test_ProcessExpand_GOPkg_NoTargetNoForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: false, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -421,7 +458,7 @@ func Test_ProcessExpand_GOPkg_NoTargetForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -446,7 +483,7 @@ func Test_ProcessExpand_GOPkg_NoTargetNoForceVerbose(t *testing.T) {
 		chk,
 		expandGlobals{forceOverwrite: false, verboseLevel: 8},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -473,7 +510,7 @@ func Test_ProcessExpand_GOPkg_NoTargetForceVerbose(t *testing.T) {
 		chk,
 		expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -500,7 +537,7 @@ func Test_ProcessExpand_GOPkg_CancelOverwriteTargetForceNoVerbose(
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
 
 	chk.SetStdinData("N\n")
 
@@ -524,7 +561,7 @@ func Test_ProcessExpand_GOPkg_CancelOverwriteForceVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("NewLine\n")))
 
 	chk.SetStdinData("N\n")
 
@@ -551,7 +588,7 @@ func Test_ProcessExpand_GOPkg_OverwriteTargetForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
 
 	chk.SetStdinData("Y\n")
 
@@ -575,7 +612,7 @@ func Test_ProcessExpand_GOPkg_OverwriteForceVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line\n")))
 
 	chk.SetStdinData("Y\n")
 
@@ -631,7 +668,7 @@ func Test_ProcessExpand_MDCmd_NoTargetNoForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: false, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -654,7 +691,7 @@ func Test_ProcessExpand_MDCmd_NoTargetForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -679,7 +716,7 @@ func Test_ProcessExpand_MDCmd_NoTargetNoForceVerbose(t *testing.T) {
 		chk,
 		expandGlobals{forceOverwrite: false, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -706,7 +743,7 @@ func Test_ProcessExpand_MDCmd_NoTargetForceVerbose(t *testing.T) {
 		chk,
 		expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -733,7 +770,7 @@ func Test_ProcessExpand_MDCmd_CancelOverwriteTargetForceNoVerbose(
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
 
 	chk.SetStdinData("N\n")
 
@@ -757,7 +794,7 @@ func Test_ProcessExpand_MDCmd_CancelOverwriteForceVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line")))
 
 	chk.SetStdinData("N\n")
 
@@ -784,7 +821,7 @@ func Test_ProcessExpand_MDCmd_OverwriteTargetForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
 
 	chk.SetStdinData("Y\n")
 
@@ -808,7 +845,7 @@ func Test_ProcessExpand_MDCmd_OverwriteForceVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line")))
 
 	chk.SetStdinData("Y\n")
 
@@ -837,7 +874,7 @@ func Test_ProcessExpand_GOCmd_NoTargetNoForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: false, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -860,7 +897,7 @@ func Test_ProcessExpand_GOCmd_NoTargetForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -885,7 +922,7 @@ func Test_ProcessExpand_GOCmd_NoTargetNoForceVerbose(t *testing.T) {
 		chk,
 		expandGlobals{forceOverwrite: false, verboseLevel: 8},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -912,7 +949,7 @@ func Test_ProcessExpand_GOCmd_NoTargetForceVerbose(t *testing.T) {
 		chk,
 		expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName))
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
 
 	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
 
@@ -939,7 +976,7 @@ func Test_ProcessExpand_GOCmd_CancelOverwriteTargetForceNoVerbose(
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
 
 	chk.SetStdinData("N\n")
 
@@ -963,7 +1000,7 @@ func Test_ProcessExpand_GOCmd_CancelOverwriteForceVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line")))
 
 	chk.SetStdinData("N\n")
 
@@ -990,7 +1027,7 @@ func Test_ProcessExpand_GOCmd_OverwriteTargetForceNoVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
 
 	chk.SetStdinData("Y\n")
 
@@ -1014,7 +1051,7 @@ func Test_ProcessExpand_GOCmd_OverwriteForceVerbose(t *testing.T) {
 	setupExpandGlobals(
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName))
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line\n")))
 
 	chk.SetStdinData("Y\n")
 
