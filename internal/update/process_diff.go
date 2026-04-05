@@ -28,13 +28,8 @@ import (
 )
 
 func diffFile(fileName string, oldData, newData string) string {
-	if !strings.HasSuffix(oldData, "\n") {
-		oldData += "\n"
-	}
-
-	if !strings.HasSuffix(newData, "\n") {
-		newData += "\n"
-	}
+	oldData = strings.TrimRight(oldData, "\n") + "\n"
+	newData = strings.TrimRight(newData, "\n") + "\n"
 
 	// Create an edit script using the Myers diff algorithm
 	edits := myers.ComputeEdits(span.URI(fileName), oldData, newData)
@@ -46,5 +41,10 @@ func diffFile(fileName string, oldData, newData string) string {
 		edits,
 	)
 
-	return fmt.Sprint(unifiedDiff)
+	res := strings.TrimRight(fmt.Sprint(unifiedDiff), "\n ")
+	if len(res) > 0 {
+		res += "\n"
+	}
+
+	return res
 }
