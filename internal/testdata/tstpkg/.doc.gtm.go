@@ -1,7 +1,3 @@
-//                *****  AUTO GENERATED:  DO NOT MODIFY  *****.
-//               MODIFY TEMPLATE: 'testdata/tstpkg/.doc.gtm.go'.
-//                  See: 'https://github.com/dancsecs/gotomd'.
-
 /*
 Package tstpkg exists in order to test various go to git
 markdown (gToMD) extraction utilities.  Various object will be defined that

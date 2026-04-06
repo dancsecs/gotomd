@@ -48,7 +48,7 @@ var usage = []string{
 	"",
 	"    programName [-v | --verbose ...] [-l | --license] [-h | --help]",
 	"                [-f | --force] [-z | --colorize] [-o | --output <dir>]",
-	"                [-p | --permission <perm>] [path ...]",
+	"                [-p | --permission <perm>] --uptodate [path ...]",
 	"",
 	"    [-v | --verbose ...]",
 	"        Increase the verbose level for each v provided.",
@@ -80,6 +80,11 @@ var usage = []string{
 	"        (can only set RW bits)",
 	"",
 	"",
+	"    --uptodate",
+	"        Returns 0 if no changes would have been made.  No writes are",
+	"        performed.",
+	"",
+	"",
 	"    [path ...]",
 	"        A specific gotomd file template with the extension '*.gtm.md'" +
 		" or a",
@@ -105,7 +110,7 @@ func getTestFiles(fName, tName string) ([]string, []string, error) {
 		nil
 }
 
-func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
+func Test_Example1ExpandMDTargetOverwriteDirVerbose(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
@@ -149,6 +154,35 @@ func Test_Example1ExpandTargetOverwriteDirVerbose(t *testing.T) {
 		"getInfo(\"ConstantGroup1\")",
 		"getInfo(\"ConstantGroup1\")",
 		"getInfo(\"ConstantGroupA\")",
+	)
+}
+
+func Test_Example1ExpandGoTargetOverwriteDirVerbose(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	fName := tstpkgPath + sep + ".doc.gtm.go"
+	tName := filepath.Join(dir, "doc.go")
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-z",
+		"-o", dir,
+		fName,
+	)
+
+	chk.Int(internal.Main(), 0)
+
+	got, wnt, err := getTestFiles(tstpkgPath+sep+"doc.go", tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Stdout(
+		"File to process: '"+fName+"'",
+		"Expanding "+fName[2:]+" to: "+tName,
 	)
 }
 

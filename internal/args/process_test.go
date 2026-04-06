@@ -60,6 +60,82 @@ func Test_ArgUsage_SampleNoArgsDefaultsToCWD(t *testing.T) {
 	chk.True(args.ShowHelp())
 }
 
+func Test_ArgUsage_InvalidUpToDateCollisionWithPerm(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	chk.SetArgs(
+		"programName",
+		"-p", "0600",
+		"--uptodate",
+		".",
+	)
+
+	chk.Err(
+		args.Process(),
+		chk.ErrChain(
+			errs.ErrUpToDateWithPerm,
+		),
+	)
+}
+
+func Test_ArgUsage_InvalidUpToDateCollisionWithForce(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	chk.SetArgs(
+		"programName",
+		"-f",
+		"--uptodate",
+		".",
+	)
+
+	chk.Err(
+		args.Process(),
+		chk.ErrChain(
+			errs.ErrUpToDateWithForce,
+		),
+	)
+}
+
+func Test_ArgUsage_InvalidUpToDateCollisionWithOutput(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	chk.SetArgs(
+		"programName",
+		"-o", dir,
+		"--uptodate",
+		".",
+	)
+
+	chk.Err(
+		args.Process(),
+		chk.ErrChain(
+			errs.ErrUpToDateWithOutput,
+		),
+	)
+}
+
+func Test_ArgUsage_ValidUpToDate(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	chk.SetArgs(
+		"programName",
+		"--uptodate",
+		".",
+	)
+
+	chk.NoErr(
+		args.Process(),
+	)
+
+	chk.True(args.CheckUpToDate())
+}
+
 func Test_ArgUsage_InvalidDefaultPermissions(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()

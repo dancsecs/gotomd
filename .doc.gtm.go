@@ -183,8 +183,9 @@ OpenAI.
 package main
 
 import (
-	"fmt"
 	"strings"
+
+	"github.com/dancsecs/szlog"
 )
 
 const copyrightMessage = `
@@ -192,8 +193,6 @@ const copyrightMessage = `
 `
 
 // Copyright writes the copyright message to os.Stdout.
-//
-//nolint:forbidigo // Copyright is public.
 func Copyright() {
-	fmt.Print(strings.Trim(copyrightMessage, " \t\n"))
+	szlog.Say0(strings.Trim(copyrightMessage, " \t\n"))
 }

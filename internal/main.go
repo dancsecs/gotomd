@@ -29,6 +29,7 @@ import (
 	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/expand"
 	"github.com/dancsecs/gotomd/internal/gopkg"
+	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/szlog"
 )
 
@@ -99,6 +100,8 @@ func Main() int {
 	if args.ShowHelp() {
 		fmt.Println(args.Usage()) //nolint:forbidigo  // Ok.
 	}
+
+	update.Dirty = false
 
 	if err == nil {
 		err = processGoFiles(args.GoFiles())

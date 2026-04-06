@@ -33,6 +33,7 @@ var (
 	perm           = defaultPerm
 	showLicense    bool
 	showHelp       bool
+	upToDate       bool
 
 	alreadyIncluded = make(map[string]bool)
 )
@@ -48,6 +49,7 @@ func Reset() {
 	perm = defaultPerm
 	showLicense = false
 	showHelp = false
+	upToDate = false
 
 	for k := range alreadyIncluded {
 		delete(alreadyIncluded, k)
@@ -97,4 +99,10 @@ func ShowLicense() bool {
 // ShowHelp returns the show help setting.
 func ShowHelp() bool {
 	return showHelp
+}
+
+// CheckUpToDate returns the flag indicating that we are only checking
+// for changes.  No writes will occur.
+func CheckUpToDate() bool {
+	return upToDate
 }

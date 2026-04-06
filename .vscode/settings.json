@@ -149,7 +149,8 @@
         "typecheck",
         "unconvert",
         "unparam",
-        // "unused",        
+        // "unused",  
+        "uptodate",      
         "usestdlibvars",       
         "varcheck", // Deprecated
         "varnamelen",

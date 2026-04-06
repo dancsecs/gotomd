@@ -36,4 +36,7 @@ var (
 	ErrUnknownCommand     = errors.New("unknown command")
 	ErrUnknownTag         = errors.New("unknown tag")
 	ErrUnknownTemplate    = errors.New("unknown template")
+	ErrUpToDateWithForce  = errors.New("uptodate incompatible with force")
+	ErrUpToDateWithPerm   = errors.New("uptodate incompatible with perm")
+	ErrUpToDateWithOutput = errors.New("uptodate incompatible with output")
 )

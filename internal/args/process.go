@@ -34,10 +34,11 @@ func Process() error {
 	var (
 		args        *szargs.Args
 		cleanedArgs []string
-		found       bool
 		permInt     uint32
 		stat        os.FileInfo
 		foundEgg    bool
+		foundOutput bool
+		foundPerm   bool
 		err         error
 	)
 
@@ -83,21 +84,21 @@ func Process() error {
 		"Colorize go test output.",
 	)
 
-	outputDir, found = args.ValueString(
+	outputDir, foundOutput = args.ValueString(
 		"[-o | --output <dir>]",
 		"Direct all output to the specified directory.",
 	)
-	if !found {
+	if !foundOutput {
 		outputDir = "."
 	}
 
-	permInt, found = args.ValueUint32(
+	permInt, foundPerm = args.ValueUint32(
 		"[-p | --permission <perm>]",
 		"Permissions to use when creating new file.\n"+
 			"(can only set RW bits)",
 	)
 
-	if !found {
+	if !foundPerm {
 		perm = defaultPerm
 	} else {
 		perm = os.FileMode(permInt)
@@ -118,7 +119,25 @@ func Process() error {
 		}
 	}
 
-	if !args.HasNext() && !(showLicense || showHelp || foundEgg) {
+	upToDate = args.Is(
+		"--uptodate",
+		"Returns 0 if no changes would have been made.  "+
+			"No writes are performed.",
+	)
+
+	if upToDate && foundOutput {
+		args.PushErr(errs.ErrUpToDateWithOutput)
+	}
+
+	if upToDate && foundPerm {
+		args.PushErr(errs.ErrUpToDateWithPerm)
+	}
+
+	if upToDate && forceOverwrite {
+		args.PushErr(errs.ErrUpToDateWithForce)
+	}
+
+	if !args.HasNext() && !(showLicense || showHelp || foundEgg || upToDate) {
 		args.PushArg(".") // Default to current directory if no args given.
 	}
 
