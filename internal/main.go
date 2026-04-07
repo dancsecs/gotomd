@@ -78,6 +78,12 @@ func processMDFiles(filesToProcess []string) error {
 
 // Main ids the classic unix entry point into the program.
 func Main() int {
+	const (
+		returnGood        = 0
+		returnFailed      = 1
+		returnNotUpToDate = 2
+	)
+
 	var (
 		origWd string
 		err    error
@@ -101,7 +107,7 @@ func Main() int {
 		fmt.Println(args.Usage()) //nolint:forbidigo  // Ok.
 	}
 
-	update.Dirty = false
+	update.ResetUpToDate()
 
 	if err == nil {
 		err = processGoFiles(args.GoFiles())
@@ -112,10 +118,20 @@ func Main() int {
 	}
 
 	if err == nil {
-		return 0
+		if args.CheckUpToDate() {
+			if !update.IsUpToDate() {
+				szlog.Say1("Documentation is NOT up to date.\n")
+
+				return returnNotUpToDate
+			}
+
+			szlog.Say1("Documentation is up to date.\n")
+		}
+
+		return returnGood
 	}
 
 	szlog.Say0("Failed: ", err, "\n")
 
-	return 1
+	return returnFailed
 }

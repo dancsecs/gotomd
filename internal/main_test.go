@@ -94,13 +94,13 @@ var usage = []string{
 }
 
 //nolint:gosec // Ok.
-func getTestFiles(fName, tName string) ([]string, []string, error) {
-	gotBytes, err := os.ReadFile(fName)
+func getTestFiles(gotFName, wntFName string) ([]string, []string, error) {
+	gotBytes, err := os.ReadFile(gotFName)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	wntBytes, err := os.ReadFile(tName)
+	wntBytes, err := os.ReadFile(wntFName)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -116,26 +116,29 @@ func Test_Example1ExpandMDTargetOverwriteDirVerbose(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 
-	fName := tstpkgPath + sep + ".README.gtm.md"
-	tName := filepath.Join(dir, "README.md")
+	var (
+		templatePath = filepath.Join(tstpkgPath, ".README.gtm.md")
+		gotPath      = filepath.Join(dir, "README.md")
+		wntPath      = filepath.Join(tstpkgPath, "README.md")
+	)
 
 	chk.SetArgs(
 		"programName",
 		"-v",
 		"-z",
 		"-o", dir,
-		fName,
+		templatePath,
 	)
 
 	chk.Int(internal.Main(), 0)
 
-	got, wnt, err := getTestFiles(tstpkgPath+sep+"README.md", tName)
+	got, wnt, err := getTestFiles(wntPath, gotPath)
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Stdout(
-		"File to process: '"+fName+"'",
-		"Expanding "+fName[2:]+" to: "+tName,
+		"File to process: '"+templatePath+"'",
+		"Expanding "+templatePath+" to: "+gotPath,
 		"Loading package info for: .",
 		"getInfo(\"package\")",
 		"getInfo(\"TimesTwo\")",
@@ -163,26 +166,83 @@ func Test_Example1ExpandGoTargetOverwriteDirVerbose(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 
-	fName := tstpkgPath + sep + ".doc.gtm.go"
-	tName := filepath.Join(dir, "doc.go")
+	var (
+		templatePath = filepath.Join(tstpkgPath, ".doc.gtm.go")
+		wntPath      = filepath.Join(tstpkgPath, "doc.go")
+		gotPath      = filepath.Join(dir, "doc.go")
+	)
 
 	chk.SetArgs(
 		"programName",
 		"-v",
 		"-z",
 		"-o", dir,
-		fName,
+		templatePath,
 	)
 
 	chk.Int(internal.Main(), 0)
 
-	got, wnt, err := getTestFiles(tstpkgPath+sep+"doc.go", tName)
+	got, wnt, err := getTestFiles(wntPath, gotPath)
 	chk.NoErr(err)
 	chk.StrSlice(got, wnt)
 
 	chk.Stdout(
-		"File to process: '"+fName+"'",
-		"Expanding "+fName[2:]+" to: "+tName,
+		"File to process: '"+templatePath+"'",
+		"Expanding "+templatePath+" to: "+gotPath,
+	)
+}
+
+func Test_Example1ExpandGoUpToDateVerbose(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	var (
+		templatePath = filepath.Join(tstpkgPath, ".doc.gtm.go")
+		docPath      = filepath.Join(tstpkgPath, "doc.go")
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-z",
+		"--uptodate",
+		templatePath,
+	)
+
+	chk.Int(internal.Main(), 0)
+
+	chk.Stdout(
+		"File to process: '"+templatePath+"'",
+		"Expanding "+templatePath+" to: "+docPath,
+		"No change: "+docPath,
+		"Documentation is up to date.",
+	)
+}
+
+func Test_Example1ExpandGoUpToDateVerboseWithChange(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	var (
+		templatePath = filepath.Join(tstpkgPath, ".doc_not_there.gtm.go")
+		docPath      = filepath.Join(tstpkgPath, "doc_not_there.go")
+	)
+
+	chk.SetArgs(
+		"programName",
+		"-v",
+		"-z",
+		"--uptodate",
+		templatePath,
+	)
+
+	chk.Int(internal.Main(), 2)
+
+	chk.Stdout(
+		"File to process: '"+templatePath+"'",
+		"Expanding "+templatePath+" to: "+docPath,
+		"Would have created: "+docPath,
+		"Documentation is NOT up to date.",
 	)
 }
 

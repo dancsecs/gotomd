@@ -34,7 +34,7 @@ func Test_Process_Invalid(t *testing.T) {
 
 	dir := chk.CreateTmpDir()
 
-	result, err := update.File(dir, false, "", perm)
+	result, err := update.File(dir, false, false, "", perm)
 
 	chk.Err(
 		err,
@@ -58,7 +58,7 @@ func Test_Process_Create(t *testing.T) {
 
 	file := filepath.Join(dir, "fileToCreate.md")
 
-	result, err := update.File(file, false, "", perm)
+	result, err := update.File(file, false, false, "", perm)
 
 	chk.NoErr(err)
 
@@ -67,20 +67,62 @@ func Test_Process_Create(t *testing.T) {
 	chk.Stdout()
 }
 
+func Test_Process_NotUpToDateCreate(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	dir := chk.CreateTmpDir()
+
+	file := filepath.Join(dir, "fileToCreate.md")
+
+	result, err := update.File(file, false, true, "", perm)
+
+	chk.NoErr(err)
+
+	chk.Int(int(result), int(update.Cancelled))
+
+	chk.Stdout(
+		"Would have created: " + file,
+	)
+}
+
 func Test_Process_Unchanged(t *testing.T) {
 	chk := sztestlog.CaptureStdout(t)
 	defer chk.Release()
 
 	file := chk.CreateTmpFile([]byte("abc"))
 
-	result, err := update.File(file, true, "abc", perm)
+	update.ResetUpToDate()
+
+	result, err := update.File(file, false, true, "abc", perm)
 
 	chk.NoErr(err)
 
 	chk.Int(int(result), int(update.Unchanged))
 
+	chk.True(update.IsUpToDate())
 	chk.Stdout(
 		"No change: " + file,
+	)
+}
+
+func Test_Process_UpToDateWithUpdate(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	file := chk.CreateTmpFile([]byte("abc"))
+
+	update.ResetUpToDate()
+
+	result, err := update.File(file, true, true, "def", perm)
+
+	chk.NoErr(err)
+
+	chk.Int(int(result), int(update.Cancelled))
+
+	chk.False(update.IsUpToDate())
+	chk.Stdout(
+		"Would have updated: " + file,
 	)
 }
 
@@ -90,7 +132,7 @@ func Test_Process_Forced_Update(t *testing.T) {
 
 	file := chk.CreateTmpFile([]byte("abc"))
 
-	result, err := update.File(file, true, "def", perm)
+	result, err := update.File(file, true, false, "def", perm)
 
 	chk.NoErr(err)
 
@@ -107,7 +149,7 @@ func Test_Process_Confirmed_Update(t *testing.T) {
 
 	chk.SetStdinData("Y\n")
 
-	result, err := update.File(file, false, "def", perm)
+	result, err := update.File(file, false, false, "def", perm)
 
 	chk.NoErr(err)
 
@@ -127,7 +169,7 @@ func Test_Process_Cancelled_Update(t *testing.T) {
 
 	chk.SetStdinData("n\n")
 
-	result, err := update.File(file, false, "def", perm)
+	result, err := update.File(file, false, false, "def", perm)
 
 	chk.NoErr(err)
 

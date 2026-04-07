@@ -86,7 +86,7 @@ func Process(rPath string) error {
 		res = strings.ReplaceAll(res, "\t", "    ")
 
 		_, err = update.File(
-			wPath, args.Force(), res, args.Perm(),
+			wPath, args.Force(), args.CheckUpToDate(), res, args.Perm(),
 		)
 	}
 

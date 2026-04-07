@@ -27,6 +27,20 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
+//nolint:goCheckNoGlobals // Ok.
+var upToDate bool
+
+// ResetUpToDate sets the upToData flag to true.
+func ResetUpToDate() {
+	upToDate = true
+}
+
+// IsUpToDate returns the cumulative result of all processing.  Any write
+// causes upToDate to be set to false.
+func IsUpToDate() bool {
+	return upToDate
+}
+
 func writeFile(fPath string, data string, perm os.FileMode) error {
 	var file *os.File
 
@@ -37,7 +51,7 @@ func writeFile(fPath string, data string, perm os.FileMode) error {
 	)
 	if err == nil {
 		defer szlog.Close("updating : "+fPath, file) // Just in case.
-		_, err = file.WriteString(data + "\n")
+		_, err = file.WriteString(data)
 	}
 
 	if err == nil {
@@ -66,15 +80,15 @@ func fileExists(fPath string) (bool, error) {
 // true then a message asking for confirmation is presented giving an
 // opportunity to review the changes.
 //
-//nolint:cyclop  // Ok.
+//nolint:cyclop,funlen  // Ok.
 func File(
-	fPath string, force bool, data string, perm os.FileMode,
+	fPath string, force, checkUpToDate bool, data string, perm os.FileMode,
 ) (Result, error) {
 	var (
 		oldData       string
-		okToOverwrite bool
 		exists        bool
 		err           error
+		okToOverwrite = force
 	)
 
 	// Insure a data ends in a single linefeed.
@@ -83,6 +97,14 @@ func File(
 	exists, err = fileExists(fPath)
 
 	if err == nil && !exists {
+		upToDate = false
+
+		if checkUpToDate {
+			szlog.Say1("Would have created: ", fPath, "\n")
+
+			return Cancelled, nil
+		}
+
 		err = writeFile(fPath, data, perm)
 		if err == nil {
 			return Created, nil
@@ -104,8 +126,15 @@ func File(
 		return Unchanged, nil
 	}
 
-	okToOverwrite = force
-	if err == nil && !force {
+	upToDate = false
+
+	if checkUpToDate {
+		szlog.Say1("Would have updated: ", fPath, "\n")
+
+		return Cancelled, nil
+	}
+
+	if err == nil && !okToOverwrite {
 		okToOverwrite, err = confirm(fPath, oldData, data)
 	}
 
