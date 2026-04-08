@@ -137,18 +137,23 @@ func Process() error {
 		args.PushErr(errs.ErrUpToDateWithForce)
 	}
 
-	if !args.HasNext() && !(showLicense || showHelp || foundEgg || upToDate) {
+	if !args.HasNext() && !(showLicense || showHelp || foundEgg) {
 		args.PushArg(".") // Default to current directory if no args given.
 	}
+
+	args.RegisterUsage(
+		"[path ...]",
+		"A specific gotomd file template with the extension '*.gtm.md' "+
+			"or a directory which will be searched for all matching "+
+			"template '*.gtm.md' files.  It defaults to the current "+
+			"directory: '.'",
+	)
 
 	var filesToProcess []string
 	for args.HasNext() {
 		filesToProcess = append(filesToProcess, args.NextString(
 			"[path ...]",
-			"A specific gotomd file template with the extension '*.gtm.md' "+
-				"or a directory which will be searched for all matching "+
-				"template '*.gtm.md' files.  It defaults to the current "+
-				"directory: '.'",
+			"",
 		))
 	}
 
