@@ -1,4 +1,6 @@
-<!--- gotomd::Auto:: See github.com/dancsecs/gotomd **DO NOT MODIFY** -->
+<!---             *****  AUTO GENERATED:  DO NOT MODIFY  ***** -->
+<!---                   MODIFY TEMPLATE: '.README.gtm.md' -->
+<!---               See: 'https://github.com/dancsecs/gotomd' -->
 
 <!---
     Golang To Github Markdown Utility: gotomd
@@ -20,24 +22,36 @@
 
 # Package goToMd
 
-<!--- gotomd::Bgn::doc::./package -->
 ```go
 package main
 ```
 
-Package gotomd maintains GitHub-style README.md files by embedding Go
-documentation, source code, test output, and command output directly
-from the Go codebase. This ensures that program documentation is kept
-in one place—the Go code itself—while keeping the README automatically
-up to date.
+   Golang To Github Markdown Utility: gotomd
+   Copyright (C) 2023, 2024 Leslie Dancsecs
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+Package gotomd maintains GitHub-style README.md and go package documentation
+by embedding Go documentation, source code, test and command
+output directly from the Go codebase. This ensures that program documentation
+is kept in one place—the Go code itself—while keeping the README and package
+documentation automatically up to date.
 
 ## How it works
 
-gotomd processes a Markdown file in one of two ways:
-
- 1. **Template mode** — You maintain a separate template file named `*.gtm.md`.
- 2. **In-place mode** — You insert directives directly into an existing
-    `*.md` file, and gotomd replaces them in place.
+gotomd processes template files (.*.gtm.md and .*.gtm.go) into their
+respective *.md and *.go expanding included directives.
 
 Directives are written inside HTML-style comments:
 
@@ -46,10 +60,8 @@ Directives are written inside HTML-style comments:
 gotomd::ACTION::PARAMETERS
 -->
 ```
-
 When processing the file, gotomd replaces each directive with the
-corresponding generated content, enclosed in matching "Bgn" and "End"
-markers.
+corresponding generated content.
 
 ## Actions
 
@@ -79,8 +91,8 @@ gotomd::dcls::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
 -->
 ```
 
-Inserts each listed declaration as a single line, regardless of
-how it is declared in the source. No comments are included.
+Inserts each listed declaration as a single line, regardless of how it is
+declared in the source. No comments are included.
 
 Example: functions, methods, constants.
 
@@ -90,8 +102,8 @@ gotomd::dcln::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
 -->
 ```
 
-Inserts each listed declaration exactly as in the source, including
-any leading comments.
+Inserts each listed declaration exactly as in the source, including any
+leading comments.
 
 ```html
 <!---
@@ -108,8 +120,8 @@ gotomd::tst::goTest::./relativeDirectory/testName
 -->
 ```
 
-Runs go test in the given directory, targeting the specified test(s)
-or package, and includes the output.
+Runs go test in the given directory, targeting the specified test(s) or
+package, and includes the output.
 
 ```html
 <!---
@@ -125,22 +137,8 @@ gotomd::run::./relativeDirectory [args ...]
 -->
 ```
 
-Runs go run on the package in the given directory (assumes main)
-with the provided arguments, including the output.
-
-## Output Markers
-
-Generated content is wrapped between markers in the target file:
-
-    const sztestBgnPrefix = sztestPrefix + "Bgn::"
-    const sztestEndPrefix = sztestPrefix + "End::"
-
-Additionally, an auto-generated section header is prefixed with:
-
-    const szAutoPrefix = sztestPrefix + "Auto::"
-
-This header is followed by a blank line. If operating in template mode
-(not in-place), a DO NOT MODIFY warning is also inserted.
+Runs go run on the package in the given directory (assumes main) with the
+provided arguments, including the output.
 
 # Usage: gotomd
 
@@ -153,7 +151,7 @@ and in sync with the source.
 
     gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
            [-f | --force] [-z | --colorize] [-o | --output <dir>]
-           [-p | --permission <perm>] [path ...]
+           [-p | --permission <perm>] --uptodate [path ...]
 
     [-v | --verbose ...]
         Increase the verbose level for each v provided.
@@ -178,6 +176,10 @@ and in sync with the source.
 
         (can only set RW bits)
 
+    --uptodate
+        Returns 0 if no changes would have been made.  No writes are
+        performed.
+
     [path ...]
         A specific gotomd file template with the extension '*.gtm.md' or a
         directory which will be searched for all matching template
@@ -185,11 +187,9 @@ and in sync with the source.
 
 # Dedication
 
-This project is dedicated to Reem.
-Your brilliance, courage, and quiet strength continue to inspire me.
-Every line is written in gratitude for the light and hope you brought into my
-life.
+This project is dedicated to Reem. Your brilliance, courage, and quiet
+strength continue to inspire me. Every line is written in gratitude for the
+light and hope you brought into my life.
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
-<!--- gotomd::End::doc::./package -->

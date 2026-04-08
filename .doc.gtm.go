@@ -17,12 +17,67 @@
 */
 /*
 Package gotomd maintains GitHub-style README.md and go package documentation
-files by embedding Go documentation, source code, test output, and command
-output directly from the Go codebase. This ensures that program documentation
-is kept in one place—the Go code itself—while keeping the README and package
-documentation automatically up to date.
 
-## How it works
+
+# Usage: gotomd
+
+Synchronize Go package and GitHub style README.md documentation files by
+embedding Go documentation, source code, test and command output directly from
+the Go codebase. This ensures that program documentation is kept in one
+place—the Go code itself—while keeping the README and package documentation
+automatically up to date. It does this by processing template files containing
+markdown formatting and replacing embedded directives with content generated
+directly from your Go codebase. This ensures your documentation is always
+accurate and in sync with the source.
+
+    gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
+           [-f | --force] [-z | --colorize] [-o | --output <dir>]
+           [-p | --permission <perm>] --uptodate [path ...]
+
+    [-v | --verbose ...]
+        Increase the verbose level for each v provided.
+
+
+    [-l | --license]
+        Display license before program exits.
+
+
+    [-h | --help]
+        Display program usage information.
+
+
+    [-f | --force]
+        Do not confirm overwrite of destination.
+
+
+    [-z | --colorize]
+        Colorize go test output.
+
+
+    [-o | --output <dir>]
+        Direct all output to the specified directory.
+
+
+    [-p | --permission <perm>]
+        Permissions to use when creating new file.
+
+        (can only set RW bits)
+
+
+    --uptodate
+        Returns 0 if all template expansions are up to date.  No changes are
+        made.  It is not compatible with the flags:-f, -o <dir>, -p <perm>.
+
+
+    [path ...]
+        Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or a
+        directory which will be searched for all matching template files.  All
+		subdirectories may be searched by using the special './...' path.
+        It defaults to search the current directory: '.'
+
+
+
+# Directives
 
 gotomd processes template files (.*.gtm.md and .*.gtm.go) into their
 respective *.md and *.go expanding included directives.
@@ -30,9 +85,7 @@ respective *.md and *.go expanding included directives.
 Directives are written inside HTML-style comments:
 
 ```html
-<!---
-gotomd::ACTION::PARAMETERS
--->
+<!--- gotomd::ACTION::PARAMETERS -->
 ```
 When processing the file, gotomd replaces each directive with the
 corresponding generated content.
@@ -42,29 +95,22 @@ corresponding generated content.
 Each directive's ACTION determines what is included:
 
 ```html
-<!---
-gotomd::doc::./relativeDirectory/goObject
--->
+<!--- gotomd::doc::./relativeDirectory/goObject -->
 ```
 Runs go doc on the specified object from the given directory.
 
 The parameter format is: ./path/to/package/ObjectName
 
-A special object name package includes the package-level comments.
+A special object name 'package' includes the package-level comments.
 
 ```html
-<!---
-gotomd::docConstGrp::./relativeDirectory/goConstName ListOfConstNames
--->
+<!--- gotomd::docConstGrp::./relativeDirectory/goConstName ListOfConstNames -->
 ```
 Runs go doc on the specified constant block(s) from the given directory.
 
 ```html
-<!---
-gotomd::dcls::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
--->
+<!--- gotomd::dcls::./relativeDirectory/declaredObject ListOfDeclaredGoObjects -->
 ```
-
 Inserts each listed declaration as a single line, regardless of how it is
 declared in the source. No comments are included.
 
@@ -114,62 +160,7 @@ gotomd::run::./relativeDirectory [args ...]
 Runs go run on the package in the given directory (assumes main) with the
 provided arguments, including the output.
 
-## Output Markers
-
-Generated content is preceded by an auto-generated section header prefixed
-with:
-
-	const szAutoPrefix = sztestPrefix + "Auto::"
-
-This header is followed by a blank line. If operating in template mode (not
-in-place), a DO NOT MODIFY warning is also inserted.
-
-# Usage: gotomd
-
-Synchronize GitHub README.md files and Go package document files with Go
-source code, documentation, tests, and command output. gotomd processes
-templates replacing special directives with content generated directly from
-your Go codebase. This ensures your documentation is always accurate and in
-sync with the source.
-
-	gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
-	       [-f | --force] [-z | --colorize] [-o | --output <dir>]
-	       [-p | --permission <perm>] [path ...]
-
-	[-v | --verbose ...]
-	    Increase the verbose level for each v provided.
-
-
-	[-l | --license]
-	    Display license before program exits.
-
-
-	[-h | --help]
-	    Display program usage information.
-
-
-	[-f | --force]
-	    Do not confirm overwrite of destination.
-
-
-	[-z | --colorize]
-	    Colorize go test output.
-
-
-	[-o | --output <dir>]
-	    Direct all output to the specified directory.
-
-
-	[-p | --permission <perm>]
-	    Permissions to use when creating new file.
-
-	    (can only set RW bits)
-
-
-	[path ...]
-	    A specific gotomd file template with the extension '*.gtm.md' or a
-	    directory which will be searched for all matching template
-	    '*.gtm.md' files.  It defaults to the current directory: '.'
+<!--- gotomd::inline-run::./. --help -->
 
 # Dedication
 
@@ -194,5 +185,5 @@ const copyrightMessage = `
 
 // Copyright writes the copyright message to os.Stdout.
 func Copyright() {
-	szlog.Say0(strings.Trim(copyrightMessage, " \t\n"))
+	szlog.Say0(strings.Trim(copyrightMessage, " \t\n") + "\n")
 }

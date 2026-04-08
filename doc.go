@@ -1,6 +1,10 @@
+//                *****  AUTO GENERATED:  DO NOT MODIFY  *****.
+//                       MODIFY TEMPLATE: '.doc.gtm.go'.
+//                  See: 'https://github.com/dancsecs/gotomd'.
+
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023-2025 Leslie Dancsecs
+   Copyright (C) 2023, 2024 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,10 +19,9 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
 /*
 Package gotomd maintains GitHub-style README.md and go package documentation
-files by embedding Go documentation, source code, test output, and command
+by embedding Go documentation, source code, test and command
 output directly from the Go codebase. This ensures that program documentation
 is kept in one place—the Go code itself—while keeping the README and package
 documentation automatically up to date.
@@ -115,62 +118,58 @@ gotomd::run::./relativeDirectory [args ...]
 Runs go run on the package in the given directory (assumes main) with the
 provided arguments, including the output.
 
-## Output Markers
-
-Generated content is preceded by an auto-generated section header prefixed
-with:
-
-	const szAutoPrefix = sztestPrefix + "Auto::"
-
-This header is followed by a blank line. If operating in template mode (not
-in-place), a DO NOT MODIFY warning is also inserted.
-
 # Usage: gotomd
 
-Synchronize GitHub README.md files and Go package document files with Go
-source code, documentation, tests, and command output. gotomd processes
-templates replacing special directives with content generated directly from
-your Go codebase. This ensures your documentation is always accurate and in
-sync with the source.
+Synchronize GitHub README.md files with Go source code,
+documentation, tests, and command output. gotomd processes
+Markdown templates or existing README files, replacing special
+directives with content generated directly from your Go
+codebase. This ensures your documentation is always accurate
+and in sync with the source.
 
-	gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
-	       [-f | --force] [-z | --colorize] [-o | --output <dir>]
-	       [-p | --permission <perm>] [path ...]
+    gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
+           [-f | --force] [-z | --colorize] [-o | --output <dir>]
+           [-p | --permission <perm>] --uptodate [path ...]
 
-	[-v | --verbose ...]
-	    Increase the verbose level for each v provided.
-
-
-	[-l | --license]
-	    Display license before program exits.
+    [-v | --verbose ...]
+        Increase the verbose level for each v provided.
 
 
-	[-h | --help]
-	    Display program usage information.
+    [-l | --license]
+        Display license before program exits.
 
 
-	[-f | --force]
-	    Do not confirm overwrite of destination.
+    [-h | --help]
+        Display program usage information.
 
 
-	[-z | --colorize]
-	    Colorize go test output.
+    [-f | --force]
+        Do not confirm overwrite of destination.
 
 
-	[-o | --output <dir>]
-	    Direct all output to the specified directory.
+    [-z | --colorize]
+        Colorize go test output.
 
 
-	[-p | --permission <perm>]
-	    Permissions to use when creating new file.
-
-	    (can only set RW bits)
+    [-o | --output <dir>]
+        Direct all output to the specified directory.
 
 
-	[path ...]
-	    A specific gotomd file template with the extension '*.gtm.md' or a
-	    directory which will be searched for all matching template
-	    '*.gtm.md' files.  It defaults to the current directory: '.'
+    [-p | --permission <perm>]
+        Permissions to use when creating new file.
+
+        (can only set RW bits)
+
+
+    --uptodate
+        Returns 0 if no changes would have been made.  No writes are
+        performed.
+
+
+    [path ...]
+        A specific gotomd file template with the extension '*.gtm.md' or a
+        directory which will be searched for all matching template
+        '*.gtm.md' files.  It defaults to the current directory: '.'
 
 # Dedication
 
@@ -184,31 +183,16 @@ OpenAI.
 package main
 
 import (
-	"fmt"
-	"strings"
+    "strings"
+
+    "github.com/dancsecs/szlog"
 )
 
 const copyrightMessage = `
-   Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023-2025 Leslie Dancsecs
-
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//<<<! gotomd::file::~/.copyright >>
 `
 
 // Copyright writes the copyright message to os.Stdout.
-//
-//nolint:forbidigo // Copyright is public
 func Copyright() {
-	fmt.Print(strings.TrimLeft(copyrightMessage, "\n"))
+    szlog.Say0(strings.Trim(copyrightMessage, " \t\n") + "\n")
 }
