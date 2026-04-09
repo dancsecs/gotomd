@@ -183,9 +183,9 @@ OpenAI.
 package main
 
 import (
-    "strings"
+	"strings"
 
-    "github.com/dancsecs/szlog"
+	"github.com/dancsecs/szlog"
 )
 
 const copyrightMessage = `
@@ -194,5 +194,5 @@ const copyrightMessage = `
 
 // Copyright writes the copyright message to os.Stdout.
 func Copyright() {
-    szlog.Say0(strings.Trim(copyrightMessage, " \t\n") + "\n")
+	szlog.Say0(strings.Trim(copyrightMessage, " \t\n") + "\n")
 }

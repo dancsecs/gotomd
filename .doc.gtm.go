@@ -16,9 +16,6 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 /*
-Package gotomd maintains GitHub-style README.md and go package documentation
-
-
 # Usage: gotomd
 
 Synchronize Go package and GitHub style README.md documentation files by

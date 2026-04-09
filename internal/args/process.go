@@ -50,53 +50,25 @@ func Process() error {
 		szlog.EnableVerbose,
 	)
 
-	args = szargs.New(
-		"Synchronize GitHub README.md files with Go source code,\n"+
-			"documentation, tests, and command output. gotomd processes\n"+
-			"Markdown templates or existing README files, replacing special\n"+
-			"directives with content generated directly from your Go\n"+
-			"codebase. This ensures your documentation is always accurate\n"+
-			"and in sync with the source."+
-			"",
-		cleanedArgs,
-	)
+	args = szargs.New(programFunction, cleanedArgs)
 
 	szlog.ArgUsageInfo(args.RegisterUsage)
 	args.PushErr(err)
 
-	showLicense = args.Is(
-		"[-l | --license]",
-		"Display license before program exits.",
-	)
+	showLicense = args.Is(licenseFlag, licenseDesc[1:])
+	showHelp = args.Is(helpFlag, helpDesc[1:])
+	forceOverwrite = args.Is(forceFlag, forceDesc[1:])
+	szColorize = args.Is(colorizeFlag, colorizeDesc[1:])
+	upToDate = args.Is(upToDateFlag, upToDateDesc[1:])
 
-	showHelp = args.Is(
-		"[-h | --help]",
-		"Display program usage information.",
-	)
+	outputDir, foundOutput = args.ValueString(outputDirFlag, outputDirDesc)
+	permInt, foundPerm = args.ValueUint32(permFlag, permDesc)
 
-	forceOverwrite = args.Is(
-		"[-f | --force]",
-		"Do not confirm overwrite of destination.",
-	)
+	args.RegisterUsage(pathArg, pathDesc)
 
-	szColorize = args.Is(
-		"[-z | --colorize]",
-		"Colorize go test output.",
-	)
-
-	outputDir, foundOutput = args.ValueString(
-		"[-o | --output <dir>]",
-		"Direct all output to the specified directory.",
-	)
 	if !foundOutput {
 		outputDir = "."
 	}
-
-	permInt, foundPerm = args.ValueUint32(
-		"[-p | --permission <perm>]",
-		"Permissions to use when creating new file.\n"+
-			"(can only set RW bits)",
-	)
 
 	if !foundPerm {
 		perm = defaultPerm
@@ -119,12 +91,6 @@ func Process() error {
 		}
 	}
 
-	upToDate = args.Is(
-		"--uptodate",
-		"Returns 0 if no changes would have been made.  "+
-			"No writes are performed.",
-	)
-
 	if upToDate && foundOutput {
 		args.PushErr(errs.ErrUpToDateWithOutput)
 	}
@@ -141,18 +107,10 @@ func Process() error {
 		args.PushArg(".") // Default to current directory if no args given.
 	}
 
-	args.RegisterUsage(
-		"[path ...]",
-		"A specific gotomd file template with the extension '*.gtm.md' "+
-			"or a directory which will be searched for all matching "+
-			"template '*.gtm.md' files.  It defaults to the current "+
-			"directory: '.'",
-	)
-
 	var filesToProcess []string
 	for args.HasNext() {
 		filesToProcess = append(filesToProcess, args.NextString(
-			"[path ...]",
+			pathArg,
 			"",
 		))
 	}
