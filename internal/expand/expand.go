@@ -140,7 +140,53 @@ func isCmd(line string) (int, int, error) {
 	return cmdIdx, len(sztestPrefix) + end + len(sep), nil
 }
 
-//nolint:cyclop // Ok.
+func getBlock(
+	str *strings.Builder,
+	i, cmdStart int,
+	lines []string,
+	terminator, cutSet string,
+) (int, error) {
+	var (
+		addSpace  bool
+		cleanLine string
+		err       error
+	)
+
+	line := lines[i]
+
+	for err == nil && !strings.HasSuffix(line, terminator) {
+		if addSpace {
+			str.WriteRune(' ')
+		} else {
+			addSpace = true
+		}
+
+		str.WriteString(line[cmdStart:])
+		cmdStart = 0
+		i++
+
+		if i < len(lines) {
+			line = strings.Trim(lines[i], " ")
+		} else {
+			err = errs.ErrBlockNotTerminated
+		}
+	}
+
+	cleanLine = strings.TrimRight(line[cmdStart:], cutSet)
+	if err == nil {
+		if addSpace && len(cleanLine) > 0 {
+			_, err = str.WriteRune(' ')
+		}
+	}
+
+	if err == nil {
+		str.WriteString(cleanLine)
+	}
+
+	return i, err
+}
+
+//nolint:cyclop,funlen // Ok.
 func parse(dir, fPath, fData string) (string, error) {
 	const (
 		skipDirBlank   = ""
@@ -150,12 +196,17 @@ func parse(dir, fPath, fData string) (string, error) {
 
 	var (
 		res              string
-		cmd              string
+		cmd              strings.Builder
 		err              error
 		cmdIdx, cmdStart int
+		updatedFile      strings.Builder
 	)
 
+	lines := strings.Split(fData+"\n", "\n")
+
 	if !(dir == skipDirBlank || dir == skipDirThis || dir == skipDirThisDir) {
+		// Need to change he current working directory and change it back
+		// at the end of the parse.
 		var cwd string
 		cwd, err = os.Getwd()
 
@@ -168,35 +219,44 @@ func parse(dir, fPath, fData string) (string, error) {
 		}
 	}
 
-	updatedFile := "" +
-		format.BalancedComment(szAutoHeader1) +
-		format.BalancedComment(szAutoHeader2+"'"+fPath+"'") +
-		format.BalancedComment(szAutoHeader3) +
-		"\n"
-
-	lines := strings.Split(fData+"\n", "\n")
+	if err == nil {
+		_, err = updatedFile.WriteString("" +
+			format.BalancedComment(szAutoHeader1) +
+			format.BalancedComment(szAutoHeader2+"'"+fPath+"'") +
+			format.BalancedComment(szAutoHeader3) +
+			"\n",
+		)
+	}
 
 	for i, mi := 0, len(lines)-1; i < mi && err == nil; i++ {
 		line := strings.TrimRight(lines[i], " ")
 		cmdIdx, cmdStart, err = isCmd(line)
 
-		if err == nil {
-			if cmdIdx >= 0 {
-				cmd = line[cmdStart : len(line)-len(" -->")]
-				res, err = action.run(cmdIdx, cmd)
+		if err == nil && cmdIdx >= 0 {
+			i, err = getBlock(&cmd, i, cmdStart, lines, "-->", " ->")
 
-				if err == nil {
-					updatedFile += res + "\n"
-				}
-			} else {
-				updatedFile += line + "\n"
+			if err == nil {
+				res, err = action.run(cmdIdx, cmd.String())
 			}
+
+			if err == nil {
+				_, err = updatedFile.WriteString(res + "\n")
+			}
+
+			continue
+		}
+
+		if err == nil {
+			// Not a command. Just append the line.
+			_, err = updatedFile.WriteString(line + "\n")
+
+			continue
 		}
 	}
 
-	if err != nil {
-		return "", err
+	if err == nil {
+		return strings.TrimRight(updatedFile.String(), "\n"), nil
 	}
 
-	return strings.TrimRight(updatedFile, "\n"), nil
+	return "", fmt.Errorf("%w: %w", errs.ErrParseError, err)
 }
