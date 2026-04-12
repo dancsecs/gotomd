@@ -18,6 +18,8 @@
 
 package args
 
+import "strings"
+
 const (
 	programFunction = `
 Synchronize Go package and GitHub style README.md documentation by
@@ -62,14 +64,35 @@ Returns 0 if no changes would have been made. No writes are performed.
 	permFlag = "[-p | --permission <perm>]"
 	permDesc = `
 Permissions to use when creating new file.
-(can only set RW bits)
+
+(can only set RW bits).
 `
 
 	pathArg  = "[path ...]"
 	pathDesc = `
-Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or a
-directory which will be searched for all matching template files.  All
-subdirectories may be searched by using the special './...' path.
+Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or
+a directory which will be searched for all matching template files.
+All subdirectories may be searched by using the special './...' path.
 It defaults to search the current directory: '.'
 `
 )
+
+func prepareDesc(desc string) string {
+	var res strings.Builder
+
+	lines := strings.Split(strings.Trim(desc, "\n"), "\n")
+	first := 0
+
+	for i, l := range lines {
+		if l == "" {
+			res.WriteString(strings.Join(lines[first:i], " ") + "\n")
+			first = i + 1
+		}
+	}
+
+	if first < len(lines) {
+		res.WriteString(strings.Join(lines[first:], " "))
+	}
+
+	return strings.TrimRight(res.String(), "\n")
+}
