@@ -26,3 +26,10 @@ header.
 Declarations can be single-line or multi-line blocks or constructions.  Each
 type will be included here for complete testing.
 
+    #!/bin/bash
+    echo "Hello, world."
+
+```bash
+#!/bin/bash
+echo "Hello, world."
+```

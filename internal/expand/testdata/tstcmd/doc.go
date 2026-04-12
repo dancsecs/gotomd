@@ -26,9 +26,10 @@ markdown (goToMD) extraction utilities.  Various object will be defined that
 exhibit the various comment and declaration options permitted by gofmt.
 
 # Usage
-    tstcmd [--help]
-    
-    --help
-        Display usage information
+
+tstcmd [--help]
+
+	--help
+	    Display usage information
 */
 package main

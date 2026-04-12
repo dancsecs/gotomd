@@ -7,10 +7,11 @@ import (
 
 const usageInfo = `
 # Usage
-	tstcmd [--help]
-	
+
+tstcmd [--help]
+
 	--help
-		Display usage information
+	    Display usage information
 `
 
 func main() {

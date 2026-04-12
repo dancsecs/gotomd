@@ -19,34 +19,51 @@
 package expand
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/sztestlog"
 )
 
+func Test_ExpandGetBlockInitialNotTerminated(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	lines := []string{
+		"<!--- gotomd::cmd::./path/cmd arg1 arg2 ->",
+	}
+
+	i, res, err := getBlock(
+		1,
+		len("<!--- gotomd::cmd::"),
+		lines, "-->", " -<>", " ",
+	)
+
+	chk.Int(i, 1)
+	chk.Err(err, errs.ErrBlockNotTerminated.Error())
+	chk.Str(res, "")
+}
+
 func Test_ExpandGetBlockNotTerminated(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
 	var (
-		res   strings.Builder
+		res   string
 		lines = []string{
 			"<!--- gotomd::cmd::./path/cmd arg1 arg2 ->",
 		}
 	)
 
-	i, err := getBlock(
-		&res,
+	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>",
+		lines, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 1)
 	chk.Err(err, errs.ErrBlockNotTerminated.Error())
-	chk.Str(res.String(), "./path/cmd arg1 arg2 ->")
+	chk.Str(res, "./path/cmd arg1 arg2 ->")
 }
 
 func Test_ExpandGetBlockOneLine(t *testing.T) {
@@ -54,22 +71,21 @@ func Test_ExpandGetBlockOneLine(t *testing.T) {
 	defer chk.Release()
 
 	var (
-		res   strings.Builder
+		res   string
 		lines = []string{
 			"<!--- gotomd::cmd::./path/cmd arg1 arg2 -->",
 		}
 	)
 
-	i, err := getBlock(
-		&res,
+	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>",
+		lines, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 0)
 	chk.NoErr(err)
-	chk.Str(res.String(), "./path/cmd arg1 arg2")
+	chk.Str(res, "./path/cmd arg1 arg2")
 }
 
 func Test_ExpandGetBlockTwoLines1(t *testing.T) {
@@ -77,23 +93,22 @@ func Test_ExpandGetBlockTwoLines1(t *testing.T) {
 	defer chk.Release()
 
 	var (
-		res   strings.Builder
+		res   string
 		lines = []string{
 			"<!--- gotomd::cmd::./path/cmd arg1 arg2",
 			"-->",
 		}
 	)
 
-	i, err := getBlock(
-		&res,
+	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>",
+		lines, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 1)
 	chk.NoErr(err)
-	chk.Str(res.String(), "./path/cmd arg1 arg2")
+	chk.Str(res, "./path/cmd arg1 arg2")
 }
 
 func Test_ExpandGetBlockTwoLines2(t *testing.T) {
@@ -101,23 +116,22 @@ func Test_ExpandGetBlockTwoLines2(t *testing.T) {
 	defer chk.Release()
 
 	var (
-		res   strings.Builder
+		res   string
 		lines = []string{
 			"<!--- gotomd::cmd::./path/cmd arg1",
 			" arg2 -->",
 		}
 	)
 
-	i, err := getBlock(
-		&res,
+	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>",
+		lines, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 1)
 	chk.NoErr(err)
-	chk.Str(res.String(), "./path/cmd arg1 arg2")
+	chk.Str(res, "./path/cmd arg1 arg2")
 }
 
 func Test_ExpandGetBlockTwoLines3(t *testing.T) {
@@ -125,7 +139,7 @@ func Test_ExpandGetBlockTwoLines3(t *testing.T) {
 	defer chk.Release()
 
 	var (
-		res   strings.Builder
+		res   string
 		lines = []string{
 			"<!--- gotomd::cmd::./path/cmd",
 			" arg1",
@@ -133,16 +147,15 @@ func Test_ExpandGetBlockTwoLines3(t *testing.T) {
 		}
 	)
 
-	i, err := getBlock(
-		&res,
+	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>",
+		lines, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 2)
 	chk.NoErr(err)
-	chk.Str(res.String(), "./path/cmd arg1 arg2")
+	chk.Str(res, "./path/cmd arg1 arg2")
 }
 
 func Test_ExpandGetBlockTwoLines4(t *testing.T) {
@@ -150,7 +163,7 @@ func Test_ExpandGetBlockTwoLines4(t *testing.T) {
 	defer chk.Release()
 
 	var (
-		res   strings.Builder
+		res   string
 		lines = []string{
 			"<!--- gotomd::cmd::./path/cmd",
 			" arg1",
@@ -159,16 +172,15 @@ func Test_ExpandGetBlockTwoLines4(t *testing.T) {
 		}
 	)
 
-	i, err := getBlock(
-		&res,
+	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>",
+		lines, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 3)
 	chk.NoErr(err)
-	chk.Str(res.String(), "./path/cmd arg1 arg2")
+	chk.Str(res, "./path/cmd arg1 arg2")
 }
 
 func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
@@ -176,7 +188,7 @@ func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
 	defer chk.Release()
 
 	updatedDoc, err := parse("", "",
-		sztestPrefix+szDocPrefix+"./INVALID_ROOT_DIRECTORY/action1 -->\n",
+		szCmdPrefix+szDocPrefix+"./INVALID_ROOT_DIRECTORY/action1 -->\n",
 	)
 
 	chk.Err(
@@ -195,7 +207,7 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 	defer chk.Release()
 
 	updatedDoc, err := parse("", "",
-		sztestPrefix+"unknownCommand -->\n",
+		szCmdPrefix+"unknownCommand -->\n",
 	)
 
 	chk.Err(

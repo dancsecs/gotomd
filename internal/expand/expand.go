@@ -38,8 +38,8 @@ const (
 )
 
 const (
-	sztestPrefix = "<!--- " + szCmdLabel + cmdSep
-	szDocPrefix  = "doc::"
+	szCmdPrefix = "<!--- " + szCmdLabel + cmdSep
+	szDocPrefix = "doc::"
 )
 
 const (
@@ -123,8 +123,8 @@ func isCmd(line string) (int, int, error) {
 		end    = 0
 	)
 
-	if strings.HasPrefix(line, sztestPrefix) {
-		cmd := line[len(sztestPrefix):]
+	if strings.HasPrefix(line, szCmdPrefix) {
+		cmd := line[len(szCmdPrefix):]
 		end = strings.Index(cmd, sep)
 
 		if end >= 0 {
@@ -137,56 +137,148 @@ func isCmd(line string) (int, int, error) {
 		}
 	}
 
-	return cmdIdx, len(sztestPrefix) + end + len(sep), nil
+	return cmdIdx, len(szCmdPrefix) + end + len(sep), nil
 }
 
 func getBlock(
-	str *strings.Builder,
 	i, cmdStart int,
 	lines []string,
-	terminator, cutSet string,
-) (int, error) {
+	terminator, cutSet, sep string,
+) (int, string, error) {
 	var (
-		addSpace  bool
-		cleanLine string
-		err       error
+		str          strings.Builder
+		addSeparator bool
+		line         string
+		err          error
 	)
 
-	line := lines[i]
+	if i < len(lines) {
+		line = strings.Trim(lines[i][cmdStart:], " ")
+	} else {
+		err = errs.ErrBlockNotTerminated
+	}
 
-	for err == nil && !strings.HasSuffix(line, terminator) {
-		if addSpace {
-			str.WriteRune(' ')
-		} else {
-			addSpace = true
+	for err == nil {
+		if strings.HasSuffix(line, terminator) {
+			break
 		}
 
-		str.WriteString(line[cmdStart:])
-		cmdStart = 0
-		i++
+		if addSeparator {
+			str.WriteString(sep)
+		} else {
+			addSeparator = true
+		}
 
+		str.WriteString(line)
+
+		i++
 		if i < len(lines) {
 			line = strings.Trim(lines[i], " ")
 		} else {
 			err = errs.ErrBlockNotTerminated
-		}
-	}
 
-	cleanLine = strings.TrimRight(line[cmdStart:], cutSet)
-	if err == nil {
-		if addSpace && len(cleanLine) > 0 {
-			_, err = str.WriteRune(' ')
+			continue
 		}
 	}
 
 	if err == nil {
-		str.WriteString(cleanLine)
+		line = strings.TrimRight(line, cutSet)
+		if addSeparator && len(line) > 0 {
+			str.WriteString(sep)
+		}
+	}
+
+	if err == nil {
+		str.WriteString(line)
+	}
+
+	return i,
+		strings.TrimRight(str.String(), "\n"), err
+}
+
+func processCmd(
+	file *strings.Builder,
+	i,
+	cmdIdx, cmdStart int,
+	lines []string,
+) (int, error) {
+	var (
+		cmd string
+		res string
+		err error
+	)
+
+	i, cmd, err = getBlock(i, cmdStart, lines, "-->", " ->", " ")
+
+	if err == nil {
+		res, err = action.run(cmdIdx, cmd)
+	}
+
+	if err == nil {
+		file.WriteString(res + "\n")
 	}
 
 	return i, err
 }
 
-//nolint:cyclop,funlen // Ok.
+func processCodeBlock(
+	file *strings.Builder,
+	i int,
+	lines []string,
+	codeSyntaxName string,
+) (int, error) {
+	var (
+		code string
+		err  error
+	)
+
+	i, code, err = getBlock(i+1, 0, lines, "```", "`", "\n")
+	if err == nil {
+		file.WriteString(
+			format.Inline(codeSyntaxName, code),
+		)
+	}
+
+	return i, err
+}
+
+func processLines(updatedFile *strings.Builder, lines []string) error {
+	var (
+		cmdIdx   int
+		cmdStart int
+		err      error
+	)
+
+	for i, mi := 0, len(lines)-1; i < mi; i++ {
+		line := strings.TrimRight(lines[i], " ")
+
+		cmdIdx, cmdStart, err = isCmd(line)
+		if err == nil && cmdIdx >= 0 {
+			i, err = processCmd(updatedFile, i, cmdIdx, cmdStart, lines)
+			if err == nil {
+				continue
+			}
+		}
+
+		if err == nil && strings.HasPrefix(line, "```") {
+			i, err = processCodeBlock(updatedFile, i, lines, line[3:])
+
+			if err == nil {
+				continue
+			}
+		}
+
+		if err == nil {
+			// Not a block. Just append the line.
+			updatedFile.WriteString(line + "\n")
+		} else {
+			break
+		}
+	}
+
+	return err
+}
+
 func parse(dir, fPath, fData string) (string, error) {
 	const (
 		skipDirBlank   = ""
@@ -195,14 +287,9 @@ func parse(dir, fPath, fData string) (string, error) {
 	)
 
 	var (
-		res              string
-		cmd              strings.Builder
-		err              error
-		cmdIdx, cmdStart int
-		updatedFile      strings.Builder
+		err         error
+		updatedFile strings.Builder
 	)
-
-	lines := strings.Split(fData+"\n", "\n")
 
 	if !(dir == skipDirBlank || dir == skipDirThis || dir == skipDirThisDir) {
 		// Need to change he current working directory and change it back
@@ -220,7 +307,7 @@ func parse(dir, fPath, fData string) (string, error) {
 	}
 
 	if err == nil {
-		_, err = updatedFile.WriteString("" +
+		updatedFile.WriteString("" +
 			format.BalancedComment(szAutoHeader1) +
 			format.BalancedComment(szAutoHeader2+"'"+fPath+"'") +
 			format.BalancedComment(szAutoHeader3) +
@@ -228,31 +315,7 @@ func parse(dir, fPath, fData string) (string, error) {
 		)
 	}
 
-	for i, mi := 0, len(lines)-1; i < mi && err == nil; i++ {
-		line := strings.TrimRight(lines[i], " ")
-		cmdIdx, cmdStart, err = isCmd(line)
-
-		if err == nil && cmdIdx >= 0 {
-			i, err = getBlock(&cmd, i, cmdStart, lines, "-->", " ->")
-
-			if err == nil {
-				res, err = action.run(cmdIdx, cmd.String())
-			}
-
-			if err == nil {
-				_, err = updatedFile.WriteString(res + "\n")
-			}
-
-			continue
-		}
-
-		if err == nil {
-			// Not a command. Just append the line.
-			_, err = updatedFile.WriteString(line + "\n")
-
-			continue
-		}
-	}
+	err = processLines(&updatedFile, strings.Split(fData+"\n", "\n"))
 
 	if err == nil {
 		return strings.TrimRight(updatedFile.String(), "\n"), nil

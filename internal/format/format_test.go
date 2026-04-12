@@ -52,12 +52,12 @@ func TestFormat_Inline(t *testing.T) {
 
 	chk.Str(
 		format.Inline("go", "ABC\n"),
-		"\n\tABC\n",
+		"\tABC\n",
 	)
 
 	chk.Str(
 		format.Inline("bash", "ABC\n"),
-		"\n\tABC\n",
+		"\tABC\n",
 	)
 }
 
@@ -104,6 +104,7 @@ func TestFormat_HLine(t *testing.T) {
 	defer chk.Release()
 
 	format.ForMarkdown()
+	chk.True(format.IsForMarkdown())
 
 	chk.Str(
 		format.HLine(),

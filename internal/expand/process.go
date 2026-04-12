@@ -83,7 +83,9 @@ func Process(rPath string) error {
 	}
 
 	if err == nil {
-		res = strings.ReplaceAll(res, "\t", "    ")
+		if format.IsForMarkdown() {
+			res = strings.ReplaceAll(res, "\t", "    ")
+		}
 
 		_, err = update.File(
 			wPath, args.Force(), args.CheckUpToDate(), res, args.Perm(),

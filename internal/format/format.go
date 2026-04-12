@@ -33,6 +33,11 @@ func ForGoDoc() {
 	formatForGo = true
 }
 
+// IsForMarkdown returns true if current formatting targets am .md file.
+func IsForMarkdown() bool {
+	return !formatForGo
+}
+
 func markForGoPackageInline(content string) string {
 	contentLines := strings.Split(content, "\n")
 	newContent := make([]string, len(contentLines))
@@ -41,7 +46,7 @@ func markForGoPackageInline(content string) string {
 		newContent[i] = "\t" + l
 	}
 
-	return "\n" + strings.Join(newContent, "\n") + "\n"
+	return strings.Join(newContent, "\n") + "\n"
 }
 
 // Inline frames the content in a ```language ... ``` multiline block for an

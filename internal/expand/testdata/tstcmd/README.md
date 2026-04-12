@@ -17,8 +17,9 @@ go run . --help
 
 ```
 # Usage
-    tstcmd [--help]
-    
+
+tstcmd [--help]
+
     --help
         Display usage information
 ```
