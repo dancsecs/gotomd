@@ -19,7 +19,6 @@
 package expand
 
 import (
-	"bytes"
 	"os"
 	"path/filepath"
 	"strings"
@@ -31,6 +30,12 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
+const (
+	skipDirBlank   = ""
+	skipDirThis    = "."
+	skipDirThisDir = skipDirThis + string(os.PathSeparator)
+)
+
 // Process processes the supplied file data (after switching
 // to the supplied directory if necessary) returning the updated data with
 // all the gotomd commands expanded.
@@ -40,12 +45,11 @@ func Process(rPath string) error {
 		rDir, rFile string
 		wDir, wFile string
 		wPath       string
-		fileBytes   []byte
 		res         string
 	)
 
 	rDir, rFile = filepath.Split(rPath)
-	wDir = rDir
+	wDir = "."
 
 	if args.OutputDir() != "." {
 		wDir = args.OutputDir()
@@ -69,20 +73,40 @@ func Process(rPath string) error {
 		}
 	}
 
+	isCwd := rDir == skipDirBlank ||
+		rDir == skipDirThis ||
+		rDir == skipDirThisDir
+	if !isCwd {
+		// Need to change he current working directory and change it back
+		// at the end of the parse.
+		var cwd string
+		cwd, err = os.Getwd()
+
+		if err == nil {
+			defer func() {
+				_ = os.Chdir(cwd)
+			}()
+
+			err = os.Chdir(rDir)
+		}
+	}
+
 	if err == nil {
 		wPath = filepath.Join(wDir, strings.TrimPrefix(wFile, "."))
 
 		szlog.Say1f("Expanding %s to: %s\n", rPath, wPath)
 
-		fileBytes, err = os.ReadFile(rPath) //nolint:gosec // Ok.
+		res, err = parse(rFile)
 	}
 
 	if err == nil {
-		fileData := string(bytes.TrimRight(fileBytes, "\n"))
-		res, err = parse(rDir, rPath, fileData)
-	}
+		res = "" +
+			format.BalancedComment(szAutoHeader1) +
+			format.BalancedComment(szAutoHeader2+"'"+rPath+"'") +
+			format.BalancedComment(szAutoHeader3) +
+			"\n" +
+			res
 
-	if err == nil {
 		if format.IsForMarkdown() {
 			res = strings.ReplaceAll(res, "\t", "    ")
 		}

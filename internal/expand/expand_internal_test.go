@@ -187,9 +187,14 @@ func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	updatedDoc, err := parse("", "",
-		szCmdPrefix+szDocPrefix+"./INVALID_ROOT_DIRECTORY/action1 -->\n",
+	fName := chk.CreateTmpFileAs(chk.CreateTmpDir(), "file.md",
+		[]byte(""+
+			szCmdPrefix+szDocPrefix+
+			"./INVALID_ROOT_DIRECTORY/action1 -->\n"+
+			"",
+		),
 	)
+	updatedDoc, err := parse(fName)
 
 	chk.Err(
 		err,
@@ -206,9 +211,12 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	updatedDoc, err := parse("", "",
-		szCmdPrefix+"unknownCommand -->\n",
+	fName := chk.CreateTmpFile(
+		[]byte("" +
+			szCmdPrefix + "unknownCommand -->\n",
+		),
 	)
+	updatedDoc, err := parse(fName)
 
 	chk.Err(
 		err,

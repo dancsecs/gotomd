@@ -202,8 +202,8 @@ func Test_Example1ExpandGoUpToDateVerbose(t *testing.T) {
 	defer chk.Release()
 
 	var (
+		docName      = "doc.go"
 		templatePath = filepath.Join(tstpkgPath, ".doc.gtm.go")
-		docPath      = filepath.Join(tstpkgPath, "doc.go")
 	)
 
 	chk.SetArgs(
@@ -218,8 +218,8 @@ func Test_Example1ExpandGoUpToDateVerbose(t *testing.T) {
 
 	chk.Stdout(
 		"File to process: '"+templatePath+"'",
-		"Expanding "+templatePath+" to: "+docPath,
-		"No change: "+docPath,
+		"Expanding "+templatePath+" to: "+docName,
+		"No change: "+docName,
 		"Documentation is up to date.",
 	)
 }
@@ -229,8 +229,8 @@ func Test_Example1ExpandGoUpToDateVerboseWithChange(t *testing.T) {
 	defer chk.Release()
 
 	var (
+		docName      = "doc_not_there.go"
 		templatePath = filepath.Join(tstpkgPath, ".doc_not_there.gtm.go")
-		docPath      = filepath.Join(tstpkgPath, "doc_not_there.go")
 	)
 
 	chk.SetArgs(
@@ -245,8 +245,8 @@ func Test_Example1ExpandGoUpToDateVerboseWithChange(t *testing.T) {
 
 	chk.Stdout(
 		"File to process: '"+templatePath+"'",
-		"Expanding "+templatePath+" to: "+docPath,
-		"Would have created: "+docPath,
+		"Expanding "+templatePath+" to: "+docName,
+		"Would have created: "+docName,
 		"Documentation is NOT up to date.",
 	)
 }

@@ -19,6 +19,7 @@
 package expand
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"sort"
@@ -242,26 +243,27 @@ func processCodeBlock(
 	return i, err
 }
 
-func processLines(updatedFile *strings.Builder, lines []string) error {
+func processLines(lines []string) (string, error) {
 	var (
-		cmdIdx   int
-		cmdStart int
-		err      error
+		cmdIdx      int
+		cmdStart    int
+		updatedFile strings.Builder
+		err         error
 	)
 
-	for i, mi := 0, len(lines)-1; i < mi; i++ {
+	for i, mi := 0, len(lines); i < mi; i++ {
 		line := strings.TrimRight(lines[i], " ")
 
 		cmdIdx, cmdStart, err = isCmd(line)
 		if err == nil && cmdIdx >= 0 {
-			i, err = processCmd(updatedFile, i, cmdIdx, cmdStart, lines)
+			i, err = processCmd(&updatedFile, i, cmdIdx, cmdStart, lines)
 			if err == nil {
 				continue
 			}
 		}
 
 		if err == nil && strings.HasPrefix(line, "```") {
-			i, err = processCodeBlock(updatedFile, i, lines, line[3:])
+			i, err = processCodeBlock(&updatedFile, i, lines, line[3:])
 
 			if err == nil {
 				continue
@@ -276,49 +278,32 @@ func processLines(updatedFile *strings.Builder, lines []string) error {
 		}
 	}
 
-	return err
+	if err == nil {
+		return updatedFile.String(), nil
+	}
+
+	return "", err
 }
 
-func parse(dir, fPath, fData string) (string, error) {
-	const (
-		skipDirBlank   = ""
-		skipDirThis    = "."
-		skipDirThisDir = skipDirThis + string(os.PathSeparator)
-	)
-
+func parse(fName string) (string, error) {
 	var (
-		err         error
-		updatedFile strings.Builder
+		err       error
+		fileBytes []byte
+		res       string
 	)
 
-	if !(dir == skipDirBlank || dir == skipDirThis || dir == skipDirThisDir) {
-		// Need to change he current working directory and change it back
-		// at the end of the parse.
-		var cwd string
-		cwd, err = os.Getwd()
-
-		if err == nil {
-			defer func() {
-				_ = os.Chdir(cwd)
-			}()
-
-			err = os.Chdir(dir)
-		}
-	}
+	fileBytes, err = os.ReadFile(fName) //nolint:gosec // Ok.
 
 	if err == nil {
-		updatedFile.WriteString("" +
-			format.BalancedComment(szAutoHeader1) +
-			format.BalancedComment(szAutoHeader2+"'"+fPath+"'") +
-			format.BalancedComment(szAutoHeader3) +
+		lines := strings.Split(
+			string(bytes.TrimRight(fileBytes, "\n")),
 			"\n",
 		)
+		res, err = processLines(lines)
 	}
 
-	err = processLines(&updatedFile, strings.Split(fData+"\n", "\n"))
-
 	if err == nil {
-		return strings.TrimRight(updatedFile.String(), "\n"), nil
+		return strings.TrimRight(res, "\n"), nil
 	}
 
 	return "", fmt.Errorf("%w: %w", errs.ErrParseError, err)
