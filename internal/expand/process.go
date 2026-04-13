@@ -30,11 +30,47 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
-const (
-	skipDirBlank   = ""
-	skipDirThis    = "."
-	skipDirThisDir = skipDirThis + string(os.PathSeparator)
-)
+func setTarget(fPath string) (string, string, error) {
+	var (
+		wFile string
+		found bool
+		err   error
+	)
+
+	wFile, found = strings.CutSuffix(fPath, ".gtm.go")
+	if found {
+		format.ForGoDoc()
+
+		wFile += ".go"
+	} else {
+		wFile, found = strings.CutSuffix(fPath, ".gtm.md")
+		if found {
+			format.ForMarkdown()
+
+			wFile += ".md"
+		} else {
+			err = errs.ErrUnknownTemplate
+		}
+	}
+
+	if err == nil {
+		return args.OutputDir(), wFile, nil
+	}
+
+	return "", "", err
+}
+
+func isCwd(dir string) bool {
+	const (
+		skipDirBlank   = ""
+		skipDirThis    = "."
+		skipDirThisDir = skipDirThis + string(os.PathSeparator)
+	)
+
+	return dir == skipDirBlank ||
+		dir == skipDirThis ||
+		dir == skipDirThisDir
+}
 
 // Process processes the supplied file data (after switching
 // to the supplied directory if necessary) returning the updated data with
@@ -49,34 +85,9 @@ func Process(rPath string) error {
 	)
 
 	rDir, rFile = filepath.Split(rPath)
-	wDir = "."
+	wDir, wFile, err = setTarget(rFile)
 
-	if args.OutputDir() != "." {
-		wDir = args.OutputDir()
-	}
-
-	var found bool
-
-	wFile, found = strings.CutSuffix(rFile, ".gtm.go")
-	if found {
-		format.ForGoDoc()
-
-		wFile += ".go"
-	} else {
-		wFile, found = strings.CutSuffix(rFile, ".gtm.md")
-		if found {
-			format.ForMarkdown()
-
-			wFile += ".md"
-		} else {
-			err = errs.ErrUnknownTemplate
-		}
-	}
-
-	isCwd := rDir == skipDirBlank ||
-		rDir == skipDirThis ||
-		rDir == skipDirThisDir
-	if !isCwd {
+	if !isCwd(rDir) {
 		// Need to change he current working directory and change it back
 		// at the end of the parse.
 		var cwd string
