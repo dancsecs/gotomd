@@ -229,6 +229,19 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 	chk.Str(updatedDoc, "")
 }
 
+func Test_Markdown_UpdateMarkDown_SquashMultipleBlankLines(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	fName := chk.CreateTmpFileAs("", "test.gtm.md",
+		[]byte("\n\nFirst\n\n\nSecond\n\n\n\nthird\n\n\n\n\nlast\n\n"),
+	)
+	updatedDoc, err := parse(fName, "")
+
+	chk.NoErr(err)
+	chk.Str(updatedDoc, "\nFirst\n\nSecond\n\nthird\n\nlast")
+}
+
 func TestInternalExpand_SplitDir(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()

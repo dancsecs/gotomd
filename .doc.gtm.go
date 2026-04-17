@@ -22,27 +22,9 @@
 <!--- gotomd::snippet::./.directives.sds.md # START SNIPPET -->
 
 # Dedication
-
-This project is dedicated to Reem. Your brilliance, courage, and quiet
-strength continue to inspire me. Every line is written in gratitude for the
-light and hope you brought into my life.
+<!--- gotomd::inline-run::./. --Reem -->
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
 */
 package ////main
-
-import (
-	"strings"
-
-	"github.com/dancsecs/szlog"
-)
-
-const copyrightMessage = `
-//<<<! gotomd::file::~/.copyright >>
-`
-
-// Copyright writes the copyright message to os.Stdout.
-func Copyright() {
-	szlog.Say0(strings.Trim(copyrightMessage, " \t\n") + "\n")
-}

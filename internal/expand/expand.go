@@ -182,13 +182,14 @@ func processCodeBlock(
 	return i, err
 }
 
-//nolint:cyclop // Ok.
+//nolint:cyclop,funlen // Ok.
 func processLines(lines []string, sentinel string) (string, error) {
 	var (
-		cmdIdx      int
-		cmdStart    int
-		updatedFile strings.Builder
-		err         error
+		cmdIdx        int
+		cmdStart      int
+		lastLineBlank bool
+		updatedFile   strings.Builder
+		err           error
 	)
 
 	processLine := (sentinel == "")
@@ -201,6 +202,12 @@ func processLines(lines []string, sentinel string) (string, error) {
 
 			continue
 		}
+
+		if err == nil && line == "" && lastLineBlank {
+			continue
+		}
+
+		lastLineBlank = line == ""
 
 		cmdIdx, cmdStart, err = isCmd(line)
 		if err == nil && cmdIdx >= 0 {

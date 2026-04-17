@@ -22,33 +22,65 @@
 
 # Package goToMd
 
-```go
-package main
-```
+# Usage: gotomd
 
-   Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
 
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
+Synchronize Go package and GitHub style README.md documentation by
+embedding Go documentation, source code, test and command output directly
+from the Go codebase. This ensures that program documentation is kept in
+one place—the Go code itself—while keeping the README and package
+documentation automatically up to date. It does this by processing template
+files containing markdown formatting and replacing embedded directives with
+content generated directly from your Go codebase. This ensures your
+documentation is always accurate and in sync with the source.
 
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
+           [-f | --force] [-z | --colorize] [-u | --uptodate]
+           [-o | --output <dir>] [-p | --permission <perm>] [path ...]
 
-Package gotomd maintains GitHub-style README.md and go package documentation
-by embedding Go documentation, source code, test and command
-output directly from the Go codebase. This ensures that program documentation
-is kept in one place—the Go code itself—while keeping the README and package
-documentation automatically up to date.
+    [-v | --verbose ...]
+        Increase the verbose level for each v provided.
 
-## How it works
+
+    [-l | --license]
+        Display license before program exits.
+
+
+    [-h | --help]
+        Display program usage information.
+
+
+    [-f | --force]
+        Do not confirm overwrite of destination.
+
+
+    [-z | --colorize]
+        Colorize go test output.
+
+
+    [-u | --uptodate]
+        Returns 0 if no changes would have been made. No writes are
+        performed.
+
+
+    [-o | --output <dir>]
+        Direct all output to the specified directory.
+
+
+    [-p | --permission <perm>]
+        Permissions to use when creating new file.
+
+        (can only set RW bits).
+
+
+    [path ...]
+        Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or
+        a directory which will be searched for all matching template
+        files. All subdirectories may be searched by using the special
+        './...' path. It defaults to search the current directory: '.'
+
+# Directives
 
 gotomd processes template files (.*.gtm.md and .*.gtm.go) into their
 respective *.md and *.go expanding included directives.
@@ -56,9 +88,7 @@ respective *.md and *.go expanding included directives.
 Directives are written inside HTML-style comments:
 
 ```html
-<!---
-gotomd::ACTION::PARAMETERS
--->
+<!--- gotomd::ACTION::PARAMETERS -->
 ```
 When processing the file, gotomd replaces each directive with the
 corresponding generated content.
@@ -68,29 +98,26 @@ corresponding generated content.
 Each directive's ACTION determines what is included:
 
 ```html
-<!---
-gotomd::doc::./relativeDirectory/goObject
--->
+<!--- gotomd::doc::./relativeDirectory/goObject -->
 ```
 Runs go doc on the specified object from the given directory.
 
 The parameter format is: ./path/to/package/ObjectName
 
-A special object name package includes the package-level comments.
+A special object name 'package' includes the package-level comments.
 
 ```html
-<!---
-gotomd::docConstGrp::./relativeDirectory/goConstName ListOfConstNames
+<!--- gotomd::docConstGrp::./relativeDirectory/goConstName
+ListOfConstNames
 -->
 ```
 Runs go doc on the specified constant block(s) from the given directory.
 
 ```html
-<!---
-gotomd::dcls::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+<!--- gotomd::dcls::./relativeDirectory/declaredObject
+ListOfDeclaredGoObjects
 -->
 ```
-
 Inserts each listed declaration as a single line, regardless of how it is
 declared in the source. No comments are included.
 
@@ -101,7 +128,6 @@ Example: functions, methods, constants.
 gotomd::dcln::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
 -->
 ```
-
 Inserts each listed declaration exactly as in the source, including any
 leading comments.
 
@@ -110,7 +136,6 @@ leading comments.
 gotomd::dcl::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
 -->
 ```
-
 Inserts each listed declaration exactly as in the source, but without
 comments.
 
@@ -119,7 +144,6 @@ comments.
 gotomd::tst::goTest::./relativeDirectory/testName
 -->
 ```
-
 Runs go test in the given directory, targeting the specified test(s) or
 package, and includes the output.
 
@@ -128,7 +152,6 @@ package, and includes the output.
 gotomd::file::./relativeDirectory/fName
 -->
 ```
-
 Inserts the contents of the specified file into a fenced code block.
 
 ```html
@@ -136,22 +159,41 @@ Inserts the contents of the specified file into a fenced code block.
 gotomd::run::./relativeDirectory [args ...]
 -->
 ```
-
 Runs go run on the package in the given directory (assumes main) with the
 provided arguments, including the output.
 
+# Dedication
+
+*****************************************************************************
+**                                                                         **
+** This project is dedicated to Reem.                                      **
+** Your brilliance, courage, and quiet strength continue to inspire me.    **
+** Every line is written in gratitude for the light and hope you brought   **
+** into my life.                                                           **
+**                                                                         **
+*****************************************************************************
+
+NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
+OpenAI.
+
+```go
+package main
+```
+
 # Usage: gotomd
 
-Synchronize GitHub README.md files with Go source code,
-documentation, tests, and command output. gotomd processes
-Markdown templates or existing README files, replacing special
-directives with content generated directly from your Go
-codebase. This ensures your documentation is always accurate
-and in sync with the source.
+Synchronize Go package and GitHub style README.md documentation by
+embedding Go documentation, source code, test and command output directly
+from the Go codebase. This ensures that program documentation is kept in
+one place—the Go code itself—while keeping the README and package
+documentation automatically up to date. It does this by processing template
+files containing markdown formatting and replacing embedded directives with
+content generated directly from your Go codebase. This ensures your
+documentation is always accurate and in sync with the source.
 
     gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
-           [-f | --force] [-z | --colorize] [-o | --output <dir>]
-           [-p | --permission <perm>] --uptodate [path ...]
+           [-f | --force] [-z | --colorize] [-u | --uptodate]
+           [-o | --output <dir>] [-p | --permission <perm>] [path ...]
 
     [-v | --verbose ...]
         Increase the verbose level for each v provided.
@@ -168,28 +210,107 @@ and in sync with the source.
     [-z | --colorize]
         Colorize go test output.
 
+    [-u | --uptodate]
+        Returns 0 if no changes would have been made. No writes are
+        performed.
+
     [-o | --output <dir>]
         Direct all output to the specified directory.
 
     [-p | --permission <perm>]
         Permissions to use when creating new file.
 
-        (can only set RW bits)
-
-    --uptodate
-        Returns 0 if no changes would have been made.  No writes are
-        performed.
+        (can only set RW bits).
 
     [path ...]
-        A specific gotomd file template with the extension '*.gtm.md' or a
-        directory which will be searched for all matching template
-        '*.gtm.md' files.  It defaults to the current directory: '.'
+        Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or
+        a directory which will be searched for all matching template
+        files. All subdirectories may be searched by using the special
+        './...' path. It defaults to search the current directory: '.'
+
+# Directives
+
+gotomd processes template files (.*.gtm.md and .*.gtm.go) into their
+respective *.md and *.go expanding included directives.
+
+Directives are written inside HTML-style comments:
+
+    <!--- gotomd::ACTION::PARAMETERS -->
+
+When processing the file, gotomd replaces each directive with the
+corresponding generated content.
+
+## Actions
+
+Each directive's ACTION determines what is included:
+
+    <!--- gotomd::doc::./relativeDirectory/goObject -->
+
+Runs go doc on the specified object from the given directory.
+
+The parameter format is: ./path/to/package/ObjectName
+
+A special object name 'package' includes the package-level comments.
+
+    <!--- gotomd::docConstGrp::./relativeDirectory/goConstName
+    ListOfConstNames
+    -->
+
+Runs go doc on the specified constant block(s) from the given directory.
+
+    <!--- gotomd::dcls::./relativeDirectory/declaredObject
+    ListOfDeclaredGoObjects
+    -->
+
+Inserts each listed declaration as a single line, regardless of how it is
+declared in the source. No comments are included.
+
+Example: functions, methods, constants.
+
+    <!---
+    gotomd::dcln::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+    -->
+
+Inserts each listed declaration exactly as in the source, including any
+leading comments.
+
+    <!---
+    gotomd::dcl::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+    -->
+
+Inserts each listed declaration exactly as in the source, but without
+comments.
+
+    <!---
+    gotomd::tst::goTest::./relativeDirectory/testName
+    -->
+
+Runs go test in the given directory, targeting the specified test(s) or
+package, and includes the output.
+
+    <!---
+    gotomd::file::./relativeDirectory/fName
+    -->
+
+Inserts the contents of the specified file into a fenced code block.
+
+    <!---
+    gotomd::run::./relativeDirectory [args ...]
+    -->
+
+Runs go run on the package in the given directory (assumes main) with the
+provided arguments, including the output.
 
 # Dedication
 
-This project is dedicated to Reem. Your brilliance, courage, and quiet
-strength continue to inspire me. Every line is written in gratitude for the
-light and hope you brought into my life.
+*****************************************************************************
+**                                                                         **
+** This project is dedicated to Reem.                                      **
+** Your brilliance, courage, and quiet strength continue to inspire me.    **
+** Every line is written in gratitude for the light and hope you brought   **
+** into my life.                                                           **
+**                                                                         **
+*****************************************************************************
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
