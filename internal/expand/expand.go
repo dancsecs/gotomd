@@ -219,6 +219,15 @@ func processLines(lines []string, sentinel string) (string, error) {
 		}
 
 		if err == nil {
+			// Remove comment (keeping gopls from complaining.)
+			const packageLabel = "package ////"
+
+			if !format.IsForMarkdown() {
+				if strings.HasPrefix(line, packageLabel) {
+					line = "package " + line[len(packageLabel):]
+				}
+			}
+
 			// Not a block. Just append the line.
 			updatedFile.WriteString(line + "\n")
 		} else {

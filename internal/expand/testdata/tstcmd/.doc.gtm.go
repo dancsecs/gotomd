@@ -23,4 +23,4 @@ exhibit the various comment and declaration options permitted by gofmt.
 
 <!--- gotomd::inline-run::./. --help -->
 */
-package main
+package ////main

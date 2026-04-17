@@ -39,4 +39,4 @@ echo "Hello, world."
 # Include Shared Snippet From .doc.gtm.go Template
 <!--- gotomd::snippet::./.sharedTemplate.sds.md # START SNIPPET -->
 */
-package example1
+package ////example1
