@@ -26,8 +26,26 @@ header.
 Declarations can be single-line or multi-line blocks or constructions.  Each
 type will be included here for complete testing.
 
+# Embedded in .doc.gtm.go template
+
     #!/bin/bash
     echo "Hello, world."
+
+# Include Shared Snippet From .doc.gtm.go Template
+# Common Snippet Inclusion
+
+    #!/bin/bash
+    echo "Hello, world."
+
+# Include Shared Snippet From .README.gtm.md Template
+# Common Snippet Inclusion
+
+```bash
+#!/bin/bash
+echo "Hello, world."
+```
+
+# Embedded in .README.gtm.md template
 
 ```bash
 #!/bin/bash

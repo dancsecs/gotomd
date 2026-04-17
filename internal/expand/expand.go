@@ -22,15 +22,11 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"sort"
+	"path/filepath"
 	"strings"
 
 	"github.com/dancsecs/gotomd/internal/errs"
-	"github.com/dancsecs/gotomd/internal/file"
 	"github.com/dancsecs/gotomd/internal/format"
-	"github.com/dancsecs/gotomd/internal/godoc"
-	"github.com/dancsecs/gotomd/internal/gorun"
-	"github.com/dancsecs/gotomd/internal/gotest"
 )
 
 const (
@@ -49,11 +45,6 @@ const (
 	szAutoHeader3 = "See: 'https://github.com/dancsecs/gotomd'"
 )
 
-type commandAction struct {
-	cmdPrefix []string
-	cmdAction []func(string) (string, error)
-}
-
 // func buildCommand(cmd string, args ...string) string {
 // 	rootCmd := szCmdLabel + cmdSep + cmd
 
@@ -63,58 +54,6 @@ type commandAction struct {
 
 // 	return format.Comment(rootCmd)
 // }
-
-func (c *commandAction) add(p string, a func(string) (string, error)) {
-	c.cmdPrefix = append(c.cmdPrefix, p)
-	c.cmdAction = append(c.cmdAction, a)
-}
-
-func (c *commandAction) sort() {
-	sort.Sort(c)
-}
-
-func (c *commandAction) search(cmd string) int {
-	cmdIdx := sort.SearchStrings(c.cmdPrefix, cmd)
-	if cmdIdx == len(c.cmdPrefix) || c.cmdPrefix[cmdIdx] != cmd {
-		cmdIdx = -1
-	}
-
-	return cmdIdx
-}
-
-func (c *commandAction) run(idx int, cmd string) (string, error) {
-	return c.cmdAction[idx](cmd)
-}
-
-func (c *commandAction) Len() int {
-	return len(c.cmdPrefix)
-}
-
-func (c *commandAction) Less(i, j int) bool {
-	return c.cmdPrefix[i] < c.cmdPrefix[j]
-}
-
-func (c *commandAction) Swap(i, j int) {
-	c.cmdPrefix[i], c.cmdPrefix[j] = c.cmdPrefix[j], c.cmdPrefix[i]
-	c.cmdAction[i], c.cmdAction[j] = c.cmdAction[j], c.cmdAction[i]
-}
-
-//nolint:goCheckNoGlobals // Ok.
-var action = new(commandAction)
-
-//nolint:goCheckNoInits // Ok.
-func init() {
-	action.add("doc::", godoc.GetDoc)
-	action.add("docConstGrp::", godoc.GetDocDeclConstantBlock)
-	action.add("dcl::", godoc.GetDocDecl)
-	action.add("dcln::", godoc.GetDocDeclNatural)
-	action.add("dcls::", godoc.GetDocDeclSingle)
-	action.add("file::", file.GetGoFile)
-	action.add("run::", gorun.GetGoRun)
-	action.add("inline-run::", gorun.RawGoRun)
-	action.add("tst::", gotest.GetGoTst)
-	action.sort()
-}
 
 func isCmd(line string) (int, int, error) {
 	const sep = "::"
@@ -243,7 +182,8 @@ func processCodeBlock(
 	return i, err
 }
 
-func processLines(lines []string) (string, error) {
+//nolint:cyclop // Ok.
+func processLines(lines []string, sentinel string) (string, error) {
 	var (
 		cmdIdx      int
 		cmdStart    int
@@ -251,8 +191,16 @@ func processLines(lines []string) (string, error) {
 		err         error
 	)
 
+	processLine := (sentinel == "")
+
 	for i, mi := 0, len(lines); i < mi; i++ {
 		line := strings.TrimRight(lines[i], " ")
+
+		if !processLine {
+			processLine = (line == sentinel)
+
+			continue
+		}
 
 		cmdIdx, cmdStart, err = isCmd(line)
 		if err == nil && cmdIdx >= 0 {
@@ -285,7 +233,19 @@ func processLines(lines []string) (string, error) {
 	return "", err
 }
 
-func parse(fName string) (string, error) {
+func splitDir(rawPath string) (string, string, string, error) {
+	dir, name := filepath.Split(rawPath)
+	dir = filepath.Clean(dir)
+	path := filepath.Join(dir, name)
+
+	if !filepath.IsLocal(path) {
+		return "", "", "", errs.ErrNotLocalDir
+	}
+
+	return dir, name, path, nil
+}
+
+func parse(fName, sentinel string) (string, error) {
 	var (
 		err       error
 		fileBytes []byte
@@ -299,7 +259,7 @@ func parse(fName string) (string, error) {
 			string(bytes.TrimRight(fileBytes, "\n")),
 			"\n",
 		)
-		res, err = processLines(lines)
+		res, err = processLines(lines, sentinel)
 	}
 
 	if err == nil {

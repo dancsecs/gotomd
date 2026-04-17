@@ -107,7 +107,7 @@ func Process(rPath string) error {
 
 		szlog.Say1f("Expanding %s to: %s\n", rPath, wPath)
 
-		res, err = parse(rFile)
+		res, err = parse(rFile, "")
 	}
 
 	if err == nil {

@@ -194,7 +194,7 @@ func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
 			"",
 		),
 	)
-	updatedDoc, err := parse(fName)
+	updatedDoc, err := parse(fName, "")
 
 	chk.Err(
 		err,
@@ -216,7 +216,7 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 			szCmdPrefix + "unknownCommand -->\n",
 		),
 	)
-	updatedDoc, err := parse(fName)
+	updatedDoc, err := parse(fName, "")
 
 	chk.Err(
 		err,
@@ -229,10 +229,43 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 	chk.Str(updatedDoc, "")
 }
 
-func Test_Markdown_Search(t *testing.T) {
+func TestInternalExpand_SplitDir(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
-	chk.Int(action.search("a"), -1)
-	chk.Int(action.search("z"), -1)
+	type testRecord struct {
+		rawPath string
+		expDir  string
+		expName string
+		expPath string
+	}
+
+	for i, tst := range []testRecord{
+		/* Idx:  0 */ {"", ".", "", "."},
+		/* Idx:  1 */ {".", ".", ".", "."},
+		/* Idx:  2 */ {"./", ".", "", "."},
+	} {
+		dir, name, path, err := splitDir(tst.rawPath)
+		chk.NoErr(err, "Idx: ", i, " err")
+		chk.Str(dir, tst.expDir, "Idx: ", i, " dir")
+		chk.Str(name, tst.expName, "Idx: ", i, " name")
+		chk.Str(path, tst.expPath, "Idx: ", i, " path")
+	}
+
+	type testErrRecord struct {
+		rawPath string
+		expErr  string
+	}
+
+	for i, tst := range []testErrRecord{
+		/* Idx:  0 */ {"/./", chk.ErrChain(errs.ErrNotLocalDir)},
+		/* Idx:  1 */ {"/./abc", chk.ErrChain(errs.ErrNotLocalDir)},
+		/* Idx:  1 */ {"/./abc", chk.ErrChain(errs.ErrNotLocalDir)},
+	} {
+		dir, name, path, err := splitDir(tst.rawPath)
+		chk.Err(err, tst.expErr, "Idx: ", i, "err")
+		chk.Str(dir, "", "Idx: ", i, " dir")
+		chk.Str(name, "", "Idx: ", i, " name")
+		chk.Str(path, "", "Idx: ", i, " path")
+	}
 }
