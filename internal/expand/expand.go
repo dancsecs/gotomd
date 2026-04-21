@@ -155,7 +155,7 @@ func processCmd(
 	}
 
 	if err == nil {
-		file.WriteString(res + "\n")
+		file.WriteString(res)
 	}
 
 	return i, err
