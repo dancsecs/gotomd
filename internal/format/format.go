@@ -43,7 +43,11 @@ func markForGoPackageInline(content string) string {
 	newContent := make([]string, len(contentLines))
 
 	for i, l := range contentLines {
-		newContent[i] = "\t" + l
+		if l == "" {
+			newContent[i] = l
+		} else {
+			newContent[i] = "\t" + strings.ReplaceAll(l, "\t", "    ")
+		}
 	}
 
 	return strings.Join(newContent, "\n") + "\n"

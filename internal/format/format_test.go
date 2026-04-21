@@ -56,8 +56,8 @@ func TestFormat_Inline(t *testing.T) {
 	)
 
 	chk.Str(
-		format.Inline("bash", "ABC\n"),
-		"\tABC\n",
+		format.Inline("bash", "ABC\n\nDEF"),
+		"\tABC\n\n\tDEF\n",
 	)
 }
 
