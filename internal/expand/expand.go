@@ -55,77 +55,6 @@ const (
 // 	return format.Comment(rootCmd)
 // }
 
-func isCmd(line string) (int, int, error) {
-	const sep = "::"
-
-	var (
-		cmdIdx = -1
-		end    = 0
-	)
-
-	if strings.HasPrefix(line, szCmdPrefix) {
-		cmd := line[len(szCmdPrefix):]
-		end = strings.Index(cmd, sep)
-
-		if end >= 0 {
-			cmd = cmd[:end+2]
-			cmdIdx = action.search(cmd)
-		}
-
-		if end < 0 || cmdIdx == -1 {
-			return 0, 0, fmt.Errorf("%w: %q", errs.ErrUnknownCommand, line)
-		}
-	}
-
-	return cmdIdx, len(szCmdPrefix) + end + len(sep), nil
-}
-
-func processCmd(
-	file *strings.Builder,
-	i,
-	cmdIdx, cmdStart int,
-	lines []string,
-) (int, error) {
-	var (
-		cmd string
-		res string
-		err error
-	)
-
-	i, cmd, err = getBlock(i, cmdStart, lines, "-->", " ->", " ")
-
-	if err == nil {
-		res, err = action.run(cmdIdx, cmd)
-	}
-
-	if err == nil {
-		file.WriteString(res)
-	}
-
-	return i, err
-}
-
-func processCodeBlock(
-	file *strings.Builder,
-	i int,
-	lines []string,
-	codeSyntaxName string,
-) (int, error) {
-	var (
-		code string
-		err  error
-	)
-
-	i, code, err = getBlock(i+1, 0, lines, "```", "`", "\n")
-	if err == nil {
-		file.WriteString(
-			format.Inline(codeSyntaxName, code),
-		)
-	}
-
-	return i, err
-}
-
 //nolint:cyclop,funlen // Ok.
 func processLines(lines []string, sentinel string) (string, error) {
 	var (
@@ -155,14 +84,14 @@ func processLines(lines []string, sentinel string) (string, error) {
 
 		cmdIdx, cmdStart, err = isCmd(line)
 		if err == nil && cmdIdx >= 0 {
-			i, err = processCmd(&updatedFile, i, cmdIdx, cmdStart, lines)
+			i, err = expandCmd(&updatedFile, i, cmdIdx, cmdStart, lines)
 			if err == nil {
 				continue
 			}
 		}
 
 		if err == nil && strings.HasPrefix(line, "```") {
-			i, err = processCodeBlock(&updatedFile, i, lines, line[3:])
+			i, err = expandPreFormatted(&updatedFile, i, lines, line[3:])
 
 			if err == nil {
 				continue
