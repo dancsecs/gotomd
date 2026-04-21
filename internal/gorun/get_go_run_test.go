@@ -121,6 +121,6 @@ func Test_GetRun_RunExampleRaw(t *testing.T) {
 	chk.NoErr(err)
 	chk.Str(
 		out,
-		"Running with 1 arguments\n-v",
+		"```\nRunning with 1 arguments\n-v\n```",
 	)
 }

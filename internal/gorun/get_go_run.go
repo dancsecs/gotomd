@@ -131,7 +131,7 @@ func RawGoRun(cmd string) (string, error) {
 	_, runRes, err := goRun(cmd)
 
 	if err == nil {
-		return runRes, nil
+		return format.Inline("", runRes), nil
 	}
 
 	return "", err
