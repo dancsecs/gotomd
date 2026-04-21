@@ -25,11 +25,11 @@ Package main exists in order to test various go to git
 markdown (goToMD) extraction utilities.  Various object will be defined that
 exhibit the various comment and declaration options permitted by gofmt.
 
-# Usage
+	# Usage
 
-tstcmd [--help]
+	tstcmd [--help]
 
-	--help
-	    Display usage information
+	    --help
+	        Display usage information
 */
 package main

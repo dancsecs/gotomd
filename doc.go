@@ -23,7 +23,6 @@
 /*
 # Usage: gotomd
 
-
 Synchronize Go package and GitHub style README.md documentation by
 embedding Go documentation, source code, test and command output directly
 from the Go codebase. This ensures that program documentation is kept in
@@ -33,51 +32,50 @@ files containing markdown formatting and replacing embedded directives with
 content generated directly from your Go codebase. This ensures your
 documentation is always accurate and in sync with the source.
 
+	gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
+	       [-f | --force] [-z | --colorize] [-u | --uptodate]
+	       [-o | --output <dir>] [-p | --permission <perm>] [path ...]
 
-    gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
-           [-f | --force] [-z | --colorize] [-u | --uptodate]
-           [-o | --output <dir>] [-p | --permission <perm>] [path ...]
-
-    [-v | --verbose ...]
-        Increase the verbose level for each v provided.
-
-
-    [-l | --license]
-        Display license before program exits.
+	[-v | --verbose ...]
+	    Increase the verbose level for each v provided.
 
 
-    [-h | --help]
-        Display program usage information.
+	[-l | --license]
+	    Display license before program exits.
 
 
-    [-f | --force]
-        Do not confirm overwrite of destination.
+	[-h | --help]
+	    Display program usage information.
 
 
-    [-z | --colorize]
-        Colorize go test output.
+	[-f | --force]
+	    Do not confirm overwrite of destination.
 
 
-    [-u | --uptodate]
-        Returns 0 if no changes would have been made. No writes are
-        performed.
+	[-z | --colorize]
+	    Colorize go test output.
 
 
-    [-o | --output <dir>]
-        Direct all output to the specified directory.
+	[-u | --uptodate]
+	    Returns 0 if no changes would have been made. No writes are
+	    performed.
 
 
-    [-p | --permission <perm>]
-        Permissions to use when creating new file.
-
-        (can only set RW bits).
+	[-o | --output <dir>]
+	    Direct all output to the specified directory.
 
 
-    [path ...]
-        Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or
-        a directory which will be searched for all matching template
-        files. All subdirectories may be searched by using the special
-        './...' path. It defaults to search the current directory: '.'
+	[-p | --permission <perm>]
+	    Permissions to use when creating new file.
+
+	    (can only set RW bits).
+
+
+	[path ...]
+	    Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or
+	    a directory which will be searched for all matching template
+	    files. All subdirectories may be searched by using the special
+	    './...' path. It defaults to search the current directory: '.'
 
 # Directives
 
