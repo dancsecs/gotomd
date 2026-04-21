@@ -80,62 +80,6 @@ func isCmd(line string) (int, int, error) {
 	return cmdIdx, len(szCmdPrefix) + end + len(sep), nil
 }
 
-func getBlock(
-	i, cmdStart int,
-	lines []string,
-	terminator, cutSet, sep string,
-) (int, string, error) {
-	var (
-		str          strings.Builder
-		addSeparator bool
-		line         string
-		err          error
-	)
-
-	if i < len(lines) {
-		line = strings.Trim(lines[i][cmdStart:], " ")
-	} else {
-		err = errs.ErrBlockNotTerminated
-	}
-
-	for err == nil {
-		if strings.HasSuffix(line, terminator) {
-			break
-		}
-
-		if addSeparator {
-			str.WriteString(sep)
-		} else {
-			addSeparator = true
-		}
-
-		str.WriteString(line)
-
-		i++
-		if i < len(lines) {
-			line = strings.Trim(lines[i], " ")
-		} else {
-			err = errs.ErrBlockNotTerminated
-
-			continue
-		}
-	}
-
-	if err == nil {
-		line = strings.TrimRight(line, cutSet)
-		if addSeparator && len(line) > 0 {
-			str.WriteString(sep)
-		}
-	}
-
-	if err == nil {
-		str.WriteString(line)
-	}
-
-	return i,
-		strings.TrimRight(str.String(), "\n"), err
-}
-
 func processCmd(
 	file *strings.Builder,
 	i,
