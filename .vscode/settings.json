@@ -66,6 +66,7 @@
         "cyclop",
 
         "darkturquoise",
+        "dclg",
         "dcln",
         "dcls",
         "deadcode",
@@ -141,6 +142,7 @@
         "interfacer",
         "intrange",
         "ireturn",
+        "irun",
 
         "jsonstore",
 
@@ -201,6 +203,7 @@
         "tagalign",
         "tenv",
         "testableexamples",
+        "testdata",
         "testifylint",
         "testpackage",
         "textit",
