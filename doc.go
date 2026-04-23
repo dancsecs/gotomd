@@ -21,61 +21,63 @@
 */
 
 /*
-# Usage: gotomd
-
-Synchronize Go package and GitHub style README.md documentation by
-embedding Go documentation, source code, test and command output directly
-from the Go codebase. This ensures that program documentation is kept in
-one place—the Go code itself—while keeping the README and package
-documentation automatically up to date. It does this by processing template
-files containing markdown formatting and replacing embedded directives with
-content generated directly from your Go codebase. This ensures your
-documentation is always accurate and in sync with the source.
-
-	gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
-	       [-f | --force] [-z | --colorize] [-u | --uptodate]
-	       [-o | --output <dir>] [-p | --permission <perm>] [path ...]
-
-	[-v | --verbose ...]
-	    Increase the verbose level for each v provided.
+	# Usage: gotomd
 
 
-	[-l | --license]
-	    Display license before program exits.
+	Synchronize Go package and GitHub style README.md documentation by
+	embedding Go documentation, source code, test and command output directly
+	from the Go codebase. This ensures that program documentation is kept in
+	one place—the Go code itself—while keeping the README and package
+	documentation automatically up to date. It does this by processing template
+	files containing markdown formatting and replacing embedded directives with
+	content generated directly from your Go codebase. This ensures your
+	documentation is always accurate and in sync with the source.
 
 
-	[-h | --help]
-	    Display program usage information.
+	    gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
+	           [-f | --force] [-z | --colorize] [-u | --uptodate]
+	           [-o | --output <dir>] [-p | --permission <perm>] [path ...]
+
+	    [-v | --verbose ...]
+	        Increase the verbose level for each v provided.
 
 
-	[-f | --force]
-	    Do not confirm overwrite of destination.
+	    [-l | --license]
+	        Display license before program exits.
 
 
-	[-z | --colorize]
-	    Colorize go test output.
+	    [-h | --help]
+	        Display program usage information.
 
 
-	[-u | --uptodate]
-	    Returns 0 if no changes would have been made. No writes are
-	    performed.
+	    [-f | --force]
+	        Do not confirm overwrite of destination.
 
 
-	[-o | --output <dir>]
-	    Direct all output to the specified directory.
+	    [-z | --colorize]
+	        Colorize go test output.
 
 
-	[-p | --permission <perm>]
-	    Permissions to use when creating new file.
+	    [-u | --uptodate]
+	        Returns 0 if no changes would have been made. No writes are
+	        performed.
 
-	    (can only set RW bits).
+
+	    [-o | --output <dir>]
+	        Direct all output to the specified directory.
 
 
-	[path ...]
-	    Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or
-	    a directory which will be searched for all matching template
-	    files. All subdirectories may be searched by using the special
-	    './...' path. It defaults to search the current directory: '.'
+	    [-p | --permission <perm>]
+	        Permissions to use when creating new file.
+
+	        (can only set RW bits).
+
+
+	    [path ...]
+	        Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or
+	        a directory which will be searched for all matching template
+	        files. All subdirectories may be searched by using the special
+	        './...' path. It defaults to search the current directory: '.'
 
 # Directives
 
@@ -151,15 +153,14 @@ Runs go run on the package in the given directory (assumes main) with the
 provided arguments, including the output.
 
 # Dedication
-
-*****************************************************************************
-**                                                                         **
-** This project is dedicated to Reem.                                      **
-** Your brilliance, courage, and quiet strength continue to inspire me.    **
-** Every line is written in gratitude for the light and hope you brought   **
-** into my life.                                                           **
-**                                                                         **
-*****************************************************************************
+	*****************************************************************************
+	**                                                                         **
+	** This project is dedicated to Reem.                                      **
+	** Your brilliance, courage, and quiet strength continue to inspire me.    **
+	** Every line is written in gratitude for the light and hope you brought   **
+	** into my life.                                                           **
+	**                                                                         **
+	*****************************************************************************
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.

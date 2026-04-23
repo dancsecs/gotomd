@@ -17,26 +17,20 @@
 */
 
 /*
-Package example1 exists in order to test various go to git
-markdown (goToMD) extraction utilities.  Various object will be defined that
-exhibit the various comment and declaration options permitted by gofmt.
+Package example1 demonstrates various template options.
 
-# Heading
+# MarkDown Headings can be used in go docs.
 
-This paragraph will demonstrating further documentation under a "markdown"
-header.
+# Markdown code formatting may be used in go doc templates.
 
-Declarations can be single-line or multi-line blocks or constructions.  Each
-type will be included here for complete testing.
-
-# Embedded in .doc.gtm.go template
+It will be translated to go doc format (tabbed) when processed.
 
 ```bash
 #!/bin/bash
 echo "Hello, world."
 ```
 
-# Include Shared Snippet From .doc.gtm.go Template
-<!--- gotomd::snippet::./.sharedTemplate.sds.md # START SNIPPET -->
+# Include (and expand) Shared Snippet From .doc.gtm.go Template
+<!--- gotomd::snip::./.sharedTemplate.sds.md # START SNIPPET -->
 */
 package ////example1

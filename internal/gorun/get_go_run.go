@@ -114,7 +114,7 @@ func GetGoRun(cmd string) (string, error) {
 	runCmd, runRes, err := goRun(cmd)
 
 	if err == nil {
-		return format.HLine() +
+		return format.HLine() + "\n" +
 				format.Inline("bash", runCmd) + "\n" +
 				"\n" +
 				format.Inline("", runRes) + "\n" +

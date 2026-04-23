@@ -30,6 +30,12 @@ import (
 	"github.com/dancsecs/szlog"
 )
 
+const (
+	szAutoHeader1 = "*****  AUTO GENERATED:  DO NOT MODIFY  *****"
+	szAutoHeader2 = "MODIFY TEMPLATE: "
+	szAutoHeader3 = "See: 'https://github.com/dancsecs/gotomd'"
+)
+
 func setTarget(fPath string) (string, string, error) {
 	var (
 		wFile string

@@ -51,11 +51,10 @@ func isCmd(line string) (int, int, error) {
 }
 
 func expandCmd(
-	file *strings.Builder,
 	i,
 	cmdIdx, cmdStart int,
 	lines []string,
-) (int, error) {
+) (string, int, error) {
 	var (
 		cmd string
 		res string
@@ -69,8 +68,8 @@ func expandCmd(
 	}
 
 	if err == nil {
-		file.WriteString(res)
+		return res, i, nil
 	}
 
-	return i, err
+	return "", i, err
 }

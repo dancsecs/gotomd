@@ -77,15 +77,15 @@ var action = new(commandAction)
 //nolint:goCheckNoInits // Ok.
 func init() {
 	action.add("doc::", godoc.GetDoc)
-	action.add("docConstGrp::", godoc.GetDocDeclConstantBlock)
 	action.add("dcl::", godoc.GetDocDecl)
+	action.add("dclg::", godoc.GetDocDeclConstantBlock)
 	action.add("dcln::", godoc.GetDocDeclNatural)
 	action.add("dcls::", godoc.GetDocDeclSingle)
-	action.add("file::", file.GetGoFile)
+	action.add("src::", file.GetGoFile)
 	action.add("run::", gorun.GetGoRun)
-	action.add("inline-run::", gorun.RawGoRun)
+	action.add("irun::", gorun.RawGoRun)
 	action.add("tst::", gotest.GetGoTst)
-	action.add("snippet::", includeSnip)
+	action.add("snip::", includeSnip)
 	action.sort()
 }
 
@@ -96,7 +96,6 @@ func includeSnip(cmd string) (string, error) {
 		action          string
 		dir             string
 		cmdArgs         []string
-		res             string
 		expandedSnippet string
 		err             error
 	)
@@ -120,9 +119,7 @@ func includeSnip(cmd string) (string, error) {
 	}
 
 	if err == nil {
-		res += expandedSnippet
-
-		return res, nil
+		return expandedSnippet, nil
 	}
 
 	return "", err

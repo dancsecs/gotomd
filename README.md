@@ -22,6 +22,7 @@
 
 # Package goToMd
 
+```
 # Usage: gotomd
 
 
@@ -79,6 +80,7 @@ documentation is always accurate and in sync with the source.
         a directory which will be searched for all matching template
         files. All subdirectories may be searched by using the special
         './...' path. It defaults to search the current directory: '.'
+```
 
 # Directives
 
@@ -90,6 +92,7 @@ Directives are written inside HTML-style comments:
 ```html
 <!--- gotomd::ACTION::PARAMETERS -->
 ```
+
 When processing the file, gotomd replaces each directive with the
 corresponding generated content.
 
@@ -100,6 +103,7 @@ Each directive's ACTION determines what is included:
 ```html
 <!--- gotomd::doc::./relativeDirectory/goObject -->
 ```
+
 Runs go doc on the specified object from the given directory.
 
 The parameter format is: ./path/to/package/ObjectName
@@ -111,6 +115,7 @@ A special object name 'package' includes the package-level comments.
 ListOfConstNames
 -->
 ```
+
 Runs go doc on the specified constant block(s) from the given directory.
 
 ```html
@@ -118,6 +123,7 @@ Runs go doc on the specified constant block(s) from the given directory.
 ListOfDeclaredGoObjects
 -->
 ```
+
 Inserts each listed declaration as a single line, regardless of how it is
 declared in the source. No comments are included.
 
@@ -128,6 +134,7 @@ Example: functions, methods, constants.
 gotomd::dcln::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
 -->
 ```
+
 Inserts each listed declaration exactly as in the source, including any
 leading comments.
 
@@ -136,6 +143,7 @@ leading comments.
 gotomd::dcl::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
 -->
 ```
+
 Inserts each listed declaration exactly as in the source, but without
 comments.
 
@@ -144,6 +152,7 @@ comments.
 gotomd::tst::goTest::./relativeDirectory/testName
 -->
 ```
+
 Runs go test in the given directory, targeting the specified test(s) or
 package, and includes the output.
 
@@ -152,6 +161,7 @@ package, and includes the output.
 gotomd::file::./relativeDirectory/fName
 -->
 ```
+
 Inserts the contents of the specified file into a fenced code block.
 
 ```html
@@ -159,11 +169,12 @@ Inserts the contents of the specified file into a fenced code block.
 gotomd::run::./relativeDirectory [args ...]
 -->
 ```
+
 Runs go run on the package in the given directory (assumes main) with the
 provided arguments, including the output.
 
 # Dedication
-
+```
 *****************************************************************************
 **                                                                         **
 ** This project is dedicated to Reem.                                      **
@@ -172,6 +183,7 @@ provided arguments, including the output.
 ** into my life.                                                           **
 **                                                                         **
 *****************************************************************************
+```
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
@@ -180,53 +192,53 @@ OpenAI.
 package main
 ```
 
-# Usage: gotomd
+    # Usage: gotomd
 
-Synchronize Go package and GitHub style README.md documentation by
-embedding Go documentation, source code, test and command output directly
-from the Go codebase. This ensures that program documentation is kept in
-one place—the Go code itself—while keeping the README and package
-documentation automatically up to date. It does this by processing template
-files containing markdown formatting and replacing embedded directives with
-content generated directly from your Go codebase. This ensures your
-documentation is always accurate and in sync with the source.
+    Synchronize Go package and GitHub style README.md documentation by
+    embedding Go documentation, source code, test and command output directly
+    from the Go codebase. This ensures that program documentation is kept in
+    one place—the Go code itself—while keeping the README and package
+    documentation automatically up to date. It does this by processing template
+    files containing markdown formatting and replacing embedded directives with
+    content generated directly from your Go codebase. This ensures your
+    documentation is always accurate and in sync with the source.
 
-    gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
-           [-f | --force] [-z | --colorize] [-u | --uptodate]
-           [-o | --output <dir>] [-p | --permission <perm>] [path ...]
+        gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
+               [-f | --force] [-z | --colorize] [-u | --uptodate]
+               [-o | --output <dir>] [-p | --permission <perm>] [path ...]
 
-    [-v | --verbose ...]
-        Increase the verbose level for each v provided.
+        [-v | --verbose ...]
+            Increase the verbose level for each v provided.
 
-    [-l | --license]
-        Display license before program exits.
+        [-l | --license]
+            Display license before program exits.
 
-    [-h | --help]
-        Display program usage information.
+        [-h | --help]
+            Display program usage information.
 
-    [-f | --force]
-        Do not confirm overwrite of destination.
+        [-f | --force]
+            Do not confirm overwrite of destination.
 
-    [-z | --colorize]
-        Colorize go test output.
+        [-z | --colorize]
+            Colorize go test output.
 
-    [-u | --uptodate]
-        Returns 0 if no changes would have been made. No writes are
-        performed.
+        [-u | --uptodate]
+            Returns 0 if no changes would have been made. No writes are
+            performed.
 
-    [-o | --output <dir>]
-        Direct all output to the specified directory.
+        [-o | --output <dir>]
+            Direct all output to the specified directory.
 
-    [-p | --permission <perm>]
-        Permissions to use when creating new file.
+        [-p | --permission <perm>]
+            Permissions to use when creating new file.
 
-        (can only set RW bits).
+            (can only set RW bits).
 
-    [path ...]
-        Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or
-        a directory which will be searched for all matching template
-        files. All subdirectories may be searched by using the special
-        './...' path. It defaults to search the current directory: '.'
+        [path ...]
+            Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or
+            a directory which will be searched for all matching template
+            files. All subdirectories may be searched by using the special
+            './...' path. It defaults to search the current directory: '.'
 
 # Directives
 
@@ -302,15 +314,14 @@ Runs go run on the package in the given directory (assumes main) with the
 provided arguments, including the output.
 
 # Dedication
-
-*****************************************************************************
-**                                                                         **
-** This project is dedicated to Reem.                                      **
-** Your brilliance, courage, and quiet strength continue to inspire me.    **
-** Every line is written in gratitude for the light and hope you brought   **
-** into my life.                                                           **
-**                                                                         **
-*****************************************************************************
+    *****************************************************************************
+    **                                                                         **
+    ** This project is dedicated to Reem.                                      **
+    ** Your brilliance, courage, and quiet strength continue to inspire me.    **
+    ** Every line is written in gratitude for the light and hope you brought   **
+    ** into my life.                                                           **
+    **                                                                         **
+    *****************************************************************************
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.

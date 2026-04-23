@@ -17,12 +17,12 @@
 */
 
 /*
-<!--- gotomd::inline-run::./. --help -->
+<!--- gotomd::irun::./. --help -->
 
-<!--- gotomd::snippet::./.directives.sds.md # START SNIPPET -->
+<!--- gotomd::snip::./.directives.sds.md # START SNIPPET -->
 
 # Dedication
-<!--- gotomd::inline-run::./. --Reem -->
+<!--- gotomd::irun::./. --Reem -->
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.

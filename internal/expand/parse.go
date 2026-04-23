@@ -39,12 +39,6 @@ const (
 	szDocPrefix = "doc::"
 )
 
-const (
-	szAutoHeader1 = "*****  AUTO GENERATED:  DO NOT MODIFY  *****"
-	szAutoHeader2 = "MODIFY TEMPLATE: "
-	szAutoHeader3 = "See: 'https://github.com/dancsecs/gotomd'"
-)
-
 // func buildCommand(cmd string, args ...string) string {
 // 	rootCmd := szCmdLabel + cmdSep + cmd
 
@@ -55,7 +49,7 @@ const (
 // 	return format.Comment(rootCmd)
 // }
 
-//nolint:cyclop,funlen // Ok.
+//nolint:cyclop // Ok.
 func processLines(lines []string, sentinel string) (string, error) {
 	var (
 		cmdIdx        int
@@ -83,18 +77,11 @@ func processLines(lines []string, sentinel string) (string, error) {
 		lastLineBlank = line == ""
 
 		cmdIdx, cmdStart, err = isCmd(line)
-		if err == nil && cmdIdx >= 0 {
-			i, err = expandCmd(&updatedFile, i, cmdIdx, cmdStart, lines)
-			if err == nil {
-				continue
-			}
-		}
-
-		if err == nil && strings.HasPrefix(line, "```") {
-			i, err = expandPreFormatted(&updatedFile, i, lines, line[3:])
-
-			if err == nil {
-				continue
+		if err == nil {
+			if cmdIdx >= 0 {
+				line, i, err = expandCmd(i, cmdIdx, cmdStart, lines)
+			} else if strings.HasPrefix(line, "```") {
+				line, i, err = expandPreFormatted(i, lines)
 			}
 		}
 

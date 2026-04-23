@@ -199,7 +199,10 @@ func GetGoTst(cmd string) (string, error) {
 				res += "\n\n"
 			}
 
-			res += format.Inline("bash", tstCmd) + "\n\n" + tstRes
+			res += format.Inline("bash", tstCmd) +
+				"\n\n" +
+				//  format.Inline("", tstRes)
+				tstRes
 		}
 	}
 

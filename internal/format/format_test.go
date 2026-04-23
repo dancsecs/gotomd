@@ -52,12 +52,12 @@ func TestFormat_Inline(t *testing.T) {
 
 	chk.Str(
 		format.Inline("go", "ABC\n"),
-		"\tABC\n",
+		"\tABC",
 	)
 
 	chk.Str(
 		format.Inline("bash", "ABC\n\nDEF"),
-		"\tABC\n\n\tDEF\n",
+		"\tABC\n\n\tDEF",
 	)
 }
 
@@ -108,13 +108,13 @@ func TestFormat_HLine(t *testing.T) {
 
 	chk.Str(
 		format.HLine(),
-		"---\n",
+		"---",
 	)
 
 	format.ForGoDoc()
 
 	chk.Str(
 		format.HLine(),
-		strings.Repeat("-", 78)+"\n",
+		strings.Repeat("-", 78),
 	)
 }

@@ -50,7 +50,7 @@ func markForGoPackageInline(content string) string {
 		}
 	}
 
-	return strings.Join(newContent, "\n") + "\n"
+	return strings.Join(newContent, "\n")
 }
 
 // Inline frames the content in a ```language ... ``` multiline block for an
@@ -100,8 +100,8 @@ func BalancedComment(line string) string {
 func HLine() string {
 	const lineLength = 78
 	if formatForGo {
-		return strings.Repeat("-", lineLength) + "\n"
+		return strings.Repeat("-", lineLength)
 	}
 
-	return "---\n"
+	return "---"
 }

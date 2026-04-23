@@ -21,6 +21,6 @@ Package main exists in order to test various go to git
 markdown (goToMD) extraction utilities.  Various object will be defined that
 exhibit the various comment and declaration options permitted by gofmt.
 
-<!--- gotomd::inline-run::./. --help -->
+<!--- gotomd::irun::./. --help -->
 */
 package ////main

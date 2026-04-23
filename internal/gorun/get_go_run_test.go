@@ -87,7 +87,7 @@ func Test_GetRun_RunExampleNoPackage(t *testing.T) {
 			"Running with 1 arguments\n"+
 			"-v\n"+
 			"```\n"+
-			"---\n"+
+			"---"+
 			"",
 	)
 }

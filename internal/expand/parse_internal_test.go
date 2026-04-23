@@ -25,7 +25,7 @@ import (
 	"github.com/dancsecs/sztestlog"
 )
 
-func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
+func TestInternalExpand_Parse_InvalidCommandDirectory(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
@@ -49,7 +49,7 @@ func Test_Markdown_UpdateMarkDownDocument(t *testing.T) {
 	chk.Str(updatedDoc, "")
 }
 
-func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
+func TestInternalExpand_Parse_UnknownCommand(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
@@ -71,7 +71,7 @@ func Test_Markdown_UpdateMarkDown_InvalidCommand(t *testing.T) {
 	chk.Str(updatedDoc, "")
 }
 
-func Test_Markdown_UpdateMarkDown_SquashMultipleBlankLines(t *testing.T) {
+func TestInternalExpand_Parse_SquashMultipleBlankLines(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 
@@ -84,7 +84,7 @@ func Test_Markdown_UpdateMarkDown_SquashMultipleBlankLines(t *testing.T) {
 	chk.Str(updatedDoc, "\nFirst\n\nSecond\n\nthird\n\nlast")
 }
 
-func TestInternalExpand_SplitDir(t *testing.T) {
+func TestInternalExpand_Parse_SplitDir(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
 

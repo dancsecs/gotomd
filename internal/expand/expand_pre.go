@@ -19,28 +19,26 @@
 package expand
 
 import (
-	"strings"
-
 	"github.com/dancsecs/gotomd/internal/format"
 )
 
+const preFormattedSymbol = "```"
+
 func expandPreFormatted(
-	file *strings.Builder,
 	i int,
 	lines []string,
-	codeSyntaxName string,
-) (int, error) {
+) (string, int, error) {
 	var (
 		code string
 		err  error
 	)
 
-	i, code, err = getBlock(i+1, 0, lines, "```", "`", "\n")
+	codeSyntaxName := lines[i][len(preFormattedSymbol):]
+
+	i, code, err = getBlock(i+1, 0, lines, preFormattedSymbol, "`", "\n")
 	if err == nil {
-		file.WriteString(
-			format.Inline(codeSyntaxName, code),
-		)
+		return format.Inline(codeSyntaxName, code), i, nil
 	}
 
-	return i, err
+	return "", i, err
 }
