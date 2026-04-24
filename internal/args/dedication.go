@@ -19,13 +19,13 @@
 package args
 
 const dedication = `
-*****************************************************************************
-**                                                                         **
-** This project is dedicated to Reem.                                      **
-** Your brilliance, courage, and quiet strength continue to inspire me.    **
-** Every line is written in gratitude for the light and hope you brought   **
-** into my life.                                                           **
-**                                                                         **
-*****************************************************************************
+***************************************************************************
+**                                                                       **
+** This project is dedicated to Reem.                                    **
+** Your brilliance, courage, and quiet strength continue to inspire me.  **
+** Every line is written in gratitude for the light and hope you brought **
+** into my life.                                                         **
+**                                                                       **
+***************************************************************************
 
 `

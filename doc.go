@@ -153,14 +153,15 @@ Runs go run on the package in the given directory (assumes main) with the
 provided arguments, including the output.
 
 # Dedication
-	*****************************************************************************
-	**                                                                         **
-	** This project is dedicated to Reem.                                      **
-	** Your brilliance, courage, and quiet strength continue to inspire me.    **
-	** Every line is written in gratitude for the light and hope you brought   **
-	** into my life.                                                           **
-	**                                                                         **
-	*****************************************************************************
+
+	***************************************************************************
+	**                                                                       **
+	** This project is dedicated to Reem.                                    **
+	** Your brilliance, courage, and quiet strength continue to inspire me.  **
+	** Every line is written in gratitude for the light and hope you brought **
+	** into my life.                                                         **
+	**                                                                       **
+	***************************************************************************
 
 NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
 OpenAI.
