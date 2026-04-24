@@ -178,6 +178,212 @@ func Test_ProcessExpand_UnknownTemplate(t *testing.T) {
 	chk.Log()
 }
 
+func Test_ProcessExpand_GOPkg_NoTargetNoForceNoVerbose(t *testing.T) {
+	chk := sztestlog.CaptureLog(t)
+	defer chk.Release()
+
+	const (
+		tPath = tstpkgPaths
+		tName = "doc.go"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: false, verboseLevel: 0},
+	)
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	_, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Log()
+}
+
+func Test_ProcessExpand_GOPkg_NoTargetForceNoVerbose(t *testing.T) {
+	chk := sztestlog.CaptureLog(t)
+	defer chk.Release()
+
+	const (
+		tPath = tstpkgPaths
+		tName = "doc.go"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
+	)
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	_, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Log()
+}
+
+func Test_ProcessExpand_GOPkg_NoTargetNoForceVerbose(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	const (
+		tPath       = tstpkgPaths
+		tName       = "doc.go"
+		sourceFName = ".doc.gtm.go"
+	)
+
+	setupExpandGlobals(
+		chk,
+		expandGlobals{forceOverwrite: false, verboseLevel: 8},
+	)
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	tFile, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Stdout(
+		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
+	)
+}
+
+func Test_ProcessExpand_GOPkg_NoTargetForceVerbose(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	const (
+		tPath       = tstpkgPaths
+		tName       = "doc.go"
+		sourceFName = ".doc.gtm.go"
+	)
+
+	setupExpandGlobals(
+		chk,
+		expandGlobals{forceOverwrite: true, verboseLevel: 6},
+	)
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	tFile, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Stdout(
+		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
+	)
+}
+
+func Test_ProcessExpand_GOPkg_CancelOverwriteTargetForceNoVerbose(
+	t *testing.T,
+) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	const (
+		tPath = tstpkgPaths
+		tName = "doc.go"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
+	)
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
+
+	chk.SetStdinData("N\n")
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	_, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+}
+
+func Test_ProcessExpand_GOPkg_CancelOverwriteForceVerbose(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	const (
+		tPath       = tstpkgPaths
+		tName       = "doc.go"
+		sourceFName = ".doc.gtm.go"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
+	)
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("NewLine\n")))
+
+	chk.SetStdinData("N\n")
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	tFile, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Stdout(
+		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
+	)
+}
+
+func Test_ProcessExpand_GOPkg_OverwriteTargetForceNoVerbose(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	const (
+		tPath = tstpkgPaths
+		tName = "doc.go"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
+	)
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
+
+	chk.SetStdinData("Y\n")
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	_, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+}
+
+func Test_ProcessExpand_GOPkg_OverwriteForceVerbose(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	const (
+		tPath       = tstpkgPaths
+		tName       = "doc.go"
+		sourceFName = ".doc.gtm.go"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
+	)
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line\n")))
+
+	chk.SetStdinData("Y\n")
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	wFile, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Stdout(
+		"Expanding " + tPath + sep + sourceFName + " to: " + wFile,
+	)
+}
+
+//
+
 func Test_ProcessExpand_MDPkg_NoTargetNoForceNoVerbose(t *testing.T) {
 	chk := sztestlog.CaptureLog(t)
 	defer chk.Release()
@@ -422,211 +628,6 @@ func Test_ProcessExpand_MDPkg_OverwriteForceVerbose(t *testing.T) {
 }
 
 //
-
-func Test_ProcessExpand_GOPkg_NoTargetNoForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
-	defer chk.Release()
-
-	const (
-		tPath = tstpkgPaths
-		tName = "doc.go"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: false, verboseLevel: 0},
-	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	_, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Log()
-}
-
-func Test_ProcessExpand_GOPkg_NoTargetForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
-	defer chk.Release()
-
-	const (
-		tPath = tstpkgPaths
-		tName = "doc.go"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
-	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	_, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Log()
-}
-
-func Test_ProcessExpand_GOPkg_NoTargetNoForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
-	defer chk.Release()
-
-	const (
-		tPath       = tstpkgPaths
-		tName       = "doc.go"
-		sourceFName = ".doc.gtm.go"
-	)
-
-	setupExpandGlobals(
-		chk,
-		expandGlobals{forceOverwrite: false, verboseLevel: 8},
-	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	tFile, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Stdout(
-		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
-	)
-}
-
-func Test_ProcessExpand_GOPkg_NoTargetForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
-	defer chk.Release()
-
-	const (
-		tPath       = tstpkgPaths
-		tName       = "doc.go"
-		sourceFName = ".doc.gtm.go"
-	)
-
-	setupExpandGlobals(
-		chk,
-		expandGlobals{forceOverwrite: true, verboseLevel: 6},
-	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	tFile, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Stdout(
-		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
-	)
-}
-
-func Test_ProcessExpand_GOPkg_CancelOverwriteTargetForceNoVerbose(
-	t *testing.T,
-) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	const (
-		tPath = tstpkgPaths
-		tName = "doc.go"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
-	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
-
-	chk.SetStdinData("N\n")
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	_, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-}
-
-func Test_ProcessExpand_GOPkg_CancelOverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
-	defer chk.Release()
-
-	const (
-		tPath       = tstpkgPaths
-		tName       = "doc.go"
-		sourceFName = ".doc.gtm.go"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
-	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("NewLine\n")))
-
-	chk.SetStdinData("N\n")
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	tFile, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Stdout(
-		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
-	)
-}
-
-func Test_ProcessExpand_GOPkg_OverwriteTargetForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	const (
-		tPath = tstpkgPaths
-		tName = "doc.go"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
-	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
-
-	chk.SetStdinData("Y\n")
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	_, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-}
-
-func Test_ProcessExpand_GOPkg_OverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
-	defer chk.Release()
-
-	const (
-		tPath       = tstpkgPaths
-		tName       = "doc.go"
-		sourceFName = ".doc.gtm.go"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
-	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line\n")))
-
-	chk.SetStdinData("Y\n")
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	wFile, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Stdout(
-		"Expanding " + tPath + sep + sourceFName + " to: " + wFile,
-	)
-}
-
 //
 //
 //
@@ -653,213 +654,6 @@ func Test_ProcessExpand_GOPkg_OverwriteForceVerbose(t *testing.T) {
 //
 //
 //
-//
-//
-
-func Test_ProcessExpand_MDCmd_NoTargetNoForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
-	defer chk.Release()
-
-	const (
-		tPath = tstcmdPaths
-		tName = "README.md"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: false, verboseLevel: 0},
-	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	_, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Log()
-}
-
-func Test_ProcessExpand_MDCmd_NoTargetForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureLog(t)
-	defer chk.Release()
-
-	const (
-		tPath = tstcmdPaths
-		tName = "README.md"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
-	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	_, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Log()
-}
-
-func Test_ProcessExpand_MDCmd_NoTargetNoForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
-	defer chk.Release()
-
-	const (
-		tPath       = tstcmdPaths
-		tName       = "README.md"
-		sourceFName = ".README.gtm.md"
-	)
-
-	setupExpandGlobals(
-		chk,
-		expandGlobals{forceOverwrite: false, verboseLevel: 6},
-	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	tFile, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Stdout(
-		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
-	)
-}
-
-func Test_ProcessExpand_MDCmd_NoTargetForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
-	defer chk.Release()
-
-	const (
-		tPath       = tstcmdPaths
-		tName       = "README.md"
-		sourceFName = ".README.gtm.md"
-	)
-
-	setupExpandGlobals(
-		chk,
-		expandGlobals{forceOverwrite: true, verboseLevel: 6},
-	)
-	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	tFile, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Stdout(
-		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
-	)
-}
-
-func Test_ProcessExpand_MDCmd_CancelOverwriteTargetForceNoVerbose(
-	t *testing.T,
-) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	const (
-		tPath = tstcmdPaths
-		tName = "README.md"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
-	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
-
-	chk.SetStdinData("N\n")
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	_, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-}
-
-func Test_ProcessExpand_MDCmd_CancelOverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
-	defer chk.Release()
-
-	const (
-		tPath       = tstcmdPaths
-		tName       = "README.md"
-		sourceFName = ".README.gtm.md"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
-	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line")))
-
-	chk.SetStdinData("N\n")
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	tFile, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Stdout(
-		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
-	)
-}
-
-func Test_ProcessExpand_MDCmd_OverwriteTargetForceNoVerbose(t *testing.T) {
-	chk := sztestlog.CaptureNothing(t)
-	defer chk.Release()
-
-	const (
-		tPath = tstcmdPaths
-		tName = "README.md"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
-	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
-
-	chk.SetStdinData("Y\n")
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	_, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-}
-
-func Test_ProcessExpand_MDCmd_OverwriteForceVerbose(t *testing.T) {
-	chk := sztestlog.CaptureStdout(t)
-	defer chk.Release()
-
-	const (
-		tPath       = tstcmdPaths
-		tName       = "README.md"
-		sourceFName = ".README.gtm.md"
-	)
-
-	setupExpandGlobals(
-		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
-	)
-	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line")))
-
-	chk.SetStdinData("Y\n")
-
-	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
-
-	wFile, got, wnt, err := getExpandFiles(tPath, tName)
-	chk.NoErr(err)
-	chk.StrSlice(got, wnt)
-
-	chk.Stdout(
-		"Expanding " + tPath + sep + sourceFName + " to: " + wFile,
-	)
-}
-
 //
 
 func Test_ProcessExpand_GOCmd_NoTargetNoForceNoVerbose(t *testing.T) {
@@ -1052,6 +846,210 @@ func Test_ProcessExpand_GOCmd_OverwriteForceVerbose(t *testing.T) {
 		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
 	)
 	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line\n")))
+
+	chk.SetStdinData("Y\n")
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	wFile, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Stdout(
+		"Expanding " + tPath + sep + sourceFName + " to: " + wFile,
+	)
+}
+
+func Test_ProcessExpand_MDCmd_NoTargetNoForceNoVerbose(t *testing.T) {
+	chk := sztestlog.CaptureLog(t)
+	defer chk.Release()
+
+	const (
+		tPath = tstcmdPaths
+		tName = "README.md"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: false, verboseLevel: 0},
+	)
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	_, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Log()
+}
+
+func Test_ProcessExpand_MDCmd_NoTargetForceNoVerbose(t *testing.T) {
+	chk := sztestlog.CaptureLog(t)
+	defer chk.Release()
+
+	const (
+		tPath = tstcmdPaths
+		tName = "README.md"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
+	)
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	_, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Log()
+}
+
+func Test_ProcessExpand_MDCmd_NoTargetNoForceVerbose(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	const (
+		tPath       = tstcmdPaths
+		tName       = "README.md"
+		sourceFName = ".README.gtm.md"
+	)
+
+	setupExpandGlobals(
+		chk,
+		expandGlobals{forceOverwrite: false, verboseLevel: 6},
+	)
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	tFile, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Stdout(
+		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
+	)
+}
+
+func Test_ProcessExpand_MDCmd_NoTargetForceVerbose(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	const (
+		tPath       = tstcmdPaths
+		tName       = "README.md"
+		sourceFName = ".README.gtm.md"
+	)
+
+	setupExpandGlobals(
+		chk,
+		expandGlobals{forceOverwrite: true, verboseLevel: 6},
+	)
+	chk.NoErr(setupExpandDirs(false, tPath, tName, nil))
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	tFile, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Stdout(
+		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
+	)
+}
+
+func Test_ProcessExpand_MDCmd_CancelOverwriteTargetForceNoVerbose(
+	t *testing.T,
+) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	const (
+		tPath = tstcmdPaths
+		tName = "README.md"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
+	)
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
+
+	chk.SetStdinData("N\n")
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	_, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+}
+
+func Test_ProcessExpand_MDCmd_CancelOverwriteForceVerbose(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	const (
+		tPath       = tstcmdPaths
+		tName       = "README.md"
+		sourceFName = ".README.gtm.md"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
+	)
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line")))
+
+	chk.SetStdinData("N\n")
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	tFile, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+
+	chk.Stdout(
+		"Expanding " + tPath + sep + sourceFName + " to: " + tFile,
+	)
+}
+
+func Test_ProcessExpand_MDCmd_OverwriteTargetForceNoVerbose(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	const (
+		tPath = tstcmdPaths
+		tName = "README.md"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 0},
+	)
+	chk.NoErr(setupExpandDirs(true, tPath, tName, nil))
+
+	chk.SetStdinData("Y\n")
+
+	chk.NoErr(expand.Process(templateName(chk, tPath, tName)))
+
+	_, got, wnt, err := getExpandFiles(tPath, tName)
+	chk.NoErr(err)
+	chk.StrSlice(got, wnt)
+}
+
+func Test_ProcessExpand_MDCmd_OverwriteForceVerbose(t *testing.T) {
+	chk := sztestlog.CaptureStdout(t)
+	defer chk.Release()
+
+	const (
+		tPath       = tstcmdPaths
+		tName       = "README.md"
+		sourceFName = ".README.gtm.md"
+	)
+
+	setupExpandGlobals(
+		chk, expandGlobals{forceOverwrite: true, verboseLevel: 6},
+	)
+	chk.NoErr(setupExpandDirs(true, tPath, tName, []byte("New Line")))
 
 	chk.SetStdinData("Y\n")
 
