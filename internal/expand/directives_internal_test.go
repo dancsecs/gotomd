@@ -58,17 +58,6 @@ func TestInternalExpand_Directive_IncludeSnippet_NOT_EXIST(t *testing.T) {
 		),
 	)
 	chk.Str(res, "")
-
-	res, err = includeSnip(
-		"./testdata/tstpkg/.sharedTemplate.sds.md",
-	)
-	chk.Err(
-		err,
-		chk.ErrChain(
-			errs.ErrInvalidSnippetAction,
-		),
-	)
-	chk.Str(res, "")
 }
 
 func TestInternalExpand_Directive_IncludeSnippet(t *testing.T) {

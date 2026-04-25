@@ -24,7 +24,6 @@ import (
 	"strings"
 
 	"github.com/dancsecs/gotomd/internal/cmds"
-	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/gotomd/internal/file"
 	"github.com/dancsecs/gotomd/internal/godoc"
 	"github.com/dancsecs/gotomd/internal/gorun"
@@ -96,6 +95,8 @@ func includeSnip(cmd string) (string, error) {
 		action          string
 		dir             string
 		cmdArgs         []string
+		fName           string
+		startAfter      string
 		expandedSnippet string
 		err             error
 	)
@@ -106,15 +107,17 @@ func includeSnip(cmd string) (string, error) {
 		const expectedArgCount = 2
 
 		cmdArgs = strings.SplitN(action, " ", expectedArgCount)
-		if len(cmdArgs) != expectedArgCount {
-			err = errs.ErrInvalidSnippetAction
+		fName = cmdArgs[0]
+
+		if len(cmdArgs) > 1 {
+			startAfter = cmdArgs[1]
 		}
 	}
 
 	if err == nil {
 		expandedSnippet, err = parse(
-			filepath.Join(dir, cmdArgs[0]),
-			cmdArgs[1],
+			filepath.Join(dir, fName),
+			startAfter,
 		)
 	}
 
