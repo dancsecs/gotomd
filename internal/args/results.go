@@ -28,7 +28,6 @@ var (
 	mdFiles        []string
 	usage          string
 	forceOverwrite bool
-	szColorize     bool
 	outputDir      = "."
 	perm           = defaultPerm
 	showLicense    bool
@@ -44,7 +43,6 @@ func Reset() {
 	mdFiles = nil
 	usage = ""
 	forceOverwrite = false
-	szColorize = false
 	outputDir = "."
 	perm = defaultPerm
 	showLicense = false
@@ -74,11 +72,6 @@ func Usage() string {
 // Force returns the force setting.
 func Force() bool {
 	return forceOverwrite
-}
-
-// Colorize returns the colorize setting.
-func Colorize() bool {
-	return szColorize
 }
 
 // OutputDir returns the overridden output directory.

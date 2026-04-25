@@ -34,7 +34,6 @@ func Test_ArgUsage_SampleNoArgsDefaultsToCWD(t *testing.T) {
 
 	chk.SetArgs(
 		"programName",
-		"-z",
 		"-f",
 		"-l",
 		"-h",
@@ -44,7 +43,6 @@ func Test_ArgUsage_SampleNoArgsDefaultsToCWD(t *testing.T) {
 
 	chk.Str(args.Usage(), "")
 	chk.Str(args.OutputDir(), ".")
-	chk.False(args.Colorize())
 	chk.False(args.Force())
 	chk.Uint32(uint32(args.Perm()), 0o0644)
 	chk.False(args.ShowLicense())
@@ -53,7 +51,6 @@ func Test_ArgUsage_SampleNoArgsDefaultsToCWD(t *testing.T) {
 	chk.NoErr(args.Process())
 
 	chk.Str(args.OutputDir(), dir)
-	chk.True(args.Colorize())
 	chk.True(args.Force())
 	chk.Uint32(uint32(args.Perm()), 0o0600)
 	chk.True(args.ShowLicense())

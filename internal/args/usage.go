@@ -46,11 +46,6 @@ Display program usage information.
 Do not confirm overwrite of destination.
 `
 
-	colorizeFlag = "[-z | --colorize]"
-	colorizeDesc = `
-Colorize go test output.
-`
-
 	outputDirFlag = "[-o | --output <dir>]"
 	outputDirDesc = `
 Direct all output to the specified directory.

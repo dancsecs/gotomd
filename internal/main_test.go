@@ -51,9 +51,8 @@ var usage = []string{
 	"",
 	"",
 	"    programName [-v | --verbose ...] [-l | --license] [-h | --help]",
-	"                [-f | --force] [-z | --colorize] [-u | --uptodate]",
-	"                [-o | --output <dir>] [-p | --permission <perm>]",
-	"                [path ...]",
+	"                [-f | --force] [-u | --uptodate] [-o | --output <dir>]",
+	"                [-p | --permission <perm>] [path ...]",
 	"",
 	"    [-v | --verbose ...]",
 	"        Increase the verbose level for each v provided.",
@@ -69,10 +68,6 @@ var usage = []string{
 	"",
 	"    [-f | --force]",
 	"        Do not confirm overwrite of destination.",
-	"",
-	"",
-	"    [-z | --colorize]",
-	"        Colorize go test output.",
 	"",
 	"",
 	"    [-u | --uptodate]",
@@ -130,7 +125,6 @@ func Test_Example1ExpandMDTargetOverwriteDirVerbose(t *testing.T) {
 	chk.SetArgs(
 		"programName",
 		"-v",
-		"-z",
 		"-o", dir,
 		templatePath,
 	)
@@ -180,7 +174,6 @@ func Test_Example1ExpandGoTargetOverwriteDirVerbose(t *testing.T) {
 	chk.SetArgs(
 		"programName",
 		"-v",
-		"-z",
 		"-o", dir,
 		templatePath,
 	)
@@ -209,7 +202,6 @@ func Test_Example1ExpandGoUpToDateVerbose(t *testing.T) {
 	chk.SetArgs(
 		"programName",
 		"-v",
-		"-z",
 		"--uptodate",
 		templatePath,
 	)
@@ -236,7 +228,6 @@ func Test_Example1ExpandGoUpToDateVerboseWithChange(t *testing.T) {
 	chk.SetArgs(
 		"programName",
 		"-v",
-		"-z",
 		"--uptodate",
 		templatePath,
 	)

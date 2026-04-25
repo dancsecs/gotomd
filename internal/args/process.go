@@ -58,7 +58,6 @@ func Process() error {
 	showLicense = args.Is(licenseFlag, prepareDesc(licenseDesc))
 	showHelp = args.Is(helpFlag, prepareDesc(helpDesc))
 	forceOverwrite = args.Is(forceFlag, prepareDesc(forceDesc))
-	szColorize = args.Is(colorizeFlag, prepareDesc(colorizeDesc))
 	upToDate = args.Is(upToDateFlag, prepareDesc(upToDateDesc))
 
 	outputDir, foundOutput = args.ValueString(

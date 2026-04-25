@@ -56,6 +56,21 @@ func Test_GetTest_GetGoTst(t *testing.T) {
 	chk.Err(err, errs.ErrNoTestToRun.Error())
 }
 
+func Test_GetTest_GetGoTstColorize(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	cmd := "TEST_DIRECTORY_DOES_NOT_EXIST" + string(os.PathSeparator)
+	_, err := GetGoTst(cmd)
+	chk.Err(
+		err,
+		errs.ErrInvalidRelativeDir.Error()+": \""+cmd+"\"",
+	)
+
+	_, err = GetGoTstColorize("./TEST_DOES_NOT_EXIST")
+	chk.Err(err, errs.ErrNoTestToRun.Error())
+}
+
 func Test_GetTest_RunTestNotDirectory(t *testing.T) {
 	chk := sztestlog.CaptureNothing(t)
 	defer chk.Release()
@@ -63,7 +78,7 @@ func Test_GetTest_RunTestNotDirectory(t *testing.T) {
 	f := chk.CreateTmpFile(nil)
 	chk.Panic(
 		func() {
-			_, _, _ = runTest(f, "")
+			_, _, _ = runTest(f, "", false)
 		},
 		"",
 	)
@@ -76,14 +91,13 @@ func Test_GetTest_RunTestColorize(t *testing.T) {
 
 	chk.SetArgs(
 		"noProgName",
-		"-z",
 	)
 
 	chk.NoErr(args.Process())
 
 	file1 := tstpkg1Path + pkgLabel
 	file2 := tstpkg2Path + pkgLabel
-	s, err := GetGoTst(file1 + " " + file2)
+	s, err := GetGoTstColorize(file1 + " " + file2)
 
 	chk.NoErr(err)
 	fmt.Printf("%s\n", s)

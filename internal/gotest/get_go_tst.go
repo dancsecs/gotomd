@@ -26,7 +26,6 @@ import (
 	"strings"
 
 	"github.com/dancsecs/gotomd/internal/ansi"
-	"github.com/dancsecs/gotomd/internal/args"
 	"github.com/dancsecs/gotomd/internal/cmds"
 	"github.com/dancsecs/gotomd/internal/errs"
 	"github.com/dancsecs/gotomd/internal/format"
@@ -83,7 +82,7 @@ func setupEnv(env []string) []string {
 	return append(newEnv, szEnv...)
 }
 
-func runTest(dir, tests string) (string, string, error) {
+func runTest(dir, tests string, colorize bool) (string, string, error) {
 	var (
 		rawRes  []byte
 		tstArgs []string
@@ -117,7 +116,7 @@ func runTest(dir, tests string) (string, string, error) {
 	}
 
 	if err == nil {
-		if args.Colorize() {
+		if colorize {
 			res = squashTestTime.ReplaceAllString(
 				string(rawRes), `${1} (0.0s)`,
 			)
@@ -193,7 +192,41 @@ func GetGoTst(cmd string) (string, error) {
 	}
 
 	for i, mi := 0, len(dir); i < mi && err == nil; i++ {
-		tstCmd, tstRes, err = runTest(dir[i], action[i])
+		tstCmd, tstRes, err = runTest(dir[i], action[i], false)
+		if err == nil {
+			if res != "" {
+				res += "\n\n"
+			}
+
+			res += format.Inline("bash", tstCmd) +
+				"\n\n" +
+				//  format.Inline("", tstRes)
+				tstRes
+		}
+	}
+
+	if err == nil {
+		return res, nil
+	}
+
+	return "", err
+}
+
+// GetGoTstColorize runs the go tests collecting all of the results.
+func GetGoTstColorize(cmd string) (string, error) {
+	var (
+		res    string
+		tstRes string
+		tstCmd string
+	)
+
+	dir, action, err := cmds.ParseCmds(cmd)
+	if err == nil {
+		dir, action = buildTestCmds(dir, action)
+	}
+
+	for i, mi := 0, len(dir); i < mi && err == nil; i++ {
+		tstCmd, tstRes, err = runTest(dir[i], action[i], true)
 		if err == nil {
 			if res != "" {
 				res += "\n\n"

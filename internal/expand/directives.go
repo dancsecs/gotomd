@@ -84,6 +84,7 @@ func init() {
 	action.add("run::", gorun.GetGoRun)
 	action.add("irun::", gorun.RawGoRun)
 	action.add("tst::", gotest.GetGoTst)
+	action.add("tstc::", gotest.GetGoTstColorize)
 	action.add("snip::", includeSnip)
 	action.sort()
 }
