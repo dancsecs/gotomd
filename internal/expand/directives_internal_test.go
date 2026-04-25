@@ -80,3 +80,40 @@ func TestInternalExpand_Directive_IncludeSnippet(t *testing.T) {
 	)
 	chk.NoErr(err)
 }
+
+func TestInternalExpand_Directive_IncludeSnippetAsString(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	res, err := includeSnip(
+		"./testdata/tstpkg/.sharedTemplate.sds.md string # START SNIPPET",
+	)
+	chk.StrSlice(
+		strings.Split(res, "\n"),
+		[]string{
+			"\t\"# Common Snippet Inclusion\"" + ` + "\n" +`,
+			"\t\"\"" + ` + "\n" +`,
+			"\t\"```bash\"" + ` + "\n" +`,
+			"\t\"#!/bin/bash\"" + ` + "\n" +`,
+			"\t\"echo \\\"Hello, world.\\\"\"" + ` + "\n" +`,
+			"\t\"```\"" + ` + "\n" +`,
+		},
+	)
+	chk.NoErr(err)
+}
+
+func TestInternalExpand_Directive_IncludeTxtSnippetAsString(t *testing.T) {
+	chk := sztestlog.CaptureNothing(t)
+	defer chk.Release()
+
+	res, err := includeSnip(
+		"./testdata/tstpkg/.sharedTemplate.sds.txt string",
+	)
+	chk.StrSlice(
+		strings.Split(res, "\n"),
+		[]string{
+			"\t\"Just plain text.\"" + ` + "\n" +`,
+		},
+	)
+	chk.NoErr(err)
+}

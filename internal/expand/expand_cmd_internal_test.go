@@ -36,7 +36,7 @@ func TestInternalExpand_ExpandCmd_InlineRun_ForGoDoc(t *testing.T) {
 
 	lines := []string{
 		"line:0",
-		"<!--- gotomd::irun::./testdata/tstcmd/. --help -->",
+		"//<!--- gotomd::irun::./testdata/tstcmd/. --help -->",
 		"line:2",
 	}
 

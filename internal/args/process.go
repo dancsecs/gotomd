@@ -55,6 +55,7 @@ func Process() error {
 	szlog.ArgUsageInfo(args.RegisterUsage)
 	args.PushErr(err)
 
+	showDirective = args.Is(directiveFlag, prepareDesc(directiveDesc))
 	showLicense = args.Is(licenseFlag, prepareDesc(licenseDesc))
 	showHelp = args.Is(helpFlag, prepareDesc(helpDesc))
 	forceOverwrite = args.Is(forceFlag, prepareDesc(forceDesc))
@@ -108,7 +109,8 @@ func Process() error {
 		args.PushErr(errs.ErrUpToDateWithForce)
 	}
 
-	if !args.HasNext() && !(showLicense || showHelp || foundEgg) {
+	infoShown := showLicense || showHelp || foundEgg || showDirective
+	if !args.HasNext() && !infoShown {
 		args.PushArg(".") // Default to current directory if no args given.
 	}
 

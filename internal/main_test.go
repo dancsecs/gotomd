@@ -50,12 +50,17 @@ var usage = []string{
 	"documentation is always accurate and in sync with the source.",
 	"",
 	"",
-	"    programName [-v | --verbose ...] [-l | --license] [-h | --help]",
-	"                [-f | --force] [-u | --uptodate] [-o | --output <dir>]",
-	"                [-p | --permission <perm>] [path ...]",
+	"    programName [-v | --verbose ...] [-d | --directive] [-l | --license]",
+	"                [-h | --help] [-f | --force] [-u | --uptodate]",
+	"                [-o | --output <dir>] [-p | --permission <perm>]",
+	"                [path ...]",
 	"",
 	"    [-v | --verbose ...]",
 	"        Increase the verbose level for each v provided.",
+	"",
+	"",
+	"    [-d | --directive]",
+	"        Display directive documentation.",
 	"",
 	"",
 	"    [-l | --license]",
@@ -251,6 +256,7 @@ func Test_JustHelp(t *testing.T) {
 	chk.SetArgs(
 		"programName",
 		"-v",
+		"-d",
 		"-l",
 		"-h",
 		"DOES_NOT_EXIST",
@@ -259,15 +265,16 @@ func Test_JustHelp(t *testing.T) {
 	chk.Int(internal.Main(), 1)
 
 	chk.Stdout(
-		internal.License+strings.Join(usage, "\n"),
+		internal.LicenseCopyright,
+		strings.Join(usage, "\n"),
+		internal.DirectiveHowTo,
 		chk.ErrChain(
 			"Failed",
 			errs.ErrInvalidTemplate,
 			errs.ErrUnknownObject,
 			"stat DOES_NOT_EXIST",
 			"no such file or directory",
-		),
-	)
+		))
 
 	chk.Log()
 }

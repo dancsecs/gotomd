@@ -31,6 +31,11 @@ files containing markdown formatting and replacing embedded directives with
 content generated directly from your Go codebase. This ensures your
 documentation is always accurate and in sync with the source.
 `
+	directiveFlag = "[-d | --directive]"
+	directiveDesc = `
+Display directive documentation.
+`
+
 	licenseFlag = "[-l | --license]"
 	licenseDesc = `
 Display license before program exits.

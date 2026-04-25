@@ -1,6 +1,6 @@
 /*
    Golang To Github Markdown Utility: gotomd
-   Copyright (C) 2023, 2024 Leslie Dancsecs
+   Copyright (C) 2025 Leslie Dancsecs
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,17 +16,19 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-//nolint:lll // Ok.
 /*
-<!--- gotomd::irun::./. --help -->
-
-<!--- gotomd::snip::./internal/.directives.sds.md # START SNIPPET -->
-
-# Dedication
-
-<!--- gotomd::irun::./. --Reem -->
-
-NOTE: Documentation reviewed and polished with the assistance of ChatGPT from
-OpenAI.
+Package internal implements the command's mainline `Main`.
 */
-package ////main
+//
+//nolint:lll // Ok.
+package ////internal
+
+// LicenseCopyright provides for program access.
+const LicenseCopyright = "" +
+	// <!--- gotomd::snip::./.copyright.sds.txt string -->
+	""
+
+// DirectiveHowTo provides for program access.
+const DirectiveHowTo = "" +
+	// <!--- gotomd::snip::./.directives.sds.md string # START SNIPPET -->
+	""

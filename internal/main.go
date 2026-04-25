@@ -23,7 +23,6 @@ returning a error status code. and all sub packages used by the program.
 package internal
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/dancsecs/gotomd/internal/args"
@@ -32,25 +31,6 @@ import (
 	"github.com/dancsecs/gotomd/internal/update"
 	"github.com/dancsecs/szlog"
 )
-
-// License contains the internal copy if the program's license.
-const License = `
-Golang To Github Markdown: gotomd.
-Copyright (C) 2023-2025  Leslie Dancsecs
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-`
 
 func processGoFiles(filesToProcess []string) error {
 	var err error
@@ -100,11 +80,15 @@ func Main() int {
 	err = args.Process()
 
 	if args.ShowLicense() {
-		fmt.Print(License) //nolint:forbidigo  // Ok.
+		szlog.Say0(LicenseCopyright, "\n")
 	}
 
 	if args.ShowHelp() {
-		fmt.Println(args.Usage()) //nolint:forbidigo  // Ok.
+		szlog.Say0(args.Usage(), "\n")
+	}
+
+	if args.ShowDirective() {
+		szlog.Say0(DirectiveHowTo, "\n")
 	}
 
 	update.ResetUpToDate()

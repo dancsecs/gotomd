@@ -25,13 +25,18 @@ import (
 	"github.com/dancsecs/gotomd/internal/errs"
 )
 
-func isCmd(line string) (int, int, error) {
+func isCmd(origLine string) (int, int, error) {
 	const sep = "::"
 
 	var (
+		extra  int
 		cmdIdx = -1
 		end    = 0
 	)
+
+	// Individual lines in a .gtm.go template.
+	line := strings.TrimLeft(origLine, "\t /")
+	extra = len(origLine) - len(line)
 
 	if strings.HasPrefix(line, szCmdPrefix) {
 		cmd := line[len(szCmdPrefix):]
@@ -43,11 +48,11 @@ func isCmd(line string) (int, int, error) {
 		}
 
 		if end < 0 || cmdIdx == -1 {
-			return 0, 0, fmt.Errorf("%w: %q", errs.ErrUnknownCommand, line)
+			return 0, 0, fmt.Errorf("%w: %q", errs.ErrUnknownCommand, origLine)
 		}
 	}
 
-	return cmdIdx, len(szCmdPrefix) + end + len(sep), nil
+	return cmdIdx, len(szCmdPrefix) + extra + end + len(sep), nil
 }
 
 func expandCmd(

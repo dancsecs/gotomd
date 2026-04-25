@@ -30,6 +30,7 @@ var (
 	forceOverwrite bool
 	outputDir      = "."
 	perm           = defaultPerm
+	showDirective  bool
 	showLicense    bool
 	showHelp       bool
 	upToDate       bool
@@ -45,6 +46,7 @@ func Reset() {
 	forceOverwrite = false
 	outputDir = "."
 	perm = defaultPerm
+	showDirective = false
 	showLicense = false
 	showHelp = false
 	upToDate = false
@@ -82,6 +84,11 @@ func OutputDir() string {
 // Perm return the default permission.
 func Perm() os.FileMode {
 	return perm
+}
+
+// ShowDirective returns the show directive setting.
+func ShowDirective() bool {
+	return showDirective
 }
 
 // ShowLicense returns the show license setting.

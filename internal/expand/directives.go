@@ -21,6 +21,7 @@ package expand
 import (
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/dancsecs/gotomd/internal/cmds"
@@ -99,6 +100,7 @@ func includeSnip(cmd string) (string, error) {
 		fName           string
 		startAfter      string
 		expandedSnippet string
+		stringify       bool
 		err             error
 	)
 
@@ -113,6 +115,14 @@ func includeSnip(cmd string) (string, error) {
 		if len(cmdArgs) > 1 {
 			startAfter = cmdArgs[1]
 		}
+
+		if startAfter == "string" {
+			stringify = true
+			startAfter = ""
+		} else if strings.HasPrefix(startAfter, "string ") {
+			stringify = true
+			startAfter = startAfter[len("string "):]
+		}
 	}
 
 	if err == nil {
@@ -123,8 +133,22 @@ func includeSnip(cmd string) (string, error) {
 	}
 
 	if err == nil {
+		if stringify {
+			expandedSnippet = fmtAsString(strings.Split(expandedSnippet, "\n"))
+		}
+
 		return expandedSnippet, nil
 	}
 
 	return "", err
+}
+
+func fmtAsString(lines []string) string {
+	var res strings.Builder
+
+	for _, line := range lines {
+		res.WriteString("\t" + strconv.QuoteToASCII(line) + ` + "\n" +` + "\n")
+	}
+
+	return strings.TrimRight(res.String(), "\n")
 }

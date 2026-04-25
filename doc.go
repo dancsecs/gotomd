@@ -35,12 +35,16 @@
 	documentation is always accurate and in sync with the source.
 
 
-	    gotomd [-v | --verbose ...] [-l | --license] [-h | --help]
-	           [-f | --force] [-z | --colorize] [-u | --uptodate]
+	    gotomd [-v | --verbose ...] [-d | --directive] [-l | --license]
+	           [-h | --help] [-f | --force] [-u | --uptodate]
 	           [-o | --output <dir>] [-p | --permission <perm>] [path ...]
 
 	    [-v | --verbose ...]
 	        Increase the verbose level for each v provided.
+
+
+	    [-d | --directive]
+	        Display directive documentation.
 
 
 	    [-l | --license]
@@ -53,10 +57,6 @@
 
 	    [-f | --force]
 	        Do not confirm overwrite of destination.
-
-
-	    [-z | --colorize]
-	        Colorize go test output.
 
 
 	    [-u | --uptodate]
@@ -228,10 +228,14 @@ The output is framed together with the command that was executed.
 
 Loads the referenced snippet and expands any embedded directives.
 
+If the optional first parameter (the word `string`) is present then the output
+will be a series of concatenated quote terminated escaped strings suitable of
+embedding in code.
+
 If the optional [`startAfter`] argument is supplied, only content appearing
 after the first line matching `startAfter` is included.
 
-	<!--- gotomd::snip::./directory/fileName [startAfter] -->
+	<!--- gotomd::snip::./directory/fileName [string ][startAfter] -->
 
 ### Action: src
 
