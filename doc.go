@@ -81,76 +81,185 @@
 
 # Directives
 
-gotomd processes template files (.*.gtm.md and .*.gtm.go) into their
-respective *.md and *.go expanding included directives.
+The gotomd utility processes template files (`*.gtm.md` and `*.gtm.go`)
+into their corresponding `*.md` and `*.go` files, expanding any embedded
+directives.
 
 Directives are written inside HTML-style comments:
 
-	<!--- gotomd::ACTION::PARAMETERS -->
+	<!--- gotomd::ACTION::OBJECT [OPTIONAL ...] -->
 
-When processing the file, gotomd replaces each directive with the
-corresponding generated content.
+They may also span multiple lines:
+
+	<!--- gotomd::ACTION::OBJECT [OPTIONAL...]
+	[OPTIONAL ...] -->
+
+	<!--- gotomd::ACTION::OBJECT [OPTIONAL...]
+	[OPTIONAL ...]
+	...
+	-->
+
+The `OPTIONAL` elements may be additional objects or parameters, depending on
+the `ACTION` being used.
+
+When processing the file, `gotomd` replaces each directive with the generated
+content corresponding to that directive.
 
 ## Actions
 
-Each directive's ACTION determines what is included:
+Available actions are:
 
-	<!--- gotomd::doc::./relativeDirectory/goObject -->
+- `doc`   runs and embeds output from `go doc` for a package object
+- `dcl`   inserts the declaration of package objects
+- `dclg`  inserts the declaration group for package objects (IE `const` blocks)
+- `dcln`  inserts the declaration exactly as defined in source including comments
+- `dcls`  inserts the declaration formatted as a single line
+- `irun`  runs the package and inserts the output without decorations
+- `run`   runs the package and frames the output with the command executed
+- `snip`  includes an external snippet expanding any embedded directives
+- `src`   includes a Go source file
+- `tst`   runs a Go test (or all tests) in a package
+- `tstc`  Runs a go test (or all tests) and converts output to TeX to preserve formatting
 
-Runs go doc on the specified object from the given directory.
+### Action: doc
 
-The parameter format is: ./path/to/package/ObjectName
+Runs `go doc` on the specified object in the given relative package
+directory.
 
-A special object name 'package' includes the package-level comments.
+The required argument is the relative package path followed by the name of the
+object to document.
 
-	<!--- gotomd::docConstGrp::./relativeDirectory/goConstName
-	ListOfConstNames
+A special object name, `package`, includes the package-level comments.
+
+Additional objects may be specified as optional arguments, with or without a
+relative directory. If no directory is provided, the most recently specified
+directory is used.
+
+	<!--- gotomd::doc::./directory/goObject -->
+
+	<!--- gotomd::doc::./directory/goObject1 goObject2 -->
+
+	<!--- gotomd::doc::./directory/goObject1 goObject2
+	./differentDirectory/goObject3 goObject4
+	./anotherDifferentDirectory/package
 	-->
 
-Runs go doc on the specified constant block(s) from the given directory.
+There are four additional directives all similar to `doc` but focused on object
+declaration formatting as follows:
 
-	<!--- gotomd::dcls::./relativeDirectory/declaredObject
-	ListOfDeclaredGoObjects
+| directive | formatting              | comments | typical use                     |
+| --------- | ----------------------- | -------: | ------------------------------- |
+| `dcl`     | preserves source layout |       no | show declaration cleanly        |
+| `dclg`    | exact source layout     |      yes | show as written in group block  |
+| `dcln`    | exact source layout     |      yes | show source as written          |
+| `dcls`    | single line             |       no | compact summaries / inline docs |
+
+See individual Action sections for more detail.
+
+### Action: dcl
+
+Similar to the `doc` directive, `dcl` inserts the declaration of the specified
+object as formatted in the source file, excluding comments.
+
+This preserves the original multi-line source layout.
+
+	<!--- gotomd::dcl::./directory/goObject
+	[[./directory/]goObject...]
+	...
 	-->
 
-Inserts each listed declaration as a single line, regardless of how it is
-declared in the source. No comments are included.
+### Action: dclg
 
-Example: functions, methods, constants.
+Similar to the `doc` directive, `dclg` inserts the grouped declaration group
+containing the specified object exactly as formatted in the source files,
+including comments.
 
-	<!---
-	gotomd::dcln::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+This is limited to grouped `const (...)` and `var (...)` blocks.
+
+	<!--- gotomd::dclg::./directory/goObject
+	[[./directory/]goObject...]
+	...
 	-->
 
-Inserts each listed declaration exactly as in the source, including any
-leading comments.
+### Action: dcln
 
-	<!---
-	gotomd::dcl::./relativeDirectory/declaredObject ListOfDeclaredGoObjects
+Similar to the `doc` directive, `dcln` inserts the declaration exactly as it
+appears in the source file, including all associated comments.
+
+This is the closest representation of the original source code.
+
+	<!--- gotomd::dcln::./directory/goObject
+	[[./directory/]goObject...
+	...
 	-->
 
-Inserts each listed declaration exactly as in the source, but without
-comments.
+### Action: dcls
 
-	<!---
-	gotomd::tst::goTest::./relativeDirectory/testName
+Similar to the `doc` directive, `dcls` inserts the declaration of the
+specified object reformatted onto a single line.
+
+Comments are not included.
+
+	<!--- gotomd::dcls::./directory/goObject
+	[[./directory/]goObject...
+	...
 	-->
 
-Runs go test in the given directory, targeting the specified test(s) or
-package, and includes the output.
+### Action: irun
 
-	<!---
-	gotomd::file::./relativeDirectory/fName
-	-->
+Runs `go run` on the package in the specified directory (assumes `main`) with
+the provided arguments.
 
-Inserts the contents of the specified file into a fenced code block.
+The output is embedded as preformatted text without decorations.
 
-	<!---
-	gotomd::run::./relativeDirectory [args ...]
-	-->
+	<!--- gotomd::irun::./directory/. [args ...] -->
 
-Runs go run on the package in the given directory (assumes main) with the
-provided arguments, including the output.
+### Action: run
+
+Runs `go run` on the package in the specified directory (assumes `main`) with
+the provided arguments.
+
+The output is framed together with the command that was executed.
+
+	<!--- gotomd::run::./directory/. [args ...] -->
+
+### Action: snip
+
+Loads the referenced snippet and expands any embedded directives.
+
+If the optional [`startAfter`] argument is supplied, only content appearing
+after the first line matching `startAfter` is included.
+
+	<!--- gotomd::snip::./directory/fileName [startAfter] -->
+
+### Action: src
+
+Inserts the contents of the specified Go source file, formatted as Go code.
+
+	<!--- gotomd::src::./directory/fileName.go -->
+
+### Action: tst
+
+Runs the specified Go test.
+
+A `.` represents all tests.
+
+	<!--- gotomd::tst::./directory/testName -->
+
+	<!--- gotomd::tst::./directory/. -->
+
+### Action: tstc
+
+Runs the specified Go test.
+
+A `.` represents all tests.
+
+The output is converted to TeX format to preserve text decorations when
+displayed on the GitHub website.
+
+	<!--- gotomd::tstc::./directory/testName -->
+
+	<!--- gotomd::tstc::./directory/. -->
 
 # Dedication
 
