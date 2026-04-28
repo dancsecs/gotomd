@@ -35,7 +35,7 @@ import (
 func processGoFiles(filesToProcess []string) error {
 	var err error
 
-	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
+	for i, mi := len(filesToProcess)-1, 0; i >= mi && err == nil; i-- {
 		gopkg.Reset()
 
 		err = expand.Process(filesToProcess[i])
@@ -47,7 +47,7 @@ func processGoFiles(filesToProcess []string) error {
 func processMDFiles(filesToProcess []string) error {
 	var err error
 
-	for i, mi := 0, len(filesToProcess); i < mi && err == nil; i++ {
+	for i, mi := len(filesToProcess)-1, 0; i >= mi && err == nil; i-- {
 		gopkg.Reset()
 
 		err = expand.Process(filesToProcess[i])
