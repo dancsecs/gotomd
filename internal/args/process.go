@@ -55,22 +55,22 @@ func Process() error {
 	szlog.ArgUsageInfo(args.RegisterUsage)
 	args.PushErr(err)
 
-	showDirective = args.Is(directiveFlag, prepareDesc(directiveDesc))
-	showLicense = args.Is(licenseFlag, prepareDesc(licenseDesc))
-	showHelp = args.Is(helpFlag, prepareDesc(helpDesc))
-	forceOverwrite = args.Is(forceFlag, prepareDesc(forceDesc))
-	upToDate = args.Is(upToDateFlag, prepareDesc(upToDateDesc))
+	showDirective = args.Is(directiveFlag, directiveDesc)
+	showLicense = args.Is(licenseFlag, licenseDesc)
+	showHelp = args.Is(helpFlag, helpDesc)
+	forceOverwrite = args.Is(forceFlag, forceDesc)
+	upToDate = args.Is(upToDateFlag, upToDateDesc)
 
 	outputDir, foundOutput = args.ValueString(
 		outputDirFlag,
-		prepareDesc(outputDirDesc),
+		outputDirDesc,
 	)
 	permInt, foundPerm = args.ValueUint32(
 		permFlag,
-		prepareDesc(permDesc),
+		permDesc,
 	)
 
-	args.RegisterUsage(pathArg, prepareDesc(pathDesc))
+	args.RegisterUsage(pathArg, pathDesc)
 
 	if !foundOutput {
 		outputDir = "."

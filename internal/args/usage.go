@@ -18,8 +18,6 @@
 
 package args
 
-import "strings"
-
 const (
 	programFunction = `
 Synchronize Go package and GitHub style README.md documentation by
@@ -76,23 +74,3 @@ All subdirectories may be searched by using the special './...' path.
 It defaults to search the current directory: '.'
 `
 )
-
-func prepareDesc(desc string) string {
-	var res strings.Builder
-
-	lines := strings.Split(strings.Trim(desc, "\n"), "\n")
-	first := 0
-
-	for i, l := range lines {
-		if l == "" {
-			res.WriteString(strings.Join(lines[first:i], " ") + "\n")
-			first = i + 1
-		}
-	}
-
-	if first < len(lines) {
-		res.WriteString(strings.Join(lines[first:], " "))
-	}
-
-	return strings.TrimRight(res.String(), "\n")
-}
