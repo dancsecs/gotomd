@@ -124,7 +124,7 @@ func Process() error {
 
 	args.Done()
 
-	usage = args.Usage()
+	usage = args.Usage(-1)
 
 	err = args.Err()
 

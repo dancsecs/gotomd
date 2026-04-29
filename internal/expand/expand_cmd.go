@@ -66,7 +66,7 @@ func expandCmd(
 		err error
 	)
 
-	i, cmd, err = getBlock(i, cmdStart, lines, "-->", " ->", " ")
+	i, cmd, err = getBlock(i, cmdStart, lines, true, "-->", " ->", " ")
 
 	if err == nil {
 		res, err = action.run(cmdIdx, cmd)

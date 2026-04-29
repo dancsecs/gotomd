@@ -61,11 +61,11 @@ const DirectiveHowTo = "" +
 	"They may also span multiple lines:" + "\n" +
 	"" + "\n" +
 	"\t<!--- gotomd::ACTION::OBJECT [OPTIONAL...]" + "\n" +
-	"\t[OPTIONAL ...] -->" + "\n" +
+	"\t   [OPTIONAL ...] -->" + "\n" +
 	"" + "\n" +
 	"\t<!--- gotomd::ACTION::OBJECT [OPTIONAL...]" + "\n" +
-	"\t[OPTIONAL ...]" + "\n" +
-	"\t..." + "\n" +
+	"\t   [OPTIONAL ...]" + "\n" +
+	"\t    ..." + "\n" +
 	"\t-->" + "\n" +
 	"" + "\n" +
 	"The `OPTIONAL` elements may be additional objects or parameters, depending on" + "\n" +
@@ -109,8 +109,8 @@ const DirectiveHowTo = "" +
 	"\t<!--- gotomd::doc::./directory/goObject1 goObject2 -->" + "\n" +
 	"" + "\n" +
 	"\t<!--- gotomd::doc::./directory/goObject1 goObject2" + "\n" +
-	"\t./differentDirectory/goObject3 goObject4" + "\n" +
-	"\t./anotherDifferentDirectory/package" + "\n" +
+	"\t   ./differentDirectory/goObject3 goObject4" + "\n" +
+	"\t   ./anotherDifferentDirectory/package" + "\n" +
 	"\t-->" + "\n" +
 	"" + "\n" +
 	"There are four additional directives all similar to `doc` but focused on object" + "\n" +
@@ -133,8 +133,8 @@ const DirectiveHowTo = "" +
 	"This preserves the original multi-line source layout." + "\n" +
 	"" + "\n" +
 	"\t<!--- gotomd::dcl::./directory/goObject" + "\n" +
-	"\t[[./directory/]goObject...]" + "\n" +
-	"\t..." + "\n" +
+	"\t   [[./directory/]goObject...]" + "\n" +
+	"\t   ..." + "\n" +
 	"\t-->" + "\n" +
 	"" + "\n" +
 	"### Action: dclg" + "\n" +
@@ -146,8 +146,8 @@ const DirectiveHowTo = "" +
 	"This is limited to grouped `const (...)` and `var (...)` blocks." + "\n" +
 	"" + "\n" +
 	"\t<!--- gotomd::dclg::./directory/goObject" + "\n" +
-	"\t[[./directory/]goObject...]" + "\n" +
-	"\t..." + "\n" +
+	"\t   [[./directory/]goObject...]" + "\n" +
+	"\t   ..." + "\n" +
 	"\t-->" + "\n" +
 	"" + "\n" +
 	"### Action: dcln" + "\n" +
@@ -158,8 +158,8 @@ const DirectiveHowTo = "" +
 	"This is the closest representation of the original source code." + "\n" +
 	"" + "\n" +
 	"\t<!--- gotomd::dcln::./directory/goObject" + "\n" +
-	"\t[[./directory/]goObject..." + "\n" +
-	"\t..." + "\n" +
+	"\t   [[./directory/]goObject..." + "\n" +
+	"\t   ..." + "\n" +
 	"\t-->" + "\n" +
 	"" + "\n" +
 	"### Action: dcls" + "\n" +
@@ -170,8 +170,8 @@ const DirectiveHowTo = "" +
 	"Comments are not included." + "\n" +
 	"" + "\n" +
 	"\t<!--- gotomd::dcls::./directory/goObject" + "\n" +
-	"\t[[./directory/]goObject..." + "\n" +
-	"\t..." + "\n" +
+	"\t   [[./directory/]goObject..." + "\n" +
+	"\t   ..." + "\n" +
 	"\t-->" + "\n" +
 	"" + "\n" +
 	"### Action: irun" + "\n" +

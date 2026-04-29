@@ -36,7 +36,7 @@ func Test_ExpandGetBlockInitialNotTerminated(t *testing.T) {
 	i, res, err := getBlock(
 		1,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>", " ",
+		lines, true, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 1)
@@ -58,7 +58,7 @@ func Test_ExpandGetBlockNotTerminated(t *testing.T) {
 	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>", " ",
+		lines, true, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 1)
@@ -80,7 +80,7 @@ func Test_ExpandGetBlockOneLine(t *testing.T) {
 	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>", " ",
+		lines, true, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 0)
@@ -103,7 +103,7 @@ func Test_ExpandGetBlockTwoLines1(t *testing.T) {
 	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>", " ",
+		lines, true, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 1)
@@ -126,7 +126,7 @@ func Test_ExpandGetBlockTwoLines2(t *testing.T) {
 	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>", " ",
+		lines, true, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 1)
@@ -150,7 +150,7 @@ func Test_ExpandGetBlockTwoLines3(t *testing.T) {
 	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>", " ",
+		lines, true, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 2)
@@ -175,7 +175,7 @@ func Test_ExpandGetBlockTwoLines4(t *testing.T) {
 	i, res, err := getBlock(
 		0,
 		len("<!--- gotomd::cmd::"),
-		lines, "-->", " -<>", " ",
+		lines, true, "-->", " -<>", " ",
 	)
 
 	chk.Int(i, 3)

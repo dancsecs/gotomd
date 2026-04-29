@@ -26,15 +26,14 @@
 	              [-h | --help] [-f | --force] [-u | --uptodate]
 	              [-o | --output <dir>] [-p | --permission <perm>] [path ...]
 
-	Synchronize Go package and GitHub style README.md documentation by
-	embedding Go documentation, source code, test and command output directly
-	from the Go codebase. This ensures that program documentation is kept in
-	one place—the Go code itself—while keeping the README and package
-	documentation automatically up to date. It does this by processing
-	template files containing markdown formatting and replacing embedded
-	directives with content generated directly from your Go codebase. This
-	ensures your documentation is always accurate and in sync with the
-	source.
+	Synchronize Go package and GitHub style README.md documentation by embedding
+	Go documentation, source code, test and command output directly from the Go
+	codebase. This ensures that program documentation is kept in one place—the
+	Go code itself—while keeping the README and package documentation
+	automatically up to date. It does this by processing template files
+	containing markdown formatting and replacing embedded directives with
+	content generated directly from your Go codebase. This ensures your
+	documentation is always accurate and in sync with the source.
 
 	    [-v | --verbose ...]
 	        Increase the verbose level for each v provided.
@@ -64,10 +63,10 @@
 	        (can only set RW bits).
 
 	    [path ...]
-	        Specific template files (named like '.*.gtm.md' or '.*.gtm.go')
-	        or a directory which will be searched for all matching template
-	        files. All subdirectories may be searched by using the special
-	        './...' path. It defaults to search the current directory: '.'
+	        Specific template files (named like '.*.gtm.md' or '.*.gtm.go') or a
+	        directory which will be searched for all matching template files.
+	        All subdirectories may be searched by using the special './...'
+	        path. It defaults to search the current directory: '.'
 
 # Directives
 
@@ -82,11 +81,11 @@ Directives are written inside HTML-style comments:
 They may also span multiple lines:
 
 	<!--- gotomd::ACTION::OBJECT [OPTIONAL...]
-	[OPTIONAL ...] -->
+	   [OPTIONAL ...] -->
 
 	<!--- gotomd::ACTION::OBJECT [OPTIONAL...]
-	[OPTIONAL ...]
-	...
+	   [OPTIONAL ...]
+	    ...
 	-->
 
 The `OPTIONAL` elements may be additional objects or parameters, depending on
@@ -130,8 +129,8 @@ directory is used.
 	<!--- gotomd::doc::./directory/goObject1 goObject2 -->
 
 	<!--- gotomd::doc::./directory/goObject1 goObject2
-	./differentDirectory/goObject3 goObject4
-	./anotherDifferentDirectory/package
+	   ./differentDirectory/goObject3 goObject4
+	   ./anotherDifferentDirectory/package
 	-->
 
 There are four additional directives all similar to `doc` but focused on object
@@ -154,8 +153,8 @@ object as formatted in the source file, excluding comments.
 This preserves the original multi-line source layout.
 
 	<!--- gotomd::dcl::./directory/goObject
-	[[./directory/]goObject...]
-	...
+	   [[./directory/]goObject...]
+	   ...
 	-->
 
 ### Action: dclg
@@ -167,8 +166,8 @@ including comments.
 This is limited to grouped `const (...)` and `var (...)` blocks.
 
 	<!--- gotomd::dclg::./directory/goObject
-	[[./directory/]goObject...]
-	...
+	   [[./directory/]goObject...]
+	   ...
 	-->
 
 ### Action: dcln
@@ -179,8 +178,8 @@ appears in the source file, including all associated comments.
 This is the closest representation of the original source code.
 
 	<!--- gotomd::dcln::./directory/goObject
-	[[./directory/]goObject...
-	...
+	   [[./directory/]goObject...
+	   ...
 	-->
 
 ### Action: dcls
@@ -191,8 +190,8 @@ specified object reformatted onto a single line.
 Comments are not included.
 
 	<!--- gotomd::dcls::./directory/goObject
-	[[./directory/]goObject...
-	...
+	   [[./directory/]goObject...
+	   ...
 	-->
 
 ### Action: irun

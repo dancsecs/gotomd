@@ -35,7 +35,15 @@ func expandPreFormatted(
 
 	codeSyntaxName := lines[i][len(preFormattedSymbol):]
 
-	i, code, err = getBlock(i+1, 0, lines, preFormattedSymbol, "`", "\n")
+	i, code, err = getBlock(
+		i+1,
+		0,
+		lines,
+		false,
+		preFormattedSymbol,
+		"`",
+		"\n",
+	)
 	if err == nil {
 		return format.Inline(codeSyntaxName, code), i, nil
 	}

@@ -27,6 +27,7 @@ import (
 func getBlock(
 	i, cmdStart int,
 	lines []string,
+	trimLeft bool,
 	terminator, cutSet, sep string,
 ) (int, string, error) {
 	var (
@@ -36,11 +37,22 @@ func getBlock(
 		err          error
 	)
 
-	if i < len(lines) {
-		line = strings.Trim(lines[i][cmdStart:], " ")
-	} else {
-		err = errs.ErrBlockNotTerminated
+	nextLine := func() error {
+		if i < len(lines) {
+			line = strings.TrimRight(lines[i][cmdStart:], " ")
+			if trimLeft {
+				line = strings.TrimLeft(line, " ")
+			}
+
+			cmdStart = 0
+
+			return nil
+		}
+
+		return errs.ErrBlockNotTerminated
 	}
+
+	err = nextLine()
 
 	for err == nil {
 		if strings.HasSuffix(line, terminator) {
@@ -56,13 +68,7 @@ func getBlock(
 		str.WriteString(line)
 
 		i++
-		if i < len(lines) {
-			line = strings.Trim(lines[i], " ")
-		} else {
-			err = errs.ErrBlockNotTerminated
-
-			continue
-		}
+		err = nextLine()
 	}
 
 	if err == nil {
